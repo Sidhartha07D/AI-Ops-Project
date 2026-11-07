@@ -13,3 +13,5 @@ data/processed/*
 !data/processed/.gitkeep
 mlflow_store/
 mlflow.db
+reports/feedback_pending.jsonl
+reports/phase5_jobs.jsonl

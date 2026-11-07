@@ -1,0 +1,156 @@
+"""Local API around the versioned MLflow probability model."""
+
+from __future__ import annotations
+
+import json
+import subprocess
+import threading
+import time
+import urllib.error
+import urllib.request
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Literal
+from uuid import uuid4
+
+import yaml
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
+
+ROOT = Path(__file__).resolve().parents[1]
+REPORT = json.loads((ROOT / "reports/model_evaluation.json").read_text())
+MODEL_URL = "http://127.0.0.1:5001"
+PYTHON = str(Path.home() / "miniconda/envs/smart-maintenance/bin/python")
+DVC = str(Path.home() / "miniconda/envs/smart-maintenance/bin/dvc")
+JOBS = ROOT / "reports/phase5_jobs.jsonl"
+FEEDBACK = ROOT / "reports/feedback_pending.jsonl"
+job_lock = threading.Lock()
+
+app = FastAPI(title="Smart Maintenance Monitor API", version="0.5.0", description="Local course demonstration. Scores describe an AI4I 2020 record, not a future failure forecast.")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://127.0.0.1:8501", "http://localhost:8501"],
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type"],
+)
+
+
+class Reading(BaseModel):
+    type: Literal["L", "M", "H"]
+    air_temperature_k: float = Field(ge=250, le=350)
+    process_temperature_k: float = Field(ge=250, le=400)
+    rotational_speed_rpm: int = Field(ge=100, le=5000)
+    torque_nm: float = Field(ge=0, le=100)
+    tool_wear_min: int = Field(ge=0, le=300)
+
+
+class Feedback(BaseModel):
+    prediction_id: str = Field(min_length=8, max_length=80)
+    observed_failure: bool | None = None
+    note: str = Field(default="", max_length=300)
+
+
+def fetch_model(path: str, payload: dict | None = None, timeout: float = 8) -> object:
+    body = json.dumps(payload).encode() if payload is not None else None
+    req = urllib.request.Request(
+        MODEL_URL + path, data=body,
+        headers={"Content-Type": "application/json"} if body else {},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as res:
+            raw = res.read()
+        if path == "/ping":
+            return {"ok": True}
+        return json.loads(raw) if raw else {"ok": True}
+    except (urllib.error.URLError, TimeoutError, ValueError) as exc:
+        raise HTTPException(status_code=503, detail=f"Model service unavailable: {type(exc).__name__}") from exc
+
+
+def append_jsonl(path: Path, item: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as out:
+        out.write(json.dumps(item, sort_keys=True) + "\n")
+
+
+@app.get("/health")
+def health() -> dict:
+    try:
+        fetch_model("/ping", timeout=2)
+        model = "ready"
+    except HTTPException:
+        model = "unavailable"
+    return {"api": "ready", "model": model, "selected_run_id": REPORT["selected_run_id"]}
+
+
+@app.post("/predict")
+def predict(reading: Reading) -> dict:
+    start = time.perf_counter()
+    features = reading.model_dump()
+    features["temperature_gap_k"] = round(features["process_temperature_k"] - features["air_temperature_k"], 6)
+    result = fetch_model("/invocations", {"dataframe_records": [features]})
+    try:
+        probability = float(result["predictions"][0][1])
+    except (TypeError, KeyError, IndexError, ValueError) as exc:
+        raise HTTPException(status_code=502, detail="Model returned an invalid prediction") from exc
+    threshold = float(REPORT["selected_threshold"])
+    alert = probability >= threshold
+    return {
+        "prediction_id": uuid4().hex,
+        "failure_probability": round(probability, 6),
+        "alert": alert,
+        "recommendation": "Schedule an inspection" if alert else "Continue routine checks",
+        "threshold": round(threshold, 2),
+        "model_run_id": REPORT["selected_run_id"],
+        "latency_ms": round((time.perf_counter() - start) * 1000, 1),
+        "interpretation": "AI4I record classification; not a future failure forecast",
+    }
+
+
+@app.post("/feedback", status_code=202)
+def feedback(item: Feedback) -> dict:
+    record = {"id": uuid4().hex, "received_at": datetime.now(timezone.utc).isoformat(), **item.model_dump(), "status": "pending_review"}
+    append_jsonl(FEEDBACK, record)
+    return {"id": record["id"], "status": "pending_review", "message": "Saved for review; it will not change the model automatically."}
+
+
+@app.get("/pipeline")
+def pipeline() -> dict:
+    config = yaml.safe_load((ROOT / "dvc.yaml").read_text())
+    steps = []
+    for name, stage in config["stages"].items():
+        outputs = [ROOT / entry for entry in stage.get("outs", [])]
+        steps.append({"name": name, "status": "ready" if outputs and all(p.exists() for p in outputs) else "missing", "outputs": [str(p.relative_to(ROOT)) for p in outputs]})
+    try:
+        dvc = subprocess.run([DVC, "status", "-c"], cwd=ROOT, text=True, capture_output=True, timeout=20)
+        dvc_message = (dvc.stdout + dvc.stderr).strip()
+        dvc_ok = dvc.returncode == 0 and "in sync" in dvc_message
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        dvc_message = f"Check failed: {type(exc).__name__}"
+        dvc_ok = False
+    jobs = []
+    if JOBS.exists():
+        jobs = [json.loads(line) for line in JOBS.read_text().splitlines()[-8:] if line.strip()]
+    return {"steps": steps, "dvc_in_sync": dvc_ok, "dvc_message": dvc_message, "model_run_id": REPORT["selected_run_id"], "recent_jobs": jobs}
+
+
+@app.post("/jobs/validate")
+def run_validation() -> dict:
+    if not job_lock.acquire(blocking=False):
+        raise HTTPException(status_code=409, detail="A validation job is already running")
+    started = datetime.now(timezone.utc).isoformat()
+    try:
+        try:
+            run = subprocess.run([PYTHON, "src/validate_data.py"], cwd=ROOT, text=True, capture_output=True, timeout=60)
+            output = (run.stdout + run.stderr).strip()[-3000:]
+            status = "success" if run.returncode == 0 else "error"
+            exit_code = run.returncode
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            output = f"{type(exc).__name__}: {exc}"
+            status = "error"
+            exit_code = -1
+        item = {"job_id": uuid4().hex[:10], "name": "validate_data", "started_at": started, "finished_at": datetime.now(timezone.utc).isoformat(), "status": status, "exit_code": exit_code, "console": output}
+        append_jsonl(JOBS, item)
+        return item
+    finally:
+        job_lock.release()

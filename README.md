@@ -29,3 +29,10 @@ The training command compares four candidates using validation average precision
 To inspect the run in the Ubuntu VM browser, start the local tracking page with `mlflow server --backend-store-uri "$MLFLOW_TRACKING_URI" --host 127.0.0.1 --port 5000` and open `http://127.0.0.1:5000` in Firefox. The MLflow store is excluded from Git; export or back it up separately when moving the project.
 
 For safe VM shutdown and restart steps, see [the resume checklist](docs/resume_after_vm_shutdown.md).
+
+
+## Local serving and UI (Phase 5)
+
+Run `scripts/start_phase5.sh` after booting the VM. It starts the saved MLflow probability model on port 5001, FastAPI on port 8000, and the separate static UI on port 8501. Open `http://127.0.0.1:8501/index.html` in the Ubuntu browser for the machine check, `http://127.0.0.1:8501/pipeline.html` for the pipeline and validation console, and `http://127.0.0.1:8000/docs` for the API interface. `scripts/phase5_smoke.py` checks the local integration. Stop the services with `scripts/stop_phase5.sh` to free RAM.
+
+The API's six-field request and response, validation errors, and feedback queue are described in `docs/api_io.md`. Feedback is stored for human review and is never added to training automatically. All services bind to the VM's loopback interface; the UI and backend have separate processes and files.

@@ -9,3 +9,6 @@ For Phase 3, the assistant wrote the Spark and Ray preparation scripts, configur
 The assistant also timed one Spark and one Ray preparation run, calculated throughput, and documented the measurement limits. These are observed values, not predicted performance.
 
 For Phase 4, the assistant added the exploratory analysis, plots, and fixed train/validation/test split logic, including checks for exact duplicate inputs and target/failure-mode disagreements. The assistant also implemented four model candidates, ran the tracked MLproject entry points, selected a threshold on validation data, evaluated the locked test once, saved a loadable probability model in MLflow, and recorded the observed metrics and VM-browser screenshots. The student should review the model card, MLflow runs, and limitations before submission.
+
+
+For Phase 5, the assistant implemented and tested a local MLflow model endpoint, FastAPI wrapper, separate browser UI, pipeline status/validation console, and feedback review queue. The assistant ran an integration smoke check and inspected the browser pages in the VM. The student should review the API contract, UI behavior, screenshots, and any later changes before submission.

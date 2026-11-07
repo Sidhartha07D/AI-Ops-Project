@@ -36,3 +36,6 @@ Leave that terminal open while viewing MLflow in the VM browser, then press Ctrl
 ## Next work
 
 Continue with Phase 5: serve the saved probability model, build the FastAPI backend and a separate simple user interface, inspect their localhost pages in the VM browser, and capture the important screenshots. Keep services small and start them one at a time on this 3.3 GiB RAM VM.
+
+
+After Phase 5, the easiest way to restart the local demo is `cd ~/smart-maintenance-monitor && scripts/start_phase5.sh`. Open the UI and API URLs it prints. Use `scripts/stop_phase5.sh` before shutting down to release RAM. The service scripts and model files are committed; runtime feedback and job logs stay on the VM disk and are not included in Git.
