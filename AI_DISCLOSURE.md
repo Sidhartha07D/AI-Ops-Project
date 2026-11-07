@@ -7,3 +7,5 @@ For Phase 2, the assistant downloaded the official UCI dataset, copied it into t
 For Phase 3, the assistant wrote the Spark and Ray preparation scripts, configured the DVC pipeline, ran both jobs in the VM, and compared their outputs. The student should review the feature definitions, run evidence screenshots, and update this disclosure if the implementation changes.
 
 The assistant also timed one Spark and one Ray preparation run, calculated throughput, and documented the measurement limits. These are observed values, not predicted performance.
+
+For Phase 4, the assistant added the exploratory analysis, plots, and fixed train/validation/test split logic, including checks for exact duplicate inputs and target/failure-mode disagreements. Model training and evaluation will be documented separately after observed runs.

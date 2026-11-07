@@ -1,0 +1,56 @@
+{
+  "blank_cells": 0,
+  "columns": [
+    "UDI",
+    "Product ID",
+    "Type",
+    "Air temperature [K]",
+    "Process temperature [K]",
+    "Rotational speed [rpm]",
+    "Torque [Nm]",
+    "Tool wear [min]",
+    "Machine failure",
+    "TWF",
+    "HDF",
+    "PWF",
+    "OSF",
+    "RNF"
+  ],
+  "duplicate_input_rows": 0,
+  "duplicate_udi": 0,
+  "interpretation": "Synthetic observation-level failure label; no future failure horizon or real machine history.",
+  "machine_failure_counts": {
+    "0": 9661,
+    "1": 339
+  },
+  "numeric_ranges": {
+    "Air temperature [K]": {
+      "max": 304.5,
+      "min": 295.3
+    },
+    "Process temperature [K]": {
+      "max": 313.8,
+      "min": 305.7
+    },
+    "Rotational speed [rpm]": {
+      "max": 2886.0,
+      "min": 1168.0
+    },
+    "Tool wear [min]": {
+      "max": 253.0,
+      "min": 0.0
+    },
+    "Torque [Nm]": {
+      "max": 76.6,
+      "min": 3.8
+    }
+  },
+  "rows": 10000,
+  "source": "/home/sidhartha/smart-maintenance-monitor/data/raw/ai4i2020.csv",
+  "target_vs_failure_mode_disagreements": 27,
+  "type_counts": {
+    "H": 1003,
+    "L": 6000,
+    "M": 2997
+  }
+}

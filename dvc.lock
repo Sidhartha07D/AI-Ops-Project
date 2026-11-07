@@ -32,3 +32,47 @@ stages:
       hash: md5
       md5: de9e1e6266057230006ed7abd405a610
       size: 388556
+  compare:
+    cmd: python src/compare_features.py > reports/feature_comparison.txt
+    deps:
+    - path: data/processed/ray_features.csv
+      hash: md5
+      md5: de9e1e6266057230006ed7abd405a610
+      size: 388556
+    - path: data/processed/spark_features.csv
+      hash: md5
+      md5: de9e1e6266057230006ed7abd405a610
+      size: 388556
+    - path: src/compare_features.py
+      hash: md5
+      md5: c22d3f09e106d2917a31705c7336ba05
+      size: 1529
+    outs:
+    - path: reports/feature_comparison.txt
+      hash: md5
+      md5: cf82e6b05673adccda6c81c12498d396
+      size: 128
+  make_splits:
+    cmd: python src/make_splits.py
+    deps:
+    - path: data/processed/spark_features.csv
+      hash: md5
+      md5: de9e1e6266057230006ed7abd405a610
+      size: 388556
+    - path: reports/feature_comparison.txt
+      hash: md5
+      md5: cf82e6b05673adccda6c81c12498d396
+      size: 128
+    - path: src/make_splits.py
+      hash: md5
+      md5: 7f81603ea1bd778f9d982dd599a9a571
+      size: 2478
+    outs:
+    - path: data/splits/split_ids.csv
+      hash: md5
+      md5: 406b61e954e701d59e0e26716c4c4a19
+      size: 116904
+    - path: reports/split_summary.json
+      hash: md5
+      md5: cd534e3fbdb34a61567c437b75e5d691
+      size: 582

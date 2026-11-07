@@ -13,3 +13,20 @@ stages:
       - src/prepare_ray.py
     outs:
       - data/processed/ray_features.csv
+  compare:
+    cmd: python src/compare_features.py > reports/feature_comparison.txt
+    deps:
+      - data/processed/spark_features.csv
+      - data/processed/ray_features.csv
+      - src/compare_features.py
+    outs:
+      - reports/feature_comparison.txt
+  make_splits:
+    cmd: python src/make_splits.py
+    deps:
+      - data/processed/spark_features.csv
+      - reports/feature_comparison.txt
+      - src/make_splits.py
+    outs:
+      - data/splits/split_ids.csv
+      - reports/split_summary.json

@@ -9,3 +9,7 @@ The project is developed incrementally in an Ubuntu ARM64 VM. Model metrics will
 ## Data preparation
 
 Activate the `smart-maintenance` environment and run `dvc repro` to prepare the raw CSV with Spark and Ray. The two jobs are deliberately limited to two local workers and run sequentially on the VM. Run `python src/compare_features.py` to check that their 10,000-row outputs match. See `data/README.md` for source and license details and `docs/feature_schema.md` for the model input columns.
+
+## Exploration and fixed splits
+
+Run `python src/explore_data.py` to regenerate the data audit and figures. The DVC pipeline now compares the Spark/Ray outputs and creates a seeded 60/20/20 stratified ID manifest with a locked test set. `dvc repro` recreates these inputs before training. The split report is in `reports/split_summary.json` after `dvc pull` or reproduction.
