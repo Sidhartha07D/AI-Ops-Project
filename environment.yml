@@ -2,3 +2,5 @@ name: smart-maintenance
 dependencies:
   - python=3.11
   - pip
+  - pip:
+      - dvc==3.67.1

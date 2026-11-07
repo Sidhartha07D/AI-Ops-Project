@@ -7,7 +7,7 @@ __pycache__/
 .DS_Store
 mlruns/
 artifacts/
-data/raw/*
+data/raw/*.csv
+data/raw/*.zip
 data/processed/*
-!data/raw/.gitkeep
 !data/processed/.gitkeep
