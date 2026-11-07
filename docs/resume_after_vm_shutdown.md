@@ -43,6 +43,6 @@ docker compose up -d
 docker compose ps
 ```
 
-The model, API, and UI containers serve `http://127.0.0.1:5001/ping`, `http://127.0.0.1:8000/docs`, and `http://127.0.0.1:8501/index.html`. Use `docker compose logs --tail=50 model api ui` to inspect them. Stop with `docker compose down` before closing the VM. Container images remain on disk, so a normal restart does not rebuild them. If rebuilding from a clone, run `dvc pull` first so `models/serving_model/` exists.
+The model, API, and UI containers serve `http://127.0.0.1:5001/ping`, `http://127.0.0.1:8000/docs`, and `http://127.0.0.1:8501/index.html`. The Phase 7 stack also provides Prometheus targets at `http://127.0.0.1:9091/targets` and Grafana at `http://127.0.0.1:3001`. Use `docker compose logs --tail=50` to inspect services. Stop with `docker compose down` before closing the VM. Container images remain on disk, so a normal restart does not rebuild them. If rebuilding from a clone, run `dvc pull` first so `models/serving_model/`, `models/active/`, and the candidate model directories exist.
 
-The lighter host-process alternative remains `scripts/start_phase5.sh` and `scripts/stop_phase5.sh`. Feedback and job logs stay on the VM disk and are excluded from Git. The next project work is Phase 7 monitoring and retraining controls, followed by final documentation and evidence review in Phase 8.
+The lighter host-process alternative remains `scripts/start_phase5.sh` and `scripts/stop_phase5.sh`. Feedback, inference observations, and job logs stay on the VM disk and are excluded from Git. The original selected model is active after the tested rollback. The next project work is Phase 8 submission documents, evidence audit, restore check, and viva preparation.

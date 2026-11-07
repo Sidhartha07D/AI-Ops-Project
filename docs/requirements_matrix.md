@@ -11,8 +11,8 @@ Source of requirements: `AI Application Evaluation Guideline.pdf` (25 points) an
 | 3. Spark and Ray | Bounded jobs, matching outputs, DVC DAG | Verified; two screenshots saved |
 | 4. Models and MLflow | EDA, leak-safe split, baseline/candidates, metrics, MLflow runs and MLproject | Verified; MLflow browser evidence saved |
 | 5. Serving and UI | MLflow model endpoint, FastAPI, independent nontechnical UI, pipeline screen, feedback | Verified with integration test and VM-browser screenshots |
-| 6. Packaging and tests | Separate Docker Compose services, logs, unit/integration/end-to-end tests | Three healthy services and unit/integration checks verified; VM-browser evidence and GitHub CI run pending |
-| 7. Operations | Prometheus/Grafana, drift, retraining gate, release/reject/rollback; isolated KServe exercise if feasible | Pending |
+| 6. Packaging and tests | Separate Docker Compose services, logs, unit/integration/end-to-end tests | Three healthy services, tests, and VM-browser evidence verified; GitHub CI run pending |
+| 7. Operations | Prometheus/Grafana, drift, retraining gate, release/reject/rollback; isolated KServe exercise if feasible | Live API/model/UI monitoring, drift guard, validation-only candidates, reject/promote/rollback verified; KServe not run on this VM |
 | 8. Submission | Five mandatory documents, test report, backups/restore, evidence audit, demo and viva | Pending |
 
 ## Evaluation criteria (25 points)
@@ -23,11 +23,11 @@ Source of requirements: `AI Application Evaluation Guideline.pdf` (25 points) an
 | Demo: pipeline view (2) | Separate pipeline view or coordinated MLOps UIs; job/error/success console; measured speed and throughput | Live pipeline and successful job console in `evidence/screenshots/14_phase5_pipeline_console.jpg`; DVC DAG and ETL timing also saved |
 | Software design (2) | Architecture diagram, HLD, LLD with REST I/O, independent UI and inference blocks | Pending, phases 5/8 |
 | Implementation (2) | Consistent Python style, logging, exception handling, inline documentation, API matching LLD, unit tests | Four API unit tests pass; complete LLD and review in phase 8 |
-| Testing (1) | Test plan, cases, acceptance criteria, pass/fail report and acceptance result | Pending, phases 6/8 |
+| Testing (1) | Test plan, cases, acceptance criteria, pass/fail report and acceptance result | Phase 6/7 observed reports exist; final unified plan and acceptance report pending phase 8 |
 | Data engineering (2) | Automated Spark or Ray or Kubernetes pipeline; measured speed and throughput | Spark and Ray jobs verified in `evidence/screenshots/06_phase3_spark_ray_comparison.jpg`; speed/throughput in `reports/etl_benchmark.md` |
 | Source control and CI (2) | Git plus DVC DAG, automated DVC CI, versioned data/model artifacts, restore proof | Git/DVC/DAG/restore and model artifact verified; CI workflow defined but GitHub run pending |
 | Experiment tracking (2) | MLflow runs with parameters, metrics, artifacts and custom metadata beyond autologging | Four candidate runs, selected-model run, provenance tags, metrics, artifacts and MLproject verified |
-| Monitoring (2) | Prometheus instrumentation of components, Grafana near-real-time views | Pending, phase 7 |
+| Monitoring (2) | Prometheus instrumentation of components, Grafana near-real-time views | API and VM metrics, model/UI probes, four targets up, Grafana dashboard and alert rules verified; screenshots 18-19 |
 | Packaging (2) | MLflow model serving, MLproject, FastAPI, independent frontend/backend containers in Compose | Model, API, and UI Compose services healthy; integration smoke passed |
 | Viva (5) | Explain system, assignments 1-10, tools/use cases, design decisions and challenges | Pending, phase 8 |
 

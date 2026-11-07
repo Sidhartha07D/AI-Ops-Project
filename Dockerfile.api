@@ -1,6 +1,6 @@
 FROM python:3.11-slim-bookworm
 ENV PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1
 WORKDIR /workspace
-RUN python -m pip install --no-cache-dir fastapi==0.162.0 uvicorn==0.54.0 pyyaml==6.0.3 dvc==3.67.1
+RUN python -m pip install --no-cache-dir fastapi==0.162.0 uvicorn==0.54.0 pyyaml==6.0.3 dvc==3.67.1 prometheus-client==0.23.1
 EXPOSE 8000
 CMD ["python", "-m", "uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]

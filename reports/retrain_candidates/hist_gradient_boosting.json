@@ -1,0 +1,22 @@
+{
+  "candidate": "hist_gradient_boosting",
+  "feature_columns": [
+    "type",
+    "air_temperature_k",
+    "process_temperature_k",
+    "rotational_speed_rpm",
+    "torque_nm",
+    "tool_wear_min",
+    "temperature_gap_k"
+  ],
+  "model_path": "models/candidate_hist_gradient_boosting",
+  "model_uri": "runs:/a3ce7ef1bb7f493fb35a7b90b1e49e9c/candidate_model",
+  "run_id": "a3ce7ef1bb7f493fb35a7b90b1e49e9c",
+  "split_manifest_sha256": "7a1fdd0cca26b328c176d621dd96ed62c19fa6a69ca95cb3f8ae492e781bd08a",
+  "test_rows_used": 0,
+  "threshold": 0.36999999999999994,
+  "train_rows": 6000,
+  "validation_average_precision": 0.7431941894389562,
+  "validation_recall_at_champion_threshold": 0.5588235294117647,
+  "validation_rows": 2000
+}

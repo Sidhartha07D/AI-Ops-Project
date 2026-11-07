@@ -17,6 +17,10 @@ Screenshots are original captures of the Ubuntu VM display. The Mac workspace al
 | `15_phase5_fastapi_docs.jpg` | Independent FastAPI endpoint documentation | Ubuntu Firefox, `http://127.0.0.1:8000/docs`, 18:12 VM time |
 | `16_phase6_compose_ui.jpg` | Containerized UI shows the selected model's 95.0% inspection result, with all services ready | Ubuntu Firefox, `http://127.0.0.1:8501/index.html`, 2026-11-07 18:34 VM time |
 | `17_phase6_compose_tests.jpg` | Three healthy Compose services, four passing API unit tests, and VM storage | Ubuntu terminal, `docker compose ps`, `python scripts/phase6_tests.py`, `df -h /`, 18:36 VM time |
+| `18_phase7_grafana_dashboard.jpg` | Provisioned near-real-time dashboard with API, model, and UI Up plus live prediction and latency panels | Ubuntu Firefox, `http://127.0.0.1:3001/d/smart-maintenance/...`, 2026-11-07 18:55 VM time |
+| `19_phase7_prometheus_targets.jpg` | API metrics scrape and model/UI probes are all Up | Ubuntu Firefox, `http://127.0.0.1:9091/targets`, 18:56 VM time |
+| `20_phase7_drift_release_checks.jpg` | Acceptance check confirms deliberate drift detection, sparse-input guard, release rejection, promotion, rollback, and DVC sync | Ubuntu terminal, `python scripts/phase7_verify.py`, 18:59 VM time |
+| `21_phase7_vm_resources.jpg` | Grafana host exporter panels show actual VM available memory and root free space alongside live service activity | Ubuntu Firefox, same Grafana dashboard, 19:05 VM time |
 
 The failed MLflow runs visible in the first browser screenshot came from initial project-entry-point and model-serialization setup errors. They are retained as an honest execution history. The later successful run is the one recorded in the model card and evaluation report.
 

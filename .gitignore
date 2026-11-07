@@ -15,3 +15,6 @@ mlflow_store/
 mlflow.db
 reports/feedback_pending.jsonl
 reports/phase5_jobs.jsonl
+reports/inference_observations.jsonl
+reports/drift_latest.json
+models/downloads/

@@ -1,0 +1,7 @@
+{
+  "model_path": "models/serving_model",
+  "run_id": "e5260d1c99b046f79795c53a4c392575",
+  "threshold": 0.36999999999999994,
+  "validation_average_precision": 0.749490506701175,
+  "version": "v1"
+}

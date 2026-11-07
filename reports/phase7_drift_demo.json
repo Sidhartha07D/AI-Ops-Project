@@ -1,0 +1,34 @@
+{
+  "control": {
+    "current_rows": 2000,
+    "max_psi": 0.0062,
+    "psi_by_feature": {
+      "air_temperature_k": 0.0025,
+      "process_temperature_k": 0.0033,
+      "rotational_speed_rpm": 0.0062,
+      "tool_wear_min": 0.0034,
+      "torque_nm": 0.0058
+    },
+    "reference_rows": 6000,
+    "source": "fixed_validation_inputs",
+    "status": "within_reference_range",
+    "threshold": 0.2
+  },
+  "created_at": "2026-11-07T13:15:53.180190+00:00",
+  "kind": "deliberate_shift_demo",
+  "shifted": {
+    "current_rows": 2000,
+    "max_psi": 4.6949,
+    "psi_by_feature": {
+      "air_temperature_k": 0.0025,
+      "process_temperature_k": 0.0033,
+      "rotational_speed_rpm": 0.0062,
+      "tool_wear_min": 0.0034,
+      "torque_nm": 4.6949
+    },
+    "reference_rows": 6000,
+    "source": "fixed_validation_inputs_with_torque_plus_25_nm",
+    "status": "drift_flagged",
+    "threshold": 0.2
+  }
+}

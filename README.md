@@ -52,3 +52,11 @@ docker compose ps
 Open the same UI, pipeline, and API URLs listed above. Compose binds all published ports to VM localhost. `docker compose logs --tail=50 model api ui` shows service logs. `docker compose down` stops and removes the three containers; the images, DVC data, feedback, and MLflow runs persist. Do not start the Phase 5 host processes and Compose on the same ports at once.
 
 Focused API tests run with `python scripts/phase6_tests.py` from the project environment. `.github/workflows/checks.yaml` defines push/PR source, unit, DVC DAG, and Compose configuration checks; the workflow has not been observed on GitHub until this repository is pushed to a remote. The container test results are recorded in `reports/phase6_test_report.md`.
+
+## Monitoring and controlled release (Phase 7)
+
+`docker compose up -d` also starts Prometheus, a probe exporter, a host exporter, and Grafana. In the Ubuntu browser, open `http://127.0.0.1:9091/targets` for live target health and `http://127.0.0.1:3001/d/smart-maintenance/smart-maintenance-monitor-c2b7-live-services` for the provisioned dashboard. The existing VM ports 9090 and 3000 are used by other work, so this project uses 9091 and 3001. All published ports bind to localhost. Prometheus retains at most two days or 256 MB of data. See `docs/operations.md` for metric meanings, drift limits, and release steps.
+
+Run `python scripts/drift_check.py --mode observations` to assess recent API inputs once at least 50 exist. `--mode demo` reproduces the clearly labeled deliberate torque shift comparison; its result is not evidence of real equipment drift. Neither mode triggers retraining automatically.
+
+Two validation-only candidates and their MLflow/DVC artifacts demonstrate the release gate. `python scripts/release_gate.py review <candidate>` checks the split, schema, locked-test exclusion, validation average precision, recall, and model artifact. An operator must explicitly run `promote`; `rollback` restores the prior release and restarts MLflow serving. The real local promote and rollback were tested, and the original model is currently active. Run `python scripts/phase7_verify.py` while Compose is running for the acceptance check. The results are in `reports/phase7_test_report.md`.

@@ -1,0 +1,22 @@
+{
+  "candidate": "random_forest_balanced",
+  "feature_columns": [
+    "type",
+    "air_temperature_k",
+    "process_temperature_k",
+    "rotational_speed_rpm",
+    "torque_nm",
+    "tool_wear_min",
+    "temperature_gap_k"
+  ],
+  "model_path": "models/candidate_random_forest_balanced",
+  "model_uri": "runs:/6a55540556934e9785a0b6494d57d93a/candidate_model",
+  "run_id": "6a55540556934e9785a0b6494d57d93a",
+  "split_manifest_sha256": "7a1fdd0cca26b328c176d621dd96ed62c19fa6a69ca95cb3f8ae492e781bd08a",
+  "test_rows_used": 0,
+  "threshold": 0.36999999999999994,
+  "train_rows": 6000,
+  "validation_average_precision": 0.749490506701175,
+  "validation_recall_at_champion_threshold": 0.8088235294117647,
+  "validation_rows": 2000
+}

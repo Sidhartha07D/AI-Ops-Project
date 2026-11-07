@@ -1,0 +1,23 @@
+groups:
+  - name: smart-maintenance
+    rules:
+      - alert: SmartMaintenanceApiDown
+        expr: up{job="api"} == 0
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: Smart Maintenance API metrics are unavailable
+      - alert: SmartMaintenanceModelOrUiDown
+        expr: probe_success{job="service-probes"} == 0
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: A Smart Maintenance model or UI probe failed
+      - alert: SmartMaintenanceApiError
+        expr: sum(increase(smm_http_requests_total{status=~"5.."}[5m])) > 0
+        labels:
+          severity: warning
+        annotations:
+          summary: Smart Maintenance API returned a server error

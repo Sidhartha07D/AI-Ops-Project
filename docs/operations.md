@@ -1,0 +1,23 @@
+# Operations, monitoring, and release control
+
+## Live monitoring
+
+Start from the project directory with `docker compose up -d`; stop with `docker compose down`. The model, API, UI, blackbox exporter, node exporter, Prometheus, and Grafana are separate containers. Published ports are loopback-only: model 5001, API 8000, UI 8501, Prometheus 9091, Grafana 3001. The latter two avoid ports already used by other VM work. `docker compose ps` and `docker compose logs --tail=50` show state and errors.
+
+The API `/metrics` exports bounded-label request totals by route/status, request-duration histogram, prediction totals by alert outcome, validation-job totals, and the last observed model readiness. Prometheus scrapes it every 10 seconds. The blackbox exporter checks the MLflow `/ping` and the UI page every 10 seconds. Node exporter supplies VM memory and root-disk metrics. The provisioned Grafana dashboard shows those three availabilities, prediction counts, request outcomes, p95 prediction latency, alert counts, validation jobs, VM memory, and free disk. Three Prometheus rules flag API scrape failure, model/UI probe failure, and API 5xx responses. The rules are local Prometheus alerts; no external notification channel is configured. Prometheus data retention is two days or 256 MB. Grafana provisioning files are versioned, so the dashboard can be recreated without its database.
+
+## Input drift
+
+`python scripts/drift_check.py --mode observations` compares at most the latest 500 successful API inputs with the 6,000 training records from the fixed split. It uses training-decile bins and population stability index (PSI) on five numeric inputs. Fewer than 50 new inputs return `insufficient_samples`; this is **not** evidence of no drift. PSI above 0.2 flags a review, not an automatic model change. The threshold is a course-demo heuristic, not a validated operational limit. Labels are unavailable for these inputs, so the check cannot measure accuracy degradation.
+
+`python scripts/drift_check.py --mode demo` compares the fixed validation inputs with the training reference, then adds 25 Nm to validation torque values and repeats the comparison. The control maximum PSI was 0.0062; the shifted torque PSI was 4.6949. This demonstrates detection of a deliberately constructed distribution shift only. The actual API-input check had eight samples and correctly returned `insufficient_samples`.
+
+Successful API requests are appended to a local, Git-ignored JSONL file for this calculation. Treat it as a local demo log and clear or rotate it if the source changes or it grows large. It contains the input readings; do not send it to an external service.
+
+## Validation-only retraining and release
+
+The two Phase 7 candidates were fitted on the same 6,000 training rows and scored on the same 2,000 validation rows. Neither script selects or scores test rows. MLflow stores their runs; DVC stores their model directories. The histogram booster obtained validation AP 0.7432 and recall 0.5588 at the champion threshold, so the gate rejected it. A deterministic random forest reproduction matched the champion's validation AP 0.7495 and recall 0.8088 and passed. Matching the old model does not show an improvement.
+
+The gate checks split-manifest SHA, feature schema, zero locked-test rows, loadable artifact, and validation AP and recall at least as high as the existing champion. A human must run `python scripts/release_gate.py promote random_forest_balanced`; the drift check cannot call it. Promotion copies the selected MLflow artifact into the DVC-tracked active model directory, changes the active release manifest, and restarts the model container. The API reads the active manifest so it reports the served run ID. The promoted run ID was `6a55540556934e9785a0b6494d57d93a`; the full API integration check passed. `python scripts/release_gate.py rollback` restored the original run ID `e5260d1c99b046f79795c53a4c392575`; the integration check passed again. The original model is the saved final state.
+
+The release event history is `reports/phase7_release_events.jsonl`. The gate only compares this fixed validation split; a real maintenance deployment would need time-aware data, fresh labels, human approval, and a separate final test before a new model could be trusted.

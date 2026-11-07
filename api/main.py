@@ -16,26 +16,53 @@ from typing import Literal
 from uuid import uuid4
 
 import yaml
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
 from pydantic import BaseModel, Field
+from prometheus_client import Counter, Gauge, Histogram, generate_latest, CONTENT_TYPE_LATEST
 
 ROOT = Path(__file__).resolve().parents[1]
 REPORT = json.loads((ROOT / "reports/model_evaluation.json").read_text())
+RELEASE = ROOT / "models/active_release.json"
 MODEL_URL = os.environ.get("SMART_MAINTENANCE_MODEL_URL", "http://127.0.0.1:5001")
 PYTHON = os.environ.get("SMART_MAINTENANCE_PYTHON", str(Path.home() / "miniconda/envs/smart-maintenance/bin/python"))
 DVC = os.environ.get("SMART_MAINTENANCE_DVC", str(Path.home() / "miniconda/envs/smart-maintenance/bin/dvc"))
 JOBS = ROOT / "reports/phase5_jobs.jsonl"
 FEEDBACK = ROOT / "reports/feedback_pending.jsonl"
+OBSERVATIONS = ROOT / "reports/inference_observations.jsonl"
 job_lock = threading.Lock()
 
-app = FastAPI(title="Smart Maintenance Monitor API", version="0.5.0", description="Local course demonstration. Scores describe an AI4I 2020 record, not a future failure forecast.")
+REQUESTS = Counter("smm_http_requests_total", "API requests", ["path", "status"])
+LATENCY = Histogram("smm_http_request_duration_seconds", "API request duration", ["path"])
+PREDICTIONS = Counter("smm_predictions_total", "Predictions by alert decision", ["alert"])
+MODEL_READY = Gauge("smm_model_ready", "Last observed MLflow model readiness")
+VALIDATIONS = Counter("smm_validation_jobs_total", "Validation job outcomes", ["status"])
+
+app = FastAPI(title="Smart Maintenance Monitor API", version="0.7.0", description="Local course demonstration. Scores describe an AI4I 2020 record, not a future failure forecast.")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://127.0.0.1:8501", "http://localhost:8501"],
     allow_methods=["GET", "POST"],
     allow_headers=["Content-Type"],
 )
+
+
+@app.middleware("http")
+async def measure_http(request: Request, call_next):
+    if request.url.path == "/metrics":
+        return await call_next(request)
+    start = time.perf_counter()
+    response = await call_next(request)
+    path = request.url.path if request.url.path in {"/health", "/predict", "/feedback", "/pipeline", "/jobs/validate"} else "other"
+    REQUESTS.labels(path=path, status=str(response.status_code)).inc()
+    LATENCY.labels(path=path).observe(time.perf_counter() - start)
+    return response
+
+
+@app.get("/metrics", include_in_schema=False)
+def metrics() -> Response:
+    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
 
 class Reading(BaseModel):
@@ -75,6 +102,12 @@ def append_jsonl(path: Path, item: dict) -> None:
         out.write(json.dumps(item, sort_keys=True) + "\n")
 
 
+def active_release() -> dict:
+    if RELEASE.exists():
+        return json.loads(RELEASE.read_text())
+    return {"run_id": REPORT["selected_run_id"], "threshold": REPORT["selected_threshold"]}
+
+
 @app.get("/health")
 def health() -> dict:
     try:
@@ -82,7 +115,8 @@ def health() -> dict:
         model = "ready"
     except HTTPException:
         model = "unavailable"
-    return {"api": "ready", "model": model, "selected_run_id": REPORT["selected_run_id"]}
+    MODEL_READY.set(1 if model == "ready" else 0)
+    return {"api": "ready", "model": model, "selected_run_id": active_release()["run_id"]}
 
 
 @app.post("/predict")
@@ -95,15 +129,18 @@ def predict(reading: Reading) -> dict:
         probability = float(result["predictions"][0][1])
     except (TypeError, KeyError, IndexError, ValueError) as exc:
         raise HTTPException(status_code=502, detail="Model returned an invalid prediction") from exc
-    threshold = float(REPORT["selected_threshold"])
+    release = active_release()
+    threshold = float(release["threshold"])
     alert = probability >= threshold
+    PREDICTIONS.labels(alert=str(alert).lower()).inc()
+    append_jsonl(OBSERVATIONS, {"received_at": datetime.now(timezone.utc).isoformat(), **features, "failure_probability": round(probability, 6), "alert": alert})
     return {
         "prediction_id": uuid4().hex,
         "failure_probability": round(probability, 6),
         "alert": alert,
         "recommendation": "Schedule an inspection" if alert else "Continue routine checks",
         "threshold": round(threshold, 2),
-        "model_run_id": REPORT["selected_run_id"],
+        "model_run_id": release["run_id"],
         "latency_ms": round((time.perf_counter() - start) * 1000, 1),
         "interpretation": "AI4I record classification; not a future failure forecast",
     }
@@ -133,7 +170,7 @@ def pipeline() -> dict:
     jobs = []
     if JOBS.exists():
         jobs = [json.loads(line) for line in JOBS.read_text().splitlines()[-8:] if line.strip()]
-    return {"steps": steps, "dvc_in_sync": dvc_ok, "dvc_message": dvc_message, "model_run_id": REPORT["selected_run_id"], "recent_jobs": jobs}
+    return {"steps": steps, "dvc_in_sync": dvc_ok, "dvc_message": dvc_message, "model_run_id": active_release()["run_id"], "recent_jobs": jobs}
 
 
 @app.post("/jobs/validate")
@@ -153,6 +190,7 @@ def run_validation() -> dict:
             exit_code = -1
         item = {"job_id": uuid4().hex[:10], "name": "validate_data", "started_at": started, "finished_at": datetime.now(timezone.utc).isoformat(), "status": status, "exit_code": exit_code, "console": output}
         append_jsonl(JOBS, item)
+        VALIDATIONS.labels(status=status).inc()
         return item
     finally:
         job_lock.release()
