@@ -7,7 +7,7 @@ Source of requirements: `AI Application Evaluation Guideline.pdf` (25 points) an
 | Phase | Exit result | Current status |
 | --- | --- | --- |
 | 1. Foundation | Clean Git project, isolated Python environment, VM budget | Verified; screenshot still to collect |
-| 2. Data and DVC | Source/license, validation, raw data pointer and restore | Verified; screenshots still to collect |
+| 2. Data and DVC | Source/license, validation, raw data pointer and restore | Verified; validation/DVC screenshot saved |
 | 3. Spark and Ray | Bounded jobs, matching outputs, DVC DAG | Verified; two screenshots saved |
 | 4. Models and MLflow | EDA, leak-safe split, baseline/candidates, metrics, MLflow runs and MLproject | Pending |
 | 5. Serving and UI | MLflow model endpoint, FastAPI, independent nontechnical UI, pipeline screen, feedback | Pending |
@@ -55,4 +55,4 @@ Source of requirements: `AI Application Evaluation Guideline.pdf` (25 points) an
 
 Target 30-40 **distinct, useful** screenshots across the eight phases, with a short recording only for flows that are hard to prove in one image. Prioritize UCI provenance, data validation, DVC DAG/restore, Spark/Ray output and throughput, MLflow runs/artifacts/MLproject, MLflow serving, FastAPI docs and error responses, the live UI and pipeline console, Compose services, Prometheus targets, Grafana panels, drift and rollback, test report, and final offline demo. Capture localhost pages in the VM browser after those services exist. Record the observed URL, time, command or action, and result for each screenshot. Never use mock or copied screenshots as execution evidence.
 
-Currently saved: three Phase 3 screenshots in `evidence/screenshots/`. The earlier `00_utm_capture_test.jpg` is only a capture test in the chat's local workspace and does not count toward the project evidence target.
+Currently saved: three Phase 3 screenshots in `evidence/screenshots/`. A Phase 2 validation/DVC screenshot is also saved. The earlier `00_utm_capture_test.jpg` is only a capture test in the chat's local workspace and does not count toward the project evidence target.
