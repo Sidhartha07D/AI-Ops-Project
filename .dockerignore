@@ -1,0 +1,4 @@
+**
+!models/
+!models/serving_model/
+!models/serving_model/**

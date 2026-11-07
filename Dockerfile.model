@@ -1,0 +1,8 @@
+FROM python:3.11-slim-bookworm
+ENV PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1
+WORKDIR /app
+COPY models/serving_model/requirements.txt /tmp/model-requirements.txt
+RUN python -m pip install --no-cache-dir -r /tmp/model-requirements.txt
+COPY models/serving_model/ /app/model/
+EXPOSE 5001
+CMD ["mlflow", "models", "serve", "-m", "/app/model", "--env-manager", "local", "--host", "0.0.0.0", "--port", "5001", "--workers", "1"]

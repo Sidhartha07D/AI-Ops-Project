@@ -1,0 +1,55 @@
+name: smart-maintenance
+services:
+  model:
+    build:
+      context: .
+      dockerfile: Dockerfile.model
+    ports:
+      - "127.0.0.1:5001:5001"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5001/ping', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    environment:
+      SMART_MAINTENANCE_MODEL_URL: http://model:5001
+      SMART_MAINTENANCE_PYTHON: /usr/local/bin/python
+      SMART_MAINTENANCE_DVC: /usr/local/bin/dvc
+    volumes:
+      - .:/workspace
+      - /home/sidhartha/dvc-storage/smart-maintenance:/home/sidhartha/dvc-storage/smart-maintenance:ro
+    depends_on:
+      model:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 10s
+    restart: unless-stopped
+
+  ui:
+    image: nginx:1.29-alpine
+    volumes:
+      - ./ui:/usr/share/nginx/html:ro
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8501:80"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/index.html"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped

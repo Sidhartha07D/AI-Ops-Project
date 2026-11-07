@@ -4,7 +4,7 @@
 
 Use Ubuntu's **Power Off / Shut Down** menu and wait for it to finish before closing UTM. The project is stored on the VM disk at `/home/sidhartha/smart-maintenance-monitor`.
 
-The saved Phase 4 checkpoint is Git commit `9d8e870`. The DVC data and local remote are in sync. The MLflow database and model artifacts are in `mlflow_store/`; a separate Mac backup is in `outputs/backups/smart-maintenance-mlflow-phase4.tar.gz` in the Codex workspace. Screenshots are saved in the VM project and the Mac workspace.
+The project has continued through container deployment in Phase 6. The DVC data and local remote, including the selected model artifact, are in sync. The MLflow database and run artifacts are in `mlflow_store/`. Mac backups in `outputs/backups/` and screenshot copies in `outputs/evidence/screenshots/` protect the checkpoint separately from the VM disk.
 
 ## When you reopen UTM
 
@@ -20,7 +20,7 @@ df -h /
 hostname -I
 ```
 
-Expected: Git branch `main` with no changed files, commit `9d8e870` or a newer commit, DVC cache and `vmstore` in sync, the MLflow message, and several GB of free disk space. The VM's IP address may change, so share the new `hostname -I` output if SSH does not reconnect.
+Expected: Git branch `main` with no changed files, DVC cache and `vmstore` in sync, the MLflow message, and several GB of free disk space. The VM's IP address may change, so share the new `hostname -I` output if SSH does not reconnect.
 
 The MLflow web page at `http://127.0.0.1:5000` is **off by design** to save RAM. Its stored runs persist. When needed, start it from the project directory with:
 
@@ -33,9 +33,16 @@ The MLflow web page at `http://127.0.0.1:5000` is **off by design** to save RAM.
 
 Leave that terminal open while viewing MLflow in the VM browser, then press Ctrl+C to free memory. You do **not** need to rerun data preparation or model training merely because the VM was shut down.
 
-## Next work
+## Restart the project demo
 
-Continue with Phase 5: serve the saved probability model, build the FastAPI backend and a separate simple user interface, inspect their localhost pages in the VM browser, and capture the important screenshots. Keep services small and start them one at a time on this 3.3 GiB RAM VM.
+Use one of these service modes at a time:
 
+```bash
+cd ~/smart-maintenance-monitor
+docker compose up -d
+docker compose ps
+```
 
-After Phase 5, the easiest way to restart the local demo is `cd ~/smart-maintenance-monitor && scripts/start_phase5.sh`. Open the UI and API URLs it prints. Use `scripts/stop_phase5.sh` before shutting down to release RAM. The service scripts and model files are committed; runtime feedback and job logs stay on the VM disk and are not included in Git.
+The model, API, and UI containers serve `http://127.0.0.1:5001/ping`, `http://127.0.0.1:8000/docs`, and `http://127.0.0.1:8501/index.html`. Use `docker compose logs --tail=50 model api ui` to inspect them. Stop with `docker compose down` before closing the VM. Container images remain on disk, so a normal restart does not rebuild them. If rebuilding from a clone, run `dvc pull` first so `models/serving_model/` exists.
+
+The lighter host-process alternative remains `scripts/start_phase5.sh` and `scripts/stop_phase5.sh`. Feedback and job logs stay on the VM disk and are excluded from Git. The next project work is Phase 7 monitoring and retraining controls, followed by final documentation and evidence review in Phase 8.

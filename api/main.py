@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import json
+import os
 import subprocess
+import sys
 import threading
 import time
 import urllib.error
@@ -20,9 +22,9 @@ from pydantic import BaseModel, Field
 
 ROOT = Path(__file__).resolve().parents[1]
 REPORT = json.loads((ROOT / "reports/model_evaluation.json").read_text())
-MODEL_URL = "http://127.0.0.1:5001"
-PYTHON = str(Path.home() / "miniconda/envs/smart-maintenance/bin/python")
-DVC = str(Path.home() / "miniconda/envs/smart-maintenance/bin/dvc")
+MODEL_URL = os.environ.get("SMART_MAINTENANCE_MODEL_URL", "http://127.0.0.1:5001")
+PYTHON = os.environ.get("SMART_MAINTENANCE_PYTHON", str(Path.home() / "miniconda/envs/smart-maintenance/bin/python"))
+DVC = os.environ.get("SMART_MAINTENANCE_DVC", str(Path.home() / "miniconda/envs/smart-maintenance/bin/dvc"))
 JOBS = ROOT / "reports/phase5_jobs.jsonl"
 FEEDBACK = ROOT / "reports/feedback_pending.jsonl"
 job_lock = threading.Lock()

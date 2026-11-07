@@ -36,3 +36,19 @@ For safe VM shutdown and restart steps, see [the resume checklist](docs/resume_a
 Run `scripts/start_phase5.sh` after booting the VM. It starts the saved MLflow probability model on port 5001, FastAPI on port 8000, and the separate static UI on port 8501. Open `http://127.0.0.1:8501/index.html` in the Ubuntu browser for the machine check, `http://127.0.0.1:8501/pipeline.html` for the pipeline and validation console, and `http://127.0.0.1:8000/docs` for the API interface. `scripts/phase5_smoke.py` checks the local integration. Stop the services with `scripts/stop_phase5.sh` to free RAM.
 
 The API's six-field request and response, validation errors, and feedback queue are described in `docs/api_io.md`. Feedback is stored for human review and is never added to training automatically. All services bind to the VM's loopback interface; the UI and backend have separate processes and files.
+
+## Container deployment and checks (Phase 6)
+
+The exact selected MLflow model is tracked as `models/serving_model.dvc`. After cloning this repository on the same VM, run `dvc pull` before building; the local DVC remote configured in `.dvc/config.local` must also be present. The image build copies this restored model into the model image. To start the three independent services:
+
+```bash
+cd ~/smart-maintenance-monitor
+scripts/stop_phase5.sh
+docker compose up -d --build
+docker compose ps
+~/miniconda/envs/smart-maintenance/bin/python scripts/phase5_smoke.py
+```
+
+Open the same UI, pipeline, and API URLs listed above. Compose binds all published ports to VM localhost. `docker compose logs --tail=50 model api ui` shows service logs. `docker compose down` stops and removes the three containers; the images, DVC data, feedback, and MLflow runs persist. Do not start the Phase 5 host processes and Compose on the same ports at once.
+
+Focused API tests run with `python scripts/phase6_tests.py` from the project environment. `.github/workflows/checks.yaml` defines push/PR source, unit, DVC DAG, and Compose configuration checks; the workflow has not been observed on GitHub until this repository is pushed to a remote. The container test results are recorded in `reports/phase6_test_report.md`.
