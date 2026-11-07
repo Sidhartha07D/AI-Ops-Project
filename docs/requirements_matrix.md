@@ -9,7 +9,7 @@ Source of requirements: `AI Application Evaluation Guideline.pdf` (25 points) an
 | 1. Foundation | Clean Git project, isolated Python environment, VM budget | Verified; screenshot still to collect |
 | 2. Data and DVC | Source/license, validation, raw data pointer and restore | Verified; validation/DVC screenshot saved |
 | 3. Spark and Ray | Bounded jobs, matching outputs, DVC DAG | Verified; two screenshots saved |
-| 4. Models and MLflow | EDA, leak-safe split, baseline/candidates, metrics, MLflow runs and MLproject | Pending |
+| 4. Models and MLflow | EDA, leak-safe split, baseline/candidates, metrics, MLflow runs and MLproject | Verified; MLflow browser evidence saved |
 | 5. Serving and UI | MLflow model endpoint, FastAPI, independent nontechnical UI, pipeline screen, feedback | Pending |
 | 6. Packaging and tests | Separate Docker Compose services, logs, unit/integration/end-to-end tests | Pending |
 | 7. Operations | Prometheus/Grafana, drift, retraining gate, release/reject/rollback; isolated KServe exercise if feasible | Pending |
@@ -26,9 +26,9 @@ Source of requirements: `AI Application Evaluation Guideline.pdf` (25 points) an
 | Testing (1) | Test plan, cases, acceptance criteria, pass/fail report and acceptance result | Pending, phases 6/8 |
 | Data engineering (2) | Automated Spark or Ray or Kubernetes pipeline; measured speed and throughput | Spark and Ray jobs verified in `evidence/screenshots/06_phase3_spark_ray_comparison.jpg`; speed/throughput in `reports/etl_benchmark.md` |
 | Source control and CI (2) | Git plus DVC DAG, automated DVC CI, versioned data/model artifacts, restore proof | Git/DVC/DAG/restore verified; automated CI and model lineage pending |
-| Experiment tracking (2) | MLflow runs with parameters, metrics, artifacts and custom metadata beyond autologging | Pending, phase 4 |
+| Experiment tracking (2) | MLflow runs with parameters, metrics, artifacts and custom metadata beyond autologging | Four candidate runs, selected-model run, provenance tags, metrics, artifacts and MLproject verified |
 | Monitoring (2) | Prometheus instrumentation of components, Grafana near-real-time views | Pending, phase 7 |
-| Packaging (2) | MLflow model serving, MLproject, FastAPI, independent frontend/backend containers in Compose | Pending, phases 4-6 |
+| Packaging (2) | MLflow model serving, MLproject, FastAPI, independent frontend/backend containers in Compose | MLproject and loadable probability model verified; serving/API/Compose pending |
 | Viva (5) | Explain system, assignments 1-10, tools/use cases, design decisions and challenges | Pending, phase 8 |
 
 ## Development-guideline coverage

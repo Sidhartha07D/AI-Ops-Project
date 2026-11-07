@@ -8,4 +8,4 @@ For Phase 3, the assistant wrote the Spark and Ray preparation scripts, configur
 
 The assistant also timed one Spark and one Ray preparation run, calculated throughput, and documented the measurement limits. These are observed values, not predicted performance.
 
-For Phase 4, the assistant added the exploratory analysis, plots, and fixed train/validation/test split logic, including checks for exact duplicate inputs and target/failure-mode disagreements. Model training and evaluation will be documented separately after observed runs.
+For Phase 4, the assistant added the exploratory analysis, plots, and fixed train/validation/test split logic, including checks for exact duplicate inputs and target/failure-mode disagreements. The assistant also implemented four model candidates, ran the tracked MLproject entry points, selected a threshold on validation data, evaluated the locked test once, saved a loadable probability model in MLflow, and recorded the observed metrics and VM-browser screenshots. The student should review the model card, MLflow runs, and limitations before submission.

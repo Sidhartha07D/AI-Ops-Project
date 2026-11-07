@@ -1,0 +1,161 @@
+{
+  "candidate_run_ids": {
+    "dummy_prior": "691f3545724d4833bb8ab42843be7a3d",
+    "hist_gradient_boosting": "6953e672bcf24caa839383a09d32feb2",
+    "logistic_balanced": "7e8a1308543c486fbc221ec625e6cedb",
+    "random_forest_balanced": "7cbed6b48d3c4ae8bcd9ebc0f84c4562"
+  },
+  "candidate_validation": {
+    "dummy_prior": {
+      "average_precision": 0.034,
+      "balanced_accuracy": 0.5,
+      "brier": 0.03284402777777777,
+      "confusion_matrix": [
+        [
+          1932,
+          0
+        ],
+        [
+          68,
+          0
+        ]
+      ],
+      "f1": 0.0,
+      "positive_count": 68,
+      "precision": 0.0,
+      "prevalence": 0.034,
+      "recall": 0.0,
+      "roc_auc": 0.5,
+      "threshold": 0.5
+    },
+    "hist_gradient_boosting": {
+      "average_precision": 0.7431941894389562,
+      "balanced_accuracy": 0.7692120326391426,
+      "brier": 0.01689191247615297,
+      "confusion_matrix": [
+        [
+          1921,
+          11
+        ],
+        [
+          31,
+          37
+        ]
+      ],
+      "f1": 0.6379310344827587,
+      "positive_count": 68,
+      "precision": 0.7708333333333334,
+      "prevalence": 0.034,
+      "recall": 0.5441176470588235,
+      "roc_auc": 0.9771191085129703,
+      "threshold": 0.5
+    },
+    "logistic_balanced": {
+      "average_precision": 0.3678860502233218,
+      "balanced_accuracy": 0.8248081841432224,
+      "brier": 0.12402019665986867,
+      "confusion_matrix": [
+        [
+          1596,
+          336
+        ],
+        [
+          12,
+          56
+        ]
+      ],
+      "f1": 0.24347826086956523,
+      "positive_count": 68,
+      "precision": 0.14285714285714285,
+      "prevalence": 0.034,
+      "recall": 0.8235294117647058,
+      "roc_auc": 0.8788363171355499,
+      "threshold": 0.5
+    },
+    "random_forest_balanced": {
+      "average_precision": 0.749490506701175,
+      "balanced_accuracy": 0.8257063695043234,
+      "brier": 0.02087252895882947,
+      "confusion_matrix": [
+        [
+          1912,
+          20
+        ],
+        [
+          23,
+          45
+        ]
+      ],
+      "f1": 0.6766917293233082,
+      "positive_count": 68,
+      "precision": 0.6923076923076923,
+      "prevalence": 0.034,
+      "recall": 0.6617647058823529,
+      "roc_auc": 0.9768298623797345,
+      "threshold": 0.5
+    }
+  },
+  "feature_columns": [
+    "type",
+    "air_temperature_k",
+    "process_temperature_k",
+    "rotational_speed_rpm",
+    "torque_nm",
+    "tool_wear_min",
+    "temperature_gap_k"
+  ],
+  "git_sha": "7dff92752e9e26fffa0f540ee670fb4de17c7f8b",
+  "git_sha_note": "Repository HEAD at run start; training script was uncommitted then and is included in the subsequent Phase 4 commit.",
+  "locked_test": {
+    "average_precision": 0.8066445779056546,
+    "balanced_accuracy": 0.9114602362684203,
+    "brier": 0.01884164234459517,
+    "confusion_matrix": [
+      [
+        1874,
+        58
+      ],
+      [
+        10,
+        58
+      ]
+    ],
+    "f1": 0.6304347826086957,
+    "positive_count": 68,
+    "precision": 0.5,
+    "prevalence": 0.034,
+    "recall": 0.8529411764705882,
+    "roc_auc": 0.9692485689928144,
+    "threshold": 0.36999999999999994
+  },
+  "selected_run_id": "e5260d1c99b046f79795c53a4c392575",
+  "selected_threshold": 0.36999999999999994,
+  "selected_validation": {
+    "average_precision": 0.749490506701175,
+    "balanced_accuracy": 0.8881074168797953,
+    "brier": 0.02087252895882947,
+    "confusion_matrix": [
+      [
+        1869,
+        63
+      ],
+      [
+        13,
+        55
+      ]
+    ],
+    "f1": 0.5913978494623656,
+    "positive_count": 68,
+    "precision": 0.4661016949152542,
+    "prevalence": 0.034,
+    "recall": 0.8088235294117647,
+    "roc_auc": 0.9768298623797345,
+    "threshold": 0.36999999999999994
+  },
+  "selection_policy": "highest validation average precision; threshold maximizes validation F2 over 0.05..0.95",
+  "serving_model_uri": "runs:/e5260d1c99b046f79795c53a4c392575/serving_model",
+  "split_manifest_sha256": "7a1fdd0cca26b328c176d621dd96ed62c19fa6a69ca95cb3f8ae492e781bd08a",
+  "test_evaluations": 1,
+  "winner": "random_forest_balanced",
+  "winner_run_id": "7cbed6b48d3c4ae8bcd9ebc0f84c4562"
+}

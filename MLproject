@@ -1,0 +1,9 @@
+name: smart-maintenance-monitor
+
+entry_points:
+  validate:
+    command: "python src/validate_data.py"
+  train:
+    command: "python src/train_models.py"
+  main:
+    command: "python src/train_models.py"

@@ -12,3 +12,4 @@ data/raw/*.zip
 data/processed/*
 !data/processed/.gitkeep
 mlflow_store/
+mlflow.db
