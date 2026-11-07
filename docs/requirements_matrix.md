@@ -20,11 +20,11 @@ Source of requirements: `AI Application Evaluation Guideline.pdf` (25 points) an
 | Rubric area | Required observed result | Status / evidence |
 | --- | --- | --- |
 | Demo: UI/UX (3) | Intuitive, responsive, foolproof nontechnical UI; no UI errors; user manual | Pending, phases 5/8 |
-| Demo: pipeline view (2) | Separate pipeline view or coordinated MLOps UIs; job/error/success console; measured speed and throughput | DVC DAG visible in `evidence/screenshots/07_phase3_dvc_pipeline.jpg`; console and timing pending |
+| Demo: pipeline view (2) | Separate pipeline view or coordinated MLOps UIs; job/error/success console; measured speed and throughput | DVC DAG visible in `evidence/screenshots/07_phase3_dvc_pipeline.jpg`; timing in `reports/etl_benchmark.md`; live console pending |
 | Software design (2) | Architecture diagram, HLD, LLD with REST I/O, independent UI and inference blocks | Pending, phases 5/8 |
 | Implementation (2) | Consistent Python style, logging, exception handling, inline documentation, API matching LLD, unit tests | Pending, phases 5/6 |
 | Testing (1) | Test plan, cases, acceptance criteria, pass/fail report and acceptance result | Pending, phases 6/8 |
-| Data engineering (2) | Automated Spark or Ray or Kubernetes pipeline; measured speed and throughput | Spark and Ray jobs verified in `evidence/screenshots/06_phase3_spark_ray_comparison.jpg`; timing pending |
+| Data engineering (2) | Automated Spark or Ray or Kubernetes pipeline; measured speed and throughput | Spark and Ray jobs verified in `evidence/screenshots/06_phase3_spark_ray_comparison.jpg`; speed/throughput in `reports/etl_benchmark.md` |
 | Source control and CI (2) | Git plus DVC DAG, automated DVC CI, versioned data/model artifacts, restore proof | Git/DVC/DAG/restore verified; automated CI and model lineage pending |
 | Experiment tracking (2) | MLflow runs with parameters, metrics, artifacts and custom metadata beyond autologging | Pending, phase 4 |
 | Monitoring (2) | Prometheus instrumentation of components, Grafana near-real-time views | Pending, phase 7 |

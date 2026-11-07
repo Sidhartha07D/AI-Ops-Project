@@ -1,0 +1,25 @@
+VM: aarch64 | cores: 4 | date: 2026-11-07T17:06:33+05:30
+
+SPARK
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+26/11/07 17:06:36 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Spark version: 3.5.7 | master: local[2]
+Prepared rows: 10000 | failure labels: {0: 9661, 1: 339}
+Output: /home/sidhartha/smart-maintenance-monitor/data/processed/spark_features.csv
+Spark preparation: PASS
+elapsed_seconds=7.62 peak_rss_kb=29176
+
+RAY
+2026-11-07 17:06:41,959	WARNING authentication_token_setup.py:85 -- Token authentication is enabled for this Ray cluster. Set RAY_AUTH_MODE=disabled to opt out. For more information, see https://docs.ray.io/en/latest/ray-security/token-auth.html
+2026-11-07 17:06:43,867	INFO worker.py:2033 -- Started a local Ray instance.
+Ray version: 2.59.0 | CPU workers: 2
+Prepared rows: 10000 | batches: 10
+Output: /home/sidhartha/smart-maintenance-monitor/data/processed/ray_features.csv
+Ray preparation: PASS
+elapsed_seconds=4.37 peak_rss_kb=152904
+
+COMPARISON
+Compared rows: 10000 | columns: 9
+Identifier and failure-mode flags are not model inputs.
+Spark and Ray output comparison: PASS
