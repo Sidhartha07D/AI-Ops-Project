@@ -1,0 +1,15 @@
+stages:
+  prepare_spark:
+    cmd: python src/prepare_spark.py
+    deps:
+      - data/raw/ai4i2020.csv
+      - src/prepare_spark.py
+    outs:
+      - data/processed/spark_features.csv
+  prepare_ray:
+    cmd: python src/prepare_ray.py
+    deps:
+      - data/raw/ai4i2020.csv
+      - src/prepare_ray.py
+    outs:
+      - data/processed/ray_features.csv

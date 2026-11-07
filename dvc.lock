@@ -1,0 +1,34 @@
+schema: '2.0'
+stages:
+  prepare_spark:
+    cmd: python src/prepare_spark.py
+    deps:
+    - path: data/raw/ai4i2020.csv
+      hash: md5
+      md5: f0adaa9c5e25366c6df1cc2684479871
+      size: 522048
+    - path: src/prepare_spark.py
+      hash: md5
+      md5: 516030a6a80a55aff33ac90d23d08a2d
+      size: 2740
+    outs:
+    - path: data/processed/spark_features.csv
+      hash: md5
+      md5: de9e1e6266057230006ed7abd405a610
+      size: 388556
+  prepare_ray:
+    cmd: python src/prepare_ray.py
+    deps:
+    - path: data/raw/ai4i2020.csv
+      hash: md5
+      md5: f0adaa9c5e25366c6df1cc2684479871
+      size: 522048
+    - path: src/prepare_ray.py
+      hash: md5
+      md5: 0985c836a8ea4bc3d6e67bb2ec1f0666
+      size: 2596
+    outs:
+    - path: data/processed/ray_features.csv
+      hash: md5
+      md5: de9e1e6266057230006ed7abd405a610
+      size: 388556

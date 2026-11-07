@@ -4,3 +4,5 @@ dependencies:
   - pip
   - pip:
       - dvc==3.67.1
+      - pyspark==3.5.7
+      - ray==2.59.0
