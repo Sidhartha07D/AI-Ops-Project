@@ -27,3 +27,5 @@ mlflow run . -e train --experiment-name smart-maintenance-baselines --env-manage
 The training command compares four candidates using validation average precision. It chooses the alert threshold using validation F2, evaluates the locked test set once, logs the selected pipeline and artifacts, and writes `reports/model_evaluation.json`. `mlflow run . -e validate --env-manager local` is a separate data-check entry point. The reproducible model details and limitations are in `docs/model_card.md`.
 
 To inspect the run in the Ubuntu VM browser, start the local tracking page with `mlflow server --backend-store-uri "$MLFLOW_TRACKING_URI" --host 127.0.0.1 --port 5000` and open `http://127.0.0.1:5000` in Firefox. The MLflow store is excluded from Git; export or back it up separately when moving the project.
+
+For safe VM shutdown and restart steps, see [the resume checklist](docs/resume_after_vm_shutdown.md).
