@@ -4,7 +4,7 @@
 
 Use Ubuntu's **Power Off / Shut Down** menu and wait for it to finish before closing UTM. The project is stored on the VM disk at `/home/sidhartha/smart-maintenance-monitor`.
 
-The project has continued through container deployment in Phase 6. The DVC data and local remote, including the selected model artifact, are in sync. The MLflow database and run artifacts are in `mlflow_store/`. Mac backups in `outputs/backups/` and screenshot copies in `outputs/evidence/screenshots/` protect the checkpoint separately from the VM disk.
+The project has continued through Phase 8 local acceptance. The DVC data and local remote, including the selected model artifact, are in sync. The MLflow database and run artifacts are in `mlflow_store/`. Mac backups in `outputs/backups/` and screenshot copies in `outputs/evidence/screenshots/` protect the checkpoint separately from the VM disk. The Phase 8 Git/state backup was restored successfully in a disposable VM directory.
 
 ## When you reopen UTM
 
@@ -45,4 +45,4 @@ docker compose ps
 
 The model, API, and UI containers serve `http://127.0.0.1:5001/ping`, `http://127.0.0.1:8000/docs`, and `http://127.0.0.1:8501/index.html`. The Phase 7 stack also provides Prometheus targets at `http://127.0.0.1:9091/targets` and Grafana at `http://127.0.0.1:3001`. Use `docker compose logs --tail=50` to inspect services. Stop with `docker compose down` before closing the VM. Container images remain on disk, so a normal restart does not rebuild them. If rebuilding from a clone, run `dvc pull` first so `models/serving_model/`, `models/active/`, and the candidate model directories exist.
 
-The lighter host-process alternative remains `scripts/start_phase5.sh` and `scripts/stop_phase5.sh`. Feedback, inference observations, and job logs stay on the VM disk and are excluded from Git. The original selected model is active after the tested rollback. The next project work is Phase 8 submission documents, evidence audit, restore check, and viva preparation.
+The lighter host-process alternative remains `scripts/start_phase5.sh` and `scripts/stop_phase5.sh`. Feedback, inference observations, and job logs stay on the VM disk and are excluded from Git. The original selected model is active after the tested rollback. The five course documents and local acceptance report are in `docs/` and `reports/final_acceptance.md`. A hosted GitHub Actions run and final AI-use disclosure remain for the submission stage. The local project remains usable if those steps are deferred.

@@ -62,3 +62,9 @@ Focused API tests run with `python scripts/phase6_tests.py` from the project env
 Run `python scripts/drift_check.py --mode observations` to assess recent API inputs once at least 50 exist. `--mode demo` reproduces the clearly labeled deliberate torque shift comparison; its result is not evidence of real equipment drift. Neither mode triggers retraining automatically.
 
 Two validation-only candidates and their MLflow/DVC artifacts demonstrate the release gate. `python scripts/release_gate.py review <candidate>` checks the split, schema, locked-test exclusion, validation average precision, recall, and model artifact. An operator must explicitly run `promote`; `rollback` restores the prior release and restarts MLflow serving. The real local promote and rollback were tested, and the original model is currently active. Run `python scripts/phase7_verify.py` while Compose is running for the acceptance check. The results are in `reports/phase7_test_report.md`.
+
+## Final checks and evidence (Phase 8)
+
+The professor's five required documents are linked near the top of this README. `reports/final_acceptance.md` records observed pass, partial, and pending results against `docs/test_plan.md`; `docs/viva_guide.md` prepares the short live explanation. The evidence inventory is `evidence/README.md`, with original VM-browser captures in `evidence/screenshots/` and Mac copies under `outputs/evidence/screenshots/` in the Codex workspace.
+
+The CI workflow restores the pinned UCI CSV by checked hash and runs the DVC stages from a fresh checkout. Those commands passed locally in a disposable clone; a hosted GitHub Actions run still requires this project to be published to a GitHub repository. A Mac Git bundle plus MLflow/DVC state backup was restored in a disposable VM directory and passed source, feature, model-artifact, and tracking-database checks. The final AI-use disclosure is intentionally deferred until submission review.
