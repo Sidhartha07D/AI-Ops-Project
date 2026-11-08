@@ -1,6 +1,6 @@
 # Test plan and acceptance criteria
 
-This plan tests the actual local VM deployment. Record commands, observed results, dates, and any failures in `reports/final_acceptance.md`. A passing script alone is not evidence that the browser UI or monitoring panels are usable.
+This plan tests the actual local VM deployment. Record commands, observed results, dates, and any failures in `reports/submission_acceptance.md`. A passing script alone is not evidence that the browser UI or monitoring panels are usable.
 
 ## Environment and prerequisites
 
@@ -14,10 +14,10 @@ This plan tests the actual local VM deployment. Record commands, observed result
 | ID | Action | Expected acceptance result | Evidence |
 | --- | --- | --- | --- |
 | T01 | Validate pinned UCI CSV and inspect DVC pointer | Schema, 10,000 rows and target checks pass; source hash matches documentation | terminal output, `data/README.md` |
-| T02 | Run `dvc repro`, inspect DAG and remote | All four stages finish; DVC remote reports in sync | terminal and DVC lock |
+| T02 | Run `dvc repro`, inspect DAG and remote | All eight stages reproduce or reuse valid cached outputs; DVC remote reports in sync | terminal and DVC lock |
 | T03 | Run Spark/Ray comparison and benchmark | Both produce 10,000 matching feature rows; wall time and throughput are recorded, with hardware context | comparison and benchmark report |
 | T04 | Inspect MLflow selected run | Parameters, metrics, tags, model and confusion artifact visible; run ID agrees with release manifest | MLflow browser and model card |
-| T05 | Run seven API unit tests | All seven pass, including invalid input, nonfinite sensor values, threshold, bad model data and unavailable model | test output |
+| T05 | Run `python scripts/run_tests.py` | All 13 collected unit tests pass, including input/model errors, storage/feedback guards, release locking and recovery | test output |
 | T06 | Start Compose and run integration smoke | Model, API and UI healthy; valid inference, 422 error, feedback, pipeline and validation succeed | Compose and smoke output |
 | T07 | Use the browser UI for routine and inspection examples | Correct recommendation and score visible; invalid entry displays helpful error; no broken controls at normal and narrow viewport | Ubuntu Firefox captures |
 | T08 | Open pipeline page, run validation, exercise a failure | Stage status plus actual success and error console shown; page distinguishes failure from success | Ubuntu Firefox captures and job log |
@@ -25,12 +25,12 @@ This plan tests the actual local VM deployment. Record commands, observed result
 | T10 | Open Prometheus targets and Grafana | API, model and UI probes Up; live request, latency, memory and disk panels visible | Ubuntu Firefox captures |
 | T11 | Run controlled drift and release checks | Demo shift is labeled; insufficient real observations are rejected; candidate rejection, promotion and rollback verified | Phase 7 report and output |
 | T12 | Stop and restart VM services, then restore a fresh clone from Git and DVC backup | Documented restart works; model and UI answer after restore | restore log and browser check |
-| T13 | Run repository CI workflow | Hosted run completes unit, source, DVC repro, comparison and Compose syntax checks; record run URL/commit | GitHub Actions run or explicit limitation |
+| T13 | Run primary VM-only CI | All 13 local command groups pass; preserve actual logs, source commit and unit counts | Local CI report and archived logs; hosted history is supplementary |
 | T14 | Audit docs and evidence | Five required documents exist; screenshots are real, distinct, indexed and match the current release | document/evidence index |
 
 ## Pass rule and defect handling
 
-The project is accepted locally when T01–T12 and T14 pass. T13 is separately reported because it depends on a remote repository and a hosted runner. Every failure is recorded with the observed output, fix, and rerun; an unexecuted case remains **not run**, never passed. Check invalid input and service outages without editing the pinned source data. The model is a synthetic-record classifier and the test does not claim a future failure forecast or field accuracy.
+The project is accepted locally when all applicable T01–T14 groups pass with recorded evidence. T13 uses the local VM runner; a GitHub-hosted run is not required. A service restart and an actual OS reboot must be distinguished in T12 evidence. Every failure is recorded with the observed output, fix, and rerun; an unexecuted case remains **not run**, never passed. Check invalid input and service outages without editing the pinned source data. The model is a synthetic-record classifier and the test does not claim a future failure forecast or field accuracy.
 
 
 ## Current verification commands

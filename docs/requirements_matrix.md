@@ -29,5 +29,5 @@ The professor's evaluation guideline defines 25 points. The original blueprint i
 - The AI disclosure remains deferred by explicit user instruction; do not submit without the later required review.
 - Confirm instructor access to the private repository and the requested archive/PDF/video format.
 - Rehearse the actual project and assignment concepts. No full-mark guarantee is made.
-- Evidence index corrections matter: screenshot 26 is mislabelled CI output and does not prove a UI outage. New captures are counted only after visual inspection.
+- Evidence index corrections matter: mislabelled screenshot 26 was removed. Genuine UI outage/recovery captures remain pending until inspected and saved.
 - Airflow/KServe/Kubernetes, fleet replay, role accounts and feedback-to-training workflow are explicit deferred extensions, not silently completed requirements.
