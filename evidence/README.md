@@ -28,7 +28,7 @@ The failed MLflow runs visible in the first browser screenshot came from initial
 
 The two UI examples are training-set records used only for demonstration; they are not additional locked-test evaluations. The integration smoke script also checks an invalid-input 422 response, a model prediction, DVC status, validation, feedback queue, and the UI service.
 
-Submission-hardening corrections supersede earlier descriptions. Screenshot 26 was removed because it showed CI terminal output rather than the claimed outage UI. Browser outage evidence remains pending; do not claim that capture exists.
+Submission-hardening corrections supersede earlier descriptions. Screenshot 26 was removed because it showed CI terminal output rather than the claimed outage UI. Replacement browser outage/recovery evidence is now recorded in captures 31 and 32.
 
 | New capture | Observed result | Context |
 | --- | --- | --- |
@@ -37,4 +37,10 @@ Submission-hardening corrections supersede earlier descriptions. Screenshot 26 w
 
 ## Evidence cleanup
 
-Removed redundant screenshots 13 (inspection result covered by 16), 14 (pipeline view superseded by 29), and 18/21 (Grafana views superseded by 30). Removed mislabelled screenshot 26, whose terminal content was already covered by CI evidence 27. Screenshot numbers are preserved so historical references remain traceable. Capture tests are excluded. The current set contains 21 useful project screenshots. Earlier versions remain recoverable in Git history.
+Removed redundant screenshots 13 (inspection result covered by 16), 14 (pipeline view superseded by 29), and 18/21 (Grafana views superseded by 30). Removed mislabelled screenshot 26, whose terminal content was already covered by CI evidence 27. Screenshot numbers are preserved so historical references remain traceable. Capture tests are excluded. After the additional outage/recovery and verification captures, the current set contains 24 useful project screenshots. Earlier versions remain recoverable in Git history.
+
+| Additional capture | Observed result | Context |
+| --- | --- | --- |
+| `31_model_outage_warning.jpg` | Genuine red model-unavailable status while the model container is stopped | Ubuntu Firefox, VM clock 2026-11-08 21:29; exact inspected frame saved |
+| `32_model_recovery_prediction.jpg` | Services ready and inspection prediction restored, with uncalibrated score explanation | Ubuntu Firefox, VM clock 2026-11-08 21:32, 67% zoom; exact inspected frame saved |
+| `33_local_checks_restore_load.jpg` | Saved actual results: 13 unit tests and 13 CI groups passed, 240-request paced measurement, DVC restore and sync | Ubuntu terminal, VM clock 2026-11-08 21:40; `cat /tmp/prof` displays an exact copy of `reports/verification_summary.txt`, generated from the linked JSON records. Commands were executed earlier, not rerun by this display. |

@@ -1,0 +1,29 @@
+SMART MAINTENANCE MONITOR | MEASURED VERIFICATION
+
+Local CI source: b77b44db0750
+Local CI: PASSED | 13 command groups
+Unit tests: 13 executed | 13 passed | 0 failures | 0 errors | 0 skipped
+
+  python_format              exit 0
+  python_lint                exit 0
+  environment                exit 0
+  compile                    exit 0
+  unit_tests                 exit 0
+  dvc_pipeline               exit 0
+  artifact_backup            exit 0
+  feature_parity             exit 0
+  compose_config             exit 0
+  integration                exit 0
+  model_contract_and_load    exit 0
+  fresh_drift                exit 0
+  operations                 exit 0
+
+Sustained probe: 120.00s | 240 requests | 0 errors
+Paced clients: 2 | p95 102.46 ms | model parity 1e-6
+Fresh checkout + DVC restore: PASSED
+Active/candidate model digests match: True/True
+Service recreation + live smoke: PASSED (not an OS reboot)
+Cache and remote 'vmstore' are in sync.
+
+Sources: reports/ JSON + evidence/verification/b77b44db/
+Demo/test readings; no new locked-test scoring.

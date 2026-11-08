@@ -40,9 +40,11 @@ Additional later workload and restore evidence is recorded separately in `report
 
 `reports/live_recovery_check.json` records a deliberately injected exception after a real candidate server startup. The recovery path restarted the original model and restored both bytes and policy; post-recovery integration passed. Successful live promotion of a validation-only candidate and rollback to the original selected run were also executed. Saved events distinguish this from the operations script's history assertions. Corrupt artifact digest and forged metric fixtures were rejected on actual model evaluation.
 
+Subsequent full Ubuntu reboot verification is recorded in `reports/vm_reboot_check.json`: boot ID changed, model bytes/policy persisted, services restarted, integration passed, DVC synced, timer active and MLflow database valid. Genuine browser outage/recovery and saved-results captures are indexed as 31–33.
+
 ## Corrections and limits
 
-- Mislabelled image 26 was removed: it showed CI terminal output, not the outage UI. A genuine browser outage screenshot remains pending; no replacement is claimed.
+- Mislabelled image 26 was removed: it showed CI terminal output, not the outage UI. Genuine replacement browser outage/recovery captures 31/32 are now indexed, together with local-results capture 33.
 - Local CI is the primary path. Historical GitHub-hosted CI is preserved; its automatic triggers are disabled. No professor exception to the cloud rule is assumed.
 - MLproject declares the version snapshot; 163 installed pip package versions and Python were checked. A fresh environment installation/image digest lock was not demonstrated during this run.
 - The user-level five-minute timer refreshes input drift while the user manager runs. Recent inputs include repeated course-demo requests, not new industrial measurements; no fresh-label accuracy/concept-drift claim is made.

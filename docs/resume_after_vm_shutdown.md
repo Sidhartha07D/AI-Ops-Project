@@ -52,3 +52,5 @@ After services become healthy, run `~/miniconda/envs/smart-maintenance/bin/pytho
 ## Latest restart evidence
 
 `reports/service_restart_check.json` records a completed `docker compose down` followed by `docker compose up -d --wait`, healthy endpoints, the active drift timer, and synchronized DVC storage. This recreated the service containers without rebuilding images or retraining. It was not an operating-system reboot; a full shutdown/start demonstration is recorded separately only when actually performed.
+
+A subsequent actual Ubuntu reboot was verified by a changed boot ID, preserved active/candidate model digests and policy, successful startup of all seven services, passing live integration, synchronized DVC storage, active drift timer, and valid MLflow database. The observed record is `reports/vm_reboot_check.json`.

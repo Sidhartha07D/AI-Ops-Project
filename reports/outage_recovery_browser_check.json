@@ -1,0 +1,16 @@
+{
+  "test": "controlled model-service outage and recovery",
+  "date": "2026-11-08",
+  "model_stop_exit_code": 0,
+  "outage_health_body": {
+    "api": "ready",
+    "model": "unavailable",
+    "selected_run_id": "e5260d1c99b046f79795c53a4c392575"
+  },
+  "outage_capture": "31_model_outage_warning.jpg",
+  "recovery_command": "docker compose up -d --wait --wait-timeout 120 model",
+  "recovery_exit_code": 0,
+  "post_recovery_phase5_smoke": "passed; health, ordinary/inspection inference, 422, pipeline/validation/feedback and separate UI",
+  "recovery_capture": "32_model_recovery_prediction.jpg",
+  "interpretation": "Genuine screenshots inspected before saving exact bytes; not an OS reboot or new model-quality evaluation."
+}

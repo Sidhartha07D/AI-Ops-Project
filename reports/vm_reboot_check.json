@@ -1,0 +1,30 @@
+{
+  "before_at": "2026-11-08T16:13:43.719027+00:00",
+  "before_boot_id": "3c5bc3ac-acf5-40f2-9c47-5dc864d29a2f",
+  "active_model_digest": "43f90b5ec016bd190c6f304479a616ce0d32f16a25f6194783545960a60e62d4",
+  "candidate_model_digest": "5d76ffce2c080d0a4bab664ef9a7e2050469737d9d85d6dc47d77d3591ed8bb6",
+  "before_release": {
+    "artifact_sha256": "43f90b5ec016bd190c6f304479a616ce0d32f16a25f6194783545960a60e62d4",
+    "model_path": "models/serving_model",
+    "run_id": "e5260d1c99b046f79795c53a4c392575",
+    "threshold": 0.36999999999999994,
+    "validation_average_precision": 0.749490506701175,
+    "version": "v1"
+  },
+  "status": "passed",
+  "after_at": "2026-11-08T16:38:39.491131+00:00",
+  "after_boot_id": "2368bf1c-7504-44cf-b458-7a754e68c818",
+  "boot_id_changed": true,
+  "model_and_release_digests_preserved": true,
+  "startup_command": "docker compose up -d --wait --wait-timeout 180",
+  "startup_exit_code": 0,
+  "post_reboot_integration": "phase5_smoke.py passed all eight printed acceptance checks",
+  "dvc_status": "Cache and remote 'vmstore' are in sync.",
+  "drift_timer": "active",
+  "api_http_status": 200,
+  "model_http_status": 200,
+  "ui_http_status": 200,
+  "grafana_http_status": 200,
+  "mlflow_sqlite_integrity": "ok",
+  "mlflow_runs": 22
+}

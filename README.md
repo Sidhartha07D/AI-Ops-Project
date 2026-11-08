@@ -51,6 +51,8 @@ The reported selected model has validation AP 0.7495; reported test AP 0.8066 an
 
 - [Current actual acceptance results](reports/submission_acceptance.md): counts, command logs, parity/load probe and recovery.
 - [Finishing checks](reports/finishing_checks.md): two-minute paced measurement, service restart, fresh DVC restore, and outstanding handoff items.
+- [LaTeX PDF report](docs/report/smart_maintenance_report.pdf) and [editable source](docs/report/smart_maintenance_report.tex): reviewed layout and actual implementation results.
+- [Narrated video plan](docs/demo_walkthrough.md): timed 7–8 minute walkthrough within the required 5–10 minutes; recording remains to be made.
 - [Requirements and limits](docs/requirements_matrix.md), [approved reduced scope](docs/scope_decisions.md), [corrections](docs/hardening_changes.md).
 - [Evidence index](evidence/README.md): genuine VM captures; file 26 is a mislabelled CI capture and excluded from outage proof.
 - [Dataset source and attribution](data/README.md), [ETL benchmark](reports/etl_benchmark.md), [model evaluation](reports/model_evaluation.json).
