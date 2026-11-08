@@ -10,14 +10,14 @@ Observed on 2026-11-08 in the Ubuntu 26.04 ARM64 UTM VM, 4 vCPUs and 3.3 GiB RAM
 | T04 MLflow | Selected run, metrics, tags and confusion artifact observed in prior Ubuntu Firefox screenshots 09–11; current release manifest still identifies that run | Pass |
 | T05 unit | Six focused API tests passed on the VM and in a fresh checkout. The final seven-test suite also rejects nonfinite sensor input and passed on the VM | Pass |
 | T06 integration | Seven Compose services started; model, API and UI reported healthy. `scripts/phase5_smoke.py` passed predictions, HTTP 422, DVC status, validation, feedback and separate UI. A temporary validation-fixture bug was found during cleanup, fixed, and the smoke run passed again | Pass |
-| T07 UI | Prior browser captures show routine and inspection outcomes. A 390 × 844 Firefox responsive view showed header, guidance, service readiness and form without horizontal clipping (screenshot 23). Post-change input-error browser review remains | Partial |
+| T07 UI | Prior browser captures show routine and inspection outcomes. A 390 × 844 Firefox responsive view showed header, guidance, service readiness and form without horizontal clipping (screenshot 23). Torque 200 was blocked by the browser's 100 Nm maximum with a visible warning (screenshot 24) | Pass |
 | T08 pipeline | Ubuntu Firefox showed four ready stages and DVC in sync. A separate invalid CSV fixture caused a real validation error and traceback, captured in screenshot 22; after removing the fixture, validation and smoke checks passed | Pass |
 | T09 API | Earlier FastAPI docs screenshot 15 and live smoke HTTP 422 response verified. A current docs review remains | Pass for endpoint behavior |
 | T10 monitoring | `scripts/phase7_verify.py` confirmed API metrics, four healthy Prometheus targets, two successful model/UI probes, and Grafana dashboard provisioning; browser captures 18, 19 and 21 show live panels | Pass |
 | T11 drift and release | Phase 7 verification confirmed marked deliberate shift, eight real observations below the 50-sample minimum, a rejected candidate, approved promotion, and rollback to the original run | Pass |
-| T12 restore | A fresh clone at `/tmp/smm-restore.T5YXyL` configured the VM DVC remote, fetched 19 files, passed source and feature comparison, found the active model artifact, and reported DVC in sync. Full Mac-backup restore and VM reboot test remain | Partial |
+| T12 restore | The VM was started again this session and Compose plus smoke checks passed. A fresh clone restored 19 DVC files and passed data checks. Separately, a disposable restore from the **Mac Phase 8 Git bundle and state archive** fetched the same 19 files, validated the source and Spark/Ray equality, found the active model, verified DVC sync, and opened the restored MLflow database with 15 runs | Pass |
 | T13 CI | The revised workflow's commands passed end-to-end in a second fresh clone at `/tmp/smm-ci.D3zyE5`: compile, unit tests, DAG, pinned UCI download, validation, forced DVC repro, Spark/Ray equality, Compose syntax. No GitHub Actions run has occurred because this project currently has no remote | Local pass; hosted run pending |
-| T14 docs/evidence | Architecture, HLD, LLD, test plan and user manual exist. Screenshot 22 added and indexed. Final evidence and viva audit remain | Partial |
+| T14 docs/evidence | Architecture, HLD, LLD, test plan and user manual exist. Screenshots 22–23 added and indexed; viva notes are in `docs/viva_guide.md`. Final evidence audit remains | Partial |
 
 ## Defects and resolution
 
@@ -26,3 +26,7 @@ Observed on 2026-11-08 in the Ubuntu 26.04 ARM64 UTM VM, 4 vCPUs and 3.3 GiB RAM
 3. A smoke test attempted immediately after `docker compose restart api` met a connection reset while the API was starting. After the API reached healthy status, the unchanged smoke test passed. Operators should wait for healthy status before invoking the smoke script.
 
 The 2026-11-08 DVC rerun reproduced the existing fixed split hash `7a1fdd0c...`; no locked-test reevaluation was performed. The original selected model run began while its training script was uncommitted, as disclosed in `docs/model_card.md`. A later commit cannot rewrite that history; provenance should be described honestly in the presentation.
+
+## Backup checkpoint
+
+The Mac workspace stores `outputs/backups/smart-maintenance-phase8.bundle` (complete Git history through `387e843`) and `outputs/backups/smart-maintenance-phase8-state.tar.gz` (MLflow store, DVC remote and local DVC configuration). SHA-256 values are `86bfd4a0d50b55fa29fd872aa82e95e4b61b1a57170e2f1954a0e2b1bf11b4c7` and `5247fef799e9010abf7f4dc4ee6e612436084f4718f53f9aa80c3ce453d0680a`. `git bundle verify` reported a complete history. The archive and bundle were copied back into a disposable VM directory and restored; that test passed as described in T12. The temporary restore directories were removed afterward.

@@ -37,4 +37,4 @@ These are one-split demonstration results, not a claim about real industrial per
 - Probability model URI: `runs:/e5260d1c99b046f79795c53a4c392575/serving_model`.
 - Full candidate metrics, run IDs, threshold policy, and selected result: `reports/model_evaluation.json`.
 
-The selected MLflow model includes the scikit-learn preprocessing pipeline. The seven input columns are required; later API code will derive the temperature gap from six user-provided raw fields. At the chosen threshold, the model emits a positive alert when failure probability is at least 0.37.
+The selected MLflow model includes the scikit-learn preprocessing pipeline. The seven input columns are required; FastAPI derives the temperature gap from the six user-provided fields. At the chosen threshold, the model emits a positive alert when failure probability is at least 0.37.

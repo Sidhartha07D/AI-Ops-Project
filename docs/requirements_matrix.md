@@ -13,19 +13,19 @@ Source of requirements: `AI Application Evaluation Guideline.pdf` (25 points) an
 | 5. Serving and UI | MLflow model endpoint, FastAPI, independent nontechnical UI, pipeline screen, feedback | Verified with integration test and VM-browser screenshots |
 | 6. Packaging and tests | Separate Docker Compose services, logs, unit/integration/end-to-end tests | Seven services healthy; six API tests and integration smoke pass; hosted CI run pending |
 | 7. Operations | Prometheus/Grafana, drift, retraining gate, release/reject/rollback | Live API/model/UI monitoring, drift guard, validation-only candidates, reject/promote/rollback verified |
-| 8. Submission | Five mandatory documents, test report, backups/restore, evidence audit, demo and viva | Five drafts written; final acceptance, restore, CI and viva work in progress |
+| 8. Submission | Five mandatory documents, test report, backups/restore, evidence audit, demo and viva | Five documents written; Mac backup restoration passed; final evidence, hosted CI and viva work in progress |
 
 ## Evaluation criteria (25 points)
 
 | Rubric area | Required observed result | Status / evidence |
 | --- | --- | --- |
-| Demo: UI/UX (3) | Intuitive, responsive, foolproof nontechnical UI; no UI errors; user manual | Separate UI and input checks verified; user manual written; narrow viewport check pending |
+| Demo: UI/UX (3) | Intuitive, responsive, foolproof nontechnical UI; no UI errors; user manual | Separate UI and input checks verified; 390-pixel view and range warning captured in screenshots 23–24; user manual written |
 | Demo: pipeline view (2) | Separate pipeline view or coordinated MLOps UIs; job/error/success console; measured speed and throughput | Success console in `evidence/screenshots/14_phase5_pipeline_console.jpg`, real failure in screenshot 22; DVC DAG and ETL timing saved |
 | Software design (2) | Architecture diagram, HLD, LLD with REST I/O, independent UI and inference blocks | `docs/architecture.md`, `docs/high_level_design.md`, `docs/low_level_design.md` written against running system |
 | Implementation (2) | Consistent Python style, logging, exception handling, inline documentation, API matching LLD, unit tests | Seven API unit tests pass; logging and model error handling checked; configurable UI API origin |
 | Testing (1) | Test plan, cases, acceptance criteria, pass/fail report and acceptance result | `docs/test_plan.md` written; Phase 6/7 observed reports exist; final unified report in progress |
 | Data engineering (2) | Automated Spark or Ray or Kubernetes pipeline; measured speed and throughput | Spark and Ray jobs verified in `evidence/screenshots/06_phase3_spark_ray_comparison.jpg`; speed/throughput in `reports/etl_benchmark.md` |
-| Source control and CI (2) | Git plus DVC DAG, automated DVC CI, versioned data/model artifacts, restore proof | Git/DVC/DAG and model artifact verified; workflow now restores pinned public data and runs real DVC repro; clean checkout and GitHub run pending |
+| Source control and CI (2) | Git plus DVC DAG, automated DVC CI, versioned data/model artifacts, restore proof | Git/DVC/DAG and model artifact verified; full CI commands passed in a fresh clone; Mac backup restore passed; GitHub Actions run pending |
 | Experiment tracking (2) | MLflow runs with parameters, metrics, artifacts and custom metadata beyond autologging | Four candidate runs, selected-model run, provenance tags, metrics, artifacts and MLproject verified |
 | Monitoring (2) | Prometheus instrumentation of components, Grafana near-real-time views | API and VM metrics, model/UI probes, four targets up, Grafana dashboard and alert rules verified; screenshots 18-19 |
 | Packaging (2) | MLflow model serving, MLproject, FastAPI, independent frontend/backend containers in Compose | Model, API, and UI Compose services healthy; integration smoke passed |
