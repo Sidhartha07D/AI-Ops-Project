@@ -18,3 +18,8 @@ reports/phase5_jobs.jsonl
 reports/inference_observations.jsonl
 reports/drift_latest.json
 models/downloads/
+
+models/.release.lock
+reports/local_ci_latest.json
+reports/local_ci_logs/
+reports/contract_load_latest.json

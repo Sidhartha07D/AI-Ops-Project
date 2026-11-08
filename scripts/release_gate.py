@@ -4,6 +4,10 @@ Promotion requires a human command; drift detection never calls this script.
 """
 
 import argparse
+import fcntl
+import os
+import sys
+from tempfile import TemporaryDirectory
 import json
 import shutil
 import subprocess
@@ -18,6 +22,9 @@ ACTIVE = MODELS / "active"
 RELEASE = MODELS / "active_release.json"
 PREVIOUS = MODELS / "previous_release.json"
 EVENTS = ROOT / "reports/phase7_release_events.jsonl"
+sys.path.insert(0, str(ROOT))
+from scripts.artifacts import load_model, tree_digest
+
 BASELINE = json.loads((ROOT / "reports/model_evaluation.json").read_text())
 
 
@@ -27,7 +34,9 @@ def event(action, **fields):
 
 
 def write_release(release):
-    RELEASE.write_text(json.dumps(release, indent=2, sort_keys=True) + "\n")
+    temporary = RELEASE.with_suffix(".tmp")
+    temporary.write_text(json.dumps(release, indent=2, sort_keys=True) + "\n")
+    os.replace(temporary, RELEASE)
 
 
 def replace_active(source):
@@ -43,15 +52,53 @@ def replace_active(source):
 
 
 def restart_and_check():
-    subprocess.run(["docker", "compose", "restart", "model"], cwd=ROOT, check=True)
+    """Recreate the mount, then compare served outputs with the active local bundle."""
+    import numpy as np
+    import pandas as pd
+    sample = [{"type": "M", "air_temperature_k": 298.1, "process_temperature_k": 308.6, "rotational_speed_rpm": 1551, "torque_nm": 42.8, "tool_wear_min": 0, "temperature_gap_k": 10.5}]
+    expected = np.asarray(load_model(ACTIVE).predict(pd.DataFrame(sample)))
+    subprocess.run(["docker", "compose", "up", "-d", "--no-deps", "--force-recreate", "model"], cwd=ROOT, check=True)
     for _ in range(45):
         try:
-            with urllib.request.urlopen("http://127.0.0.1:5001/ping", timeout=2) as res:
-                if res.status == 200:
-                    return
-        except Exception:
-            time.sleep(1)
-    raise RuntimeError("Model did not become healthy after release switch")
+            request = urllib.request.Request("http://127.0.0.1:5001/invocations", data=json.dumps({"dataframe_records": sample}).encode(), headers={"Content-Type": "application/json"})
+            with urllib.request.urlopen(request, timeout=3) as res:
+                actual = np.asarray(json.load(res)["predictions"])
+            if actual.shape == expected.shape and np.allclose(actual, expected, atol=1e-8):
+                return
+        except (OSError, ValueError, KeyError):
+            pass
+        time.sleep(1)
+    raise RuntimeError("Served model did not match the staged bundle")
+
+
+def switch_release(release):
+    """Block predictions; restore bytes and policy automatically on any failed switch."""
+    source = ROOT / release["model_path"]
+    load_model(source)  # Reject corrupt bundles before touching the serving release.
+    with (MODELS / ".release.lock").open("a") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        old = json.loads(RELEASE.read_text())
+        with TemporaryDirectory(prefix="release-backup-", dir=MODELS) as temporary:
+            backup = Path(temporary) / "model"
+            shutil.copytree(ACTIVE, backup)
+            try:
+                subprocess.run(["docker", "compose", "stop", "model"], cwd=ROOT, check=True)
+                replace_active(release["model_path"])
+                restart_and_check()
+                write_release({**release, "artifact_sha256": tree_digest(ACTIVE)})
+            except BaseException:
+                # Keep the exclusive lock while recovering, so no mixed model/policy is served.
+                subprocess.run(["docker", "compose", "stop", "model"], cwd=ROOT, check=True)
+                replace_active(backup)
+                write_release(old)
+                try:
+                    restart_and_check()
+                except Exception as recovery_error:
+                    event("recovery_failed", error=type(recovery_error).__name__)
+                    raise RuntimeError("Release failed and recovery needs operator attention") from recovery_error
+                event("failed_switch_restored", release=old)
+                raise
+        return old
 
 
 def candidate(name):
@@ -71,8 +118,29 @@ def review(item):
         reasons.append("validation average precision below champion")
     if item["validation_recall_at_champion_threshold"] + 1e-9 < BASELINE["selected_validation"]["recall"]:
         reasons.append("validation recall below champion")
-    if not (ROOT / item["model_path"] / "MLmodel").exists():
-        reasons.append("loadable model artifact missing")
+    try:
+        import pandas as pd
+        import numpy as np
+        from hashlib import sha256
+        from sklearn.metrics import average_precision_score, recall_score
+        from src.train_models import FEATURES
+        split_path = ROOT / "data/splits/split_ids.csv"
+        if sha256(split_path.read_bytes()).hexdigest() != item["split_manifest_sha256"]:
+            reasons.append("actual split hash changed")
+        path = ROOT / item["model_path"]
+        if item.get("artifact_sha256") and tree_digest(path) != item["artifact_sha256"]:
+            reasons.append("artifact digest mismatch")
+        model = load_model(path)
+        frame = pd.read_csv(ROOT / "data/processed/spark_features.csv").merge(pd.read_csv(split_path), on="udi", validate="one_to_one")
+        validation = frame.loc[frame.split == "validation"]
+        assert len(validation) == 2000
+        scores = np.asarray(model.predict(validation[FEATURES]))[:, 1]
+        actual_ap = float(average_precision_score(validation.machine_failure, scores))
+        actual_recall = float(recall_score(validation.machine_failure, scores >= item["threshold"]))
+        if abs(actual_ap - item["validation_average_precision"]) > 1e-8 or abs(actual_recall - item["validation_recall_at_champion_threshold"]) > 1e-8:
+            reasons.append("reported scores do not match actual artifact")
+    except Exception as exc:
+        reasons.append("artifact validation failed: " + type(exc).__name__)
     return reasons
 
 
@@ -102,12 +170,10 @@ def main():
             if args.action == "promote" and reasons:
                 raise SystemExit(2)
             return
-        previous = json.loads(RELEASE.read_text())
-        PREVIOUS.write_text(json.dumps(previous, indent=2, sort_keys=True) + "\n")
-        replace_active(item["model_path"])
+
         release = {"version": "v2", "run_id": item["run_id"], "model_path": item["model_path"], "threshold": item["threshold"], "validation_average_precision": item["validation_average_precision"]}
-        write_release(release)
-        restart_and_check()
+        previous = switch_release(release)
+        PREVIOUS.write_text(json.dumps(previous, indent=2, sort_keys=True) + "\n")
         event("promote", release=release, previous=previous)
         print(f"PROMOTED: {release['run_id']}; model endpoint healthy")
         return
@@ -115,9 +181,7 @@ def main():
         raise SystemExit("No previous release recorded")
     previous = json.loads(PREVIOUS.read_text())
     outgoing = json.loads(RELEASE.read_text())
-    replace_active(previous["model_path"])
-    write_release(previous)
-    restart_and_check()
+    switch_release(previous)
     event("rollback", release=previous, outgoing=outgoing)
     print(f"ROLLED BACK: {previous['run_id']}; model endpoint healthy")
 

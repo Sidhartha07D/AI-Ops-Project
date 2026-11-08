@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+import fcntl
+from contextlib import contextmanager
 import logging
 import math
 import os
@@ -34,6 +36,7 @@ JOBS = ROOT / "reports/phase5_jobs.jsonl"
 FEEDBACK = ROOT / "reports/feedback_pending.jsonl"
 OBSERVATIONS = ROOT / "reports/inference_observations.jsonl"
 job_lock = threading.Lock()
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
 logger = logging.getLogger(__name__)
 
 REQUESTS = Counter("smm_http_requests_total", "API requests", ["path", "status"])
@@ -104,8 +107,12 @@ def fetch_model(path: str, payload: dict | None = None, timeout: float = 8) -> o
 
 def append_jsonl(path: Path, item: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("a", encoding="utf-8") as out:
-        out.write(json.dumps(item, sort_keys=True) + "\n")
+    try:
+        with path.open("a", encoding="utf-8") as out:
+            out.write(json.dumps(item, sort_keys=True) + "\n")
+    except OSError as exc:
+        logger.exception("Local storage write failed")
+        raise HTTPException(status_code=503, detail="Local storage unavailable; please retry later") from exc
 
 
 def active_release() -> dict:
@@ -125,9 +132,29 @@ def health() -> dict:
     return {"api": "ready", "model": model, "selected_run_id": active_release()["run_id"]}
 
 
+@contextmanager
+def release_read_lock():
+    """Exclude predictions during a release change to keep model/policy consistent."""
+    with (ROOT / "models/.release.lock").open("a") as lock:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_SH | fcntl.LOCK_NB)
+        except BlockingIOError as exc:
+            raise HTTPException(status_code=503, detail="Model release in progress; retry shortly") from exc
+        try:
+            yield
+        finally:
+            fcntl.flock(lock, fcntl.LOCK_UN)
+
+
 @app.post("/predict")
 def predict(reading: Reading) -> dict:
+    with release_read_lock():
+        return predict_locked(reading)
+
+
+def predict_locked(reading: Reading) -> dict:
     start = time.perf_counter()
+    prediction_id = uuid4().hex
     features = reading.model_dump()
     features["temperature_gap_k"] = round(features["process_temperature_k"] - features["air_temperature_k"], 6)
     result = fetch_model("/invocations", {"dataframe_records": [features]})
@@ -142,10 +169,10 @@ def predict(reading: Reading) -> dict:
     threshold = float(release["threshold"])
     alert = probability >= threshold
     PREDICTIONS.labels(alert=str(alert).lower()).inc()
-    append_jsonl(OBSERVATIONS, {"received_at": datetime.now(timezone.utc).isoformat(), **features, "failure_probability": round(probability, 6), "alert": alert})
+    append_jsonl(OBSERVATIONS, {"prediction_id": prediction_id, "model_run_id": release["run_id"], "received_at": datetime.now(timezone.utc).isoformat(), **features, "failure_probability": round(probability, 6), "alert": alert})
     logger.info("Prediction served: release=%s alert=%s latency_ms=%.1f", release["run_id"][:8], alert, (time.perf_counter() - start) * 1000)
     return {
-        "prediction_id": uuid4().hex,
+        "prediction_id": prediction_id,
         "failure_probability": round(probability, 6),
         "alert": alert,
         "recommendation": "Schedule an inspection" if alert else "Continue routine checks",
@@ -158,6 +185,12 @@ def predict(reading: Reading) -> dict:
 
 @app.post("/feedback", status_code=202)
 def feedback(item: Feedback) -> dict:
+    try:
+        known = OBSERVATIONS.exists() and any(json.loads(line).get("prediction_id") == item.prediction_id for line in OBSERVATIONS.read_text().splitlines() if line.strip())
+    except (OSError, ValueError) as exc:
+        raise HTTPException(status_code=503, detail="Prediction history unavailable") from exc
+    if not known:
+        raise HTTPException(status_code=404, detail="Prediction was not found in local history")
     record = {"id": uuid4().hex, "received_at": datetime.now(timezone.utc).isoformat(), **item.model_dump(), "status": "pending_review"}
     append_jsonl(FEEDBACK, record)
     logger.info("Feedback queued: id=%s", record["id"])
@@ -182,7 +215,9 @@ def pipeline() -> dict:
     jobs = []
     if JOBS.exists():
         jobs = [json.loads(line) for line in JOBS.read_text().splitlines()[-8:] if line.strip()]
-    return {"steps": steps, "dvc_in_sync": dvc_ok, "dvc_message": dvc_message, "model_run_id": active_release()["run_id"], "recent_jobs": jobs}
+    evaluation_path = ROOT / "reports/pipeline_evaluation.json"
+    evaluation = json.loads(evaluation_path.read_text()) if evaluation_path.exists() else None
+    return {"candidate_evaluation": evaluation, "steps": steps, "dvc_in_sync": dvc_ok, "dvc_message": dvc_message, "model_run_id": active_release()["run_id"], "recent_jobs": jobs}
 
 
 @app.post("/jobs/validate")

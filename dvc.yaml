@@ -1,8 +1,16 @@
 stages:
+  validate_source:
+    cmd: python src/validate_data.py --report reports/source_validation.json
+    deps:
+      - data/raw/ai4i2020.csv
+      - src/validate_data.py
+    outs:
+      - reports/source_validation.json
   prepare_spark:
     cmd: python src/prepare_spark.py
     deps:
       - data/raw/ai4i2020.csv
+      - reports/source_validation.json
       - src/prepare_spark.py
     outs:
       - data/processed/spark_features.csv
@@ -10,6 +18,7 @@ stages:
     cmd: python src/prepare_ray.py
     deps:
       - data/raw/ai4i2020.csv
+      - reports/source_validation.json
       - src/prepare_ray.py
     outs:
       - data/processed/ray_features.csv
@@ -30,3 +39,31 @@ stages:
     outs:
       - data/splits/split_ids.csv
       - reports/split_summary.json
+  train_candidate:
+    cmd: python scripts/train_candidate.py
+    deps:
+      - data/processed/spark_features.csv
+      - data/splits/split_ids.csv
+      - src/train_models.py
+      - scripts/train_candidate.py
+      - scripts/artifacts.py
+      - environment.yml
+    params:
+      - candidate
+    outs:
+      - models/pipeline_candidate
+      - reports/pipeline_training.json
+  evaluate_candidate:
+    cmd: python scripts/evaluate_candidate.py
+    deps:
+      - models/pipeline_candidate
+      - reports/pipeline_training.json
+      - data/processed/spark_features.csv
+      - data/splits/split_ids.csv
+      - reports/model_evaluation.json
+      - scripts/evaluate_candidate.py
+      - scripts/artifacts.py
+      - src/train_models.py
+    metrics:
+      - reports/pipeline_evaluation.json:
+          cache: false

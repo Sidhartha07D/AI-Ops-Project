@@ -13,13 +13,13 @@ After the project operator starts the VM services, open Firefox **inside the Ubu
 1. Enter the machine's product type (`L`, `M`, or `H`), air and process temperatures in Kelvin, rotation speed in rpm, torque in Nm, and tool wear in minutes. The form labels show the accepted ranges.
 2. Select **Check reading**. The page shows a failure probability, alert decision, recommendation, model run, and response time.
 3. **Continue routine checks** means this record is below the saved alert threshold. **Schedule an inspection** means the record meets or exceeds it. A score is a model output on synthetic data; use ordinary safety procedures and judgment for real equipment.
-4. For a guided demonstration, choose **Load sample** or **Inspection sample**, then **Check reading**. These are examples, not live sensor measurements.
+4. For a guided demonstration, choose **Routine sample** or **Inspection sample**, then **Check reading**. These are examples, not live sensor measurements.
 
 If a field is out of range or missing, correct it and submit again. If the page says the model is unavailable, contact the operator; no prediction has been produced. The application never changes the model because a user submits a reading.
 
 ## Submit feedback
 
-After a prediction, use the feedback section to report what was observed and add a short note if useful. Feedback is saved for human review. It does not immediately retrain the model or change the alert threshold.
+After a prediction, select **Flag this result for review**. The current UI records a flag; it does not offer a note editor or outcome-label form. Feedback is saved for human review. It does not immediately retrain the model or change the alert threshold.
 
 ## Inspect the pipeline
 

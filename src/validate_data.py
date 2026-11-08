@@ -2,6 +2,9 @@
 
 from collections import Counter
 import csv
+import argparse
+import json
+import math
 from hashlib import sha256
 import os
 from pathlib import Path
@@ -19,7 +22,12 @@ FLAGS = EXPECTED[9:]
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--report")
+    args = parser.parse_args()
     raw = DATA.read_bytes()
+    digest = sha256(raw).hexdigest()
+    assert digest == "dc6630cd9b1f0f853922fad78a1b6436570d3f1ec863f1dd5c4340ac56bc8a8e", "Pinned source hash mismatch"
     with DATA.open(newline="", encoding="utf-8-sig") as stream:
         reader = csv.DictReader(stream)
         assert reader.fieldnames == EXPECTED, f"Unexpected columns: {reader.fieldnames}"
@@ -30,7 +38,7 @@ def main() -> None:
     assert {row["Type"] for row in rows} <= {"L", "M", "H"}, "Unexpected Type"
     for row in rows:
         for column in NUMERIC:
-            float(row[column])
+            assert math.isfinite(float(row[column])), "Nonfinite source value"
         assert row["Machine failure"] in {"0", "1"}, "Unexpected target"
         assert all(row[column] in {"0", "1"} for column in FLAGS), "Unexpected failure flag"
     labels = Counter(row["Machine failure"] for row in rows)
@@ -39,6 +47,8 @@ def main() -> None:
     print(f"Rows: {len(rows)} | Columns: {len(EXPECTED)} | Blank cells: 0")
     print(f"Machine failure: 0={labels['0']}, 1={labels['1']}")
     print("Type:", dict(Counter(row["Type"] for row in rows)))
+    if args.report:
+        Path(args.report).write_text(json.dumps({"sha256": digest, "rows": len(rows), "status": "pass"}, indent=2) + "\n")
     print("Validation: PASS")
 
 

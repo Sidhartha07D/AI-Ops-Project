@@ -54,7 +54,7 @@ def main():
     assert any(e["action"] == "rollback" for e in events)
     original = json.loads((ROOT / "reports/model_evaluation.json").read_text())["selected_run_id"]
     assert active["run_id"] == original
-    print("Release gate: PASS (rejected weaker model; promoted approved model; rolled back to original)")
+    print("Historical release record: PASS (saved reject/promote/rollback events; no new release executed)")
 
 
 if __name__ == "__main__":

@@ -1,7 +1,6 @@
 name: checks
 on:
-  push:
-  pull_request:
+  workflow_dispatch:
 jobs:
   source-and-api:
     runs-on: ubuntu-24.04
@@ -15,7 +14,7 @@ jobs:
           distribution: temurin
           java-version: '17'
       - name: Install check dependencies
-        run: python -m pip install fastapi==0.162.0 pyyaml==6.0.3 dvc==3.67.1 prometheus-client==0.23.1 pyspark==3.5.7 ray==2.59.0 pandas==2.3.3 scikit-learn==1.7.2
+        run: python -m pip install fastapi==0.162.0 pyyaml==6.0.3 dvc==3.67.1 prometheus-client==0.23.1 pyspark==3.5.7 ray==2.59.0 pandas==2.3.3 scikit-learn==1.7.2 mlflow==3.18.0 matplotlib==3.10.7
       - name: Compile Python source
         run: python -m compileall -q api src scripts
       - name: Unit tests
