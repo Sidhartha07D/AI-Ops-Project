@@ -13,7 +13,7 @@ Source of requirements: `AI Application Evaluation Guideline.pdf` (25 points) an
 | 5. Serving and UI | MLflow model endpoint, FastAPI, independent nontechnical UI, pipeline screen, feedback | Verified with integration test and VM-browser screenshots |
 | 6. Packaging and tests | Separate Docker Compose services, logs, unit/integration/end-to-end tests | Seven services healthy; six API tests and integration smoke pass; hosted CI run pending |
 | 7. Operations | Prometheus/Grafana, drift, retraining gate, release/reject/rollback | Live API/model/UI monitoring, drift guard, validation-only candidates, reject/promote/rollback verified |
-| 8. Submission | Five mandatory documents, test report, backups/restore, evidence audit, demo and viva | Five documents written; Mac backup restoration passed; final evidence, hosted CI and viva work in progress |
+| 8. Submission | Five mandatory documents, test report, backups/restore, evidence audit, demo and viva | Five documents written; Mac backup restoration and hosted CI passed; final evidence and viva work in progress |
 
 ## Evaluation criteria (25 points)
 
@@ -25,7 +25,7 @@ Source of requirements: `AI Application Evaluation Guideline.pdf` (25 points) an
 | Implementation (2) | Consistent Python style, logging, exception handling, inline documentation, API matching LLD, unit tests | Seven API unit tests pass; logging and model error handling checked; configurable UI API origin |
 | Testing (1) | Test plan, cases, acceptance criteria, pass/fail report and acceptance result | `docs/test_plan.md` written; Phase 6/7 observed reports exist; final unified report in progress |
 | Data engineering (2) | Automated Spark or Ray or Kubernetes pipeline; measured speed and throughput | Spark and Ray jobs verified in `evidence/screenshots/06_phase3_spark_ray_comparison.jpg`; speed/throughput in `reports/etl_benchmark.md` |
-| Source control and CI (2) | Git plus DVC DAG, automated DVC CI, versioned data/model artifacts, restore proof | Git/DVC/DAG and model artifact verified; full CI commands passed in a fresh clone; Mac backup restore passed; GitHub Actions run pending |
+| Source control and CI (2) | Git plus DVC DAG, automated DVC CI, versioned data/model artifacts, restore proof | Git/DVC/DAG and model artifact verified; full CI passed in a fresh clone and on GitHub Actions run `42454769012`; Mac backup restore passed |
 | Experiment tracking (2) | MLflow runs with parameters, metrics, artifacts and custom metadata beyond autologging | Four candidate runs, selected-model run, provenance tags, metrics, artifacts and MLproject verified |
 | Monitoring (2) | Prometheus instrumentation of components, Grafana near-real-time views | API and VM metrics, model/UI probes, four targets up, Grafana dashboard and alert rules verified; screenshots 18-19 |
 | Packaging (2) | MLflow model serving, MLproject, FastAPI, independent frontend/backend containers in Compose | Model, API, and UI Compose services healthy; integration smoke passed |

@@ -27,7 +27,7 @@
 
 Input ranges are checked both in the browser and FastAPI. FastAPI returns 422 for invalid inputs, 503 when the model cannot be reached, and 502 for malformed or nonfinite model predictions. The UI shows service failures rather than a fabricated score. The validation job records its exit status and console output, whether it succeeds or fails. The API logs requests, model failures, feedback IDs, and job outcomes without logging full sensor values; a separate local observation file supports drift analysis. Prometheus rules detect API availability, model/UI probe failure, and API 5xx errors.
 
-The API and UI are local-only. Grafana permits anonymous viewing because its published port binds to loopback and the dashboard contains only course-demo metrics. This is a constrained educational design, not an authenticated production portal. Release decisions and model provenance are recorded, but the original selected MLflow run began with an uncommitted training script; the model card discloses this and the final code is committed. Phase 8 will add an observed reproducibility and CI record.
+The API and UI are local-only. Grafana permits anonymous viewing because its published port binds to loopback and the dashboard contains only course-demo metrics. This is a constrained educational design, not an authenticated production portal. Release decisions and model provenance are recorded, but the original selected MLflow run began with an uncommitted training script; the model card discloses this. A later clean-commit validation-only MLflow run and a passing hosted CI run document the committed implementation without rewriting the original training history.
 
 ## Performance and capacity
 
