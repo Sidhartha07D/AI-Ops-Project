@@ -34,6 +34,7 @@ These are one-split demonstration results, not a claim about real industrial per
 - Repository HEAD when the run started: `7dff92752e9e26fffa0f540ee670fb4de17c7f8b`. The training script was uncommitted at that instant; its finalized version is in the subsequent Phase 4 commit. The MLflow run records the observed experiment, and the Git commit records the reproducible implementation.
 - Split manifest SHA-256: `7a1fdd0cca26b328c176d621dd96ed62c19fa6a69ca95cb3f8ae492e781bd08a`.
 - Selected MLflow run: `e5260d1c99b046f79795c53a4c392575`.
+- Separate validation-only MLflow run: `71c564ba12294121ab1e4f78e8eeab9e`, marked FINISHED and tagged with clean Git commit `91f9214f884fe9c2ad665c759d62abe8b4924b7b`. This verifies the committed data-validation entry point; it does **not** replace or retrospectively alter the selected training run.
 - Probability model URI: `runs:/e5260d1c99b046f79795c53a4c392575/serving_model`.
 - Full candidate metrics, run IDs, threshold policy, and selected result: `reports/model_evaluation.json`.
 

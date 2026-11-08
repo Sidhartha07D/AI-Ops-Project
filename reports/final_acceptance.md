@@ -27,6 +27,8 @@ Observed on 2026-11-08 in the Ubuntu 26.04 ARM64 UTM VM, 4 vCPUs and 3.3 GiB RAM
 
 The 2026-11-08 DVC rerun reproduced the existing fixed split hash `7a1fdd0c...`; no locked-test reevaluation was performed. The original selected model run began while its training script was uncommitted, as disclosed in `docs/model_card.md`. A later commit cannot rewrite that history; provenance should be described honestly in the presentation.
 
+At clean commit `91f9214f884fe9c2ad665c759d62abe8b4924b7b`, `mlflow run . -e validate` finished successfully as run `71c564ba12294121ab1e4f78e8eeab9e`. Its `mlflow.source.git.commit` tag exactly matches that commit. This run only revalidated the pinned CSV; it did not train, select, or evaluate the locked test set.
+
 ## Backup checkpoint
 
 The Mac workspace stores `outputs/backups/smart-maintenance-phase8.bundle` (complete Git history through `387e843`) and `outputs/backups/smart-maintenance-phase8-state.tar.gz` (MLflow store, DVC remote and local DVC configuration). SHA-256 values are `86bfd4a0d50b55fa29fd872aa82e95e4b61b1a57170e2f1954a0e2b1bf11b4c7` and `5247fef799e9010abf7f4dc4ee6e612436084f4718f53f9aa80c3ce453d0680a`. `git bundle verify` reported a complete history. The archive and bundle were copied back into a disposable VM directory and restored; that test passed as described in T12. The temporary restore directories were removed afterward.
