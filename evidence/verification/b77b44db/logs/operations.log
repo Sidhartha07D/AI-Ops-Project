@@ -1,0 +1,7 @@
+Serving release: PASS (rolled back to v1, e5260d1c)
+API Prometheus metrics: PASS (requests, predictions, latency, validation)
+Prometheus: PASS (API and host scraped; model/UI/Grafana probes successful)
+Grafana dashboard provisioning: PASS
+Deliberate drift demo: PASS (control PSI 0.0062; shifted torque PSI 4.6949)
+Real-input drift guard: PASS (500 samples; drift_flagged)
+Historical release record: PASS (saved reject/promote/rollback events; no new release executed)

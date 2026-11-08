@@ -1,7 +1,7 @@
 # Current submission verification
 
-Observed archive date: 2026-11-08T11:27:58.780693+00:00.
-Verified source commit: `17aa0b4e21b0b2806542abf8f32456d65a625e81`. Execution: Ubuntu ARM64 VM, local CI.
+Observed archive date: 2026-11-08T15:50:55.002184+00:00.
+Verified source commit: `b77b44db0750bf8a6c5168f11d4d4c023d4129c1`. Execution: Ubuntu ARM64 VM, local CI.
 This record supersedes broad completion statements in `reports/final_acceptance.md`; older phase reports remain historical.
 
 ## Actual counts
@@ -10,7 +10,7 @@ This record supersedes broad completion statements in `reports/final_acceptance.
 - Local CI commands: **13**, overall status **passed**. These commands are not additional unit test cases.
 - Live integration: health, ordinary and inspection predictions, invalid input, pipeline/DVC, validation console, known prediction feedback and separate UI pages passed in the integration log.
 - Direct local model/API parity: 40 requests at concurrency 2, tolerance 1e-6, 0 errors.
-- Short probe: 44.49 requests/s; p50 41.87 ms; p95 57.15 ms. This is a short repeated-demo-input probe, not the blueprint's two-minute SLA benchmark.
+- Short probe: 44.87 requests/s; p50 44.24 ms; p95 56.06 ms. This is a short repeated-demo-input probe, not the blueprint's two-minute SLA benchmark.
 - Candidate source SHA: `07c89c541e74d6fe4fd6e79fc5b4fdc01d116185`; MLflow run `f3f3943f9e544acc987012bec9ff0cda`; train rows 6000, validation rows 2000, locked-test rows scored 0.
 - Validation AP 0.7495; a deterministic reproduction, not a claimed improvement. Permutation importance is in the evaluation JSON and MLflow artifact, subject to correlated-feature limitations.
 
@@ -18,21 +18,23 @@ This record supersedes broad completion statements in `reports/final_acceptance.
 
 | Command | Exit code | Seconds |
 | --- | ---: | ---: |
-| python_format | 0 | 0.028 |
+| python_format | 0 | 0.074 |
 | python_lint | 0 | 0.025 |
-| environment | 0 | 0.194 |
-| compile | 0 | 0.036 |
-| unit_tests | 0 | 4.39 |
-| dvc_pipeline | 0 | 0.754 |
-| artifact_backup | 0 | 0.423 |
-| feature_parity | 0 | 0.067 |
-| compose_config | 0 | 0.176 |
-| integration | 0 | 0.928 |
-| model_contract_and_load | 0 | 4.647 |
+| environment | 0 | 0.121 |
+| compile | 0 | 0.062 |
+| unit_tests | 0 | 4.437 |
+| dvc_pipeline | 0 | 0.794 |
+| artifact_backup | 0 | 0.399 |
+| feature_parity | 0 | 0.069 |
+| compose_config | 0 | 0.184 |
+| integration | 0 | 0.989 |
+| model_contract_and_load | 0 | 5.173 |
 | fresh_drift | 0 | 0.086 |
-| operations | 0 | 0.255 |
+| operations | 0 | 0.234 |
 
-The exact logs and JSON results are archived under `evidence/verification/17aa0b4e`. DVC reuse is shown in the pipeline log; skipped cached stages are not new training runs. The MLproject validate entry point was separately executed with its declared environment-version check in run `568a4402193344c3999f618c91191b23`.
+The exact logs and JSON results are archived under `evidence/verification/b77b44db`. DVC reuse is shown in the pipeline log; skipped cached stages are not new training runs. The MLproject validate entry point was separately executed with its declared environment-version check in run `568a4402193344c3999f618c91191b23`.
+
+Additional later workload and restore evidence is recorded separately in `reports/finishing_checks.md` and its linked JSON reports; each measurement identifies its own source commit.
 
 ## Release verification
 
