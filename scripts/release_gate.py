@@ -102,7 +102,7 @@ def switch_release(release):
 
 
 def candidate(name):
-    path = ROOT / "reports/retrain_candidates" / f"{name}.json"
+    path = ROOT / "reports/pipeline_evaluation.json" if name == "pipeline" else ROOT / "reports/retrain_candidates" / f"{name}.json"
     return json.loads(path.read_text())
 
 
@@ -135,6 +135,10 @@ def review(item):
         validation = frame.loc[frame.split == "validation"]
         assert len(validation) == 2000
         scores = np.asarray(model.predict(validation[FEATURES]))[:, 1]
+        assert np.isfinite(scores).all(), "Nonfinite artifact output"
+        for key in ["threshold", "validation_average_precision", "validation_recall_at_champion_threshold"]:
+            assert np.isfinite(item[key]), "Nonfinite candidate report"
+        assert 0 <= item["threshold"] <= 1
         actual_ap = float(average_precision_score(validation.machine_failure, scores))
         actual_recall = float(recall_score(validation.machine_failure, scores >= item["threshold"]))
         if abs(actual_ap - item["validation_average_precision"]) > 1e-8 or abs(actual_recall - item["validation_recall_at_champion_threshold"]) > 1e-8:

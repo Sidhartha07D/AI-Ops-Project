@@ -1,14 +1,14 @@
 name: smart-maintenance-monitor
-conda_env: environment.yml
+conda_env: environment.snapshot.yml
 entry_points:
   validate:
-    command: "python src/validate_data.py"
+    command: "python scripts/verify_environment.py && python src/validate_data.py"
   train:
     parameters:
       config: {type: str, default: params.yaml}
       name: {type: str, default: random_forest_balanced}
-    command: "python scripts/train_candidate.py --config {config} --name {name}"
+    command: "python scripts/verify_environment.py && python scripts/train_candidate.py --config {config} --name {name}"
   evaluate:
-    command: "python scripts/evaluate_candidate.py"
+    command: "python scripts/verify_environment.py && python scripts/evaluate_candidate.py"
   main:
-    command: "dvc repro"
+    command: "python scripts/verify_environment.py && dvc repro"

@@ -28,8 +28,9 @@ def main():
     cfg = yaml.safe_load((ROOT / args.config).read_text())["candidate"]
     if cfg["name"] != args.name:
         raise ValueError("Candidate name must match the versioned configuration")
-    dirty = subprocess.check_output(["git", "diff", "HEAD", "--", "src", "scripts", args.config, "MLproject", "environment.yml", "dvc.yaml"], cwd=ROOT, text=True)
-    if dirty.strip():
+    dirty = subprocess.check_output(["git", "diff", "HEAD", "--", "src", "scripts", args.config, "MLproject", "environment.yml", "environment.snapshot.yml", "dvc.yaml"], cwd=ROOT, text=True)
+    untracked = subprocess.check_output(["git", "ls-files", "--others", "--exclude-standard", "--", "src", "scripts"], cwd=ROOT, text=True)
+    if dirty.strip() or untracked.strip():
         raise RuntimeError("Commit source/config changes before tracked training")
     git_sha = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     source = ROOT / "data/processed/spark_features.csv"

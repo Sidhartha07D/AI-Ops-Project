@@ -48,6 +48,7 @@ stages:
       - scripts/train_candidate.py
       - scripts/artifacts.py
       - environment.yml
+      - environment.snapshot.yml
     params:
       - candidate
     outs:
@@ -67,3 +68,12 @@ stages:
     metrics:
       - reports/pipeline_evaluation.json:
           cache: false
+  package_candidate:
+    cmd: python scripts/package_candidate.py
+    deps:
+      - models/pipeline_candidate
+      - reports/pipeline_evaluation.json
+      - scripts/package_candidate.py
+      - scripts/artifacts.py
+    outs:
+      - reports/candidate_release.json

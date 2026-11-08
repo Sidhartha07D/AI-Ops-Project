@@ -43,6 +43,10 @@ REQUESTS = Counter("smm_http_requests_total", "API requests", ["path", "status"]
 LATENCY = Histogram("smm_http_request_duration_seconds", "API request duration", ["path"])
 PREDICTIONS = Counter("smm_predictions_total", "Predictions by alert decision", ["alert"])
 MODEL_READY = Gauge("smm_model_ready", "Last observed MLflow model readiness")
+DRIFT_UPDATED = Gauge("smm_drift_report_timestamp_seconds", "Last drift report file update time")
+CI_UPDATED = Gauge("smm_local_ci_timestamp_seconds", "Last completed local CI report update time")
+DRIFT_SAMPLES = Gauge("smm_drift_samples", "Inputs in the latest drift report")
+DRIFT_PSI = Gauge("smm_drift_max_psi", "Largest PSI; NaN when insufficient inputs")
 VALIDATIONS = Counter("smm_validation_jobs_total", "Validation job outcomes", ["status"])
 
 app = FastAPI(title="Smart Maintenance Monitor API", version="0.7.0", description="Local course demonstration. Scores describe an AI4I 2020 record, not a future failure forecast.")
@@ -59,7 +63,12 @@ async def measure_http(request: Request, call_next):
     if request.url.path == "/metrics":
         return await call_next(request)
     start = time.perf_counter()
-    response = await call_next(request)
+    try:
+        response = await call_next(request)
+    except Exception:
+        logger.exception("Unhandled API request failure")
+        from fastapi.responses import JSONResponse
+        response = JSONResponse(status_code=503, content={"detail": "Local service error; retry later or contact the operator"})
     path = request.url.path if request.url.path in {"/health", "/predict", "/feedback", "/pipeline", "/jobs/validate"} else "other"
     REQUESTS.labels(path=path, status=str(response.status_code)).inc()
     LATENCY.labels(path=path).observe(time.perf_counter() - start)
@@ -68,6 +77,17 @@ async def measure_http(request: Request, call_next):
 
 @app.get("/metrics", include_in_schema=False)
 def metrics() -> Response:
+    for name, timestamp_gauge in [("drift_latest.json", DRIFT_UPDATED), ("local_ci_latest.json", CI_UPDATED)]:
+        path = ROOT / "reports" / name
+        timestamp_gauge.set(path.stat().st_mtime if path.exists() else 0)
+    path = ROOT / "reports/drift_latest.json"
+    if path.exists():
+        try:
+            result = json.loads(path.read_text())["result"]
+            DRIFT_SAMPLES.set(result["current_rows"])
+            DRIFT_PSI.set(result["max_psi"] if result["max_psi"] is not None else float("nan"))
+        except (OSError, ValueError, KeyError):
+            logger.warning("Drift report unavailable")
     return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
 
@@ -99,15 +119,18 @@ def fetch_model(path: str, payload: dict | None = None, timeout: float = 8) -> o
             raw = res.read()
         if path == "/ping":
             return {"ok": True}
-        return json.loads(raw) if raw else {"ok": True}
-    except (urllib.error.URLError, TimeoutError, ValueError) as exc:
+        try:
+            return json.loads(raw) if raw else {"ok": True}
+        except ValueError as exc:
+            raise HTTPException(status_code=502, detail="Model returned invalid JSON") from exc
+    except (urllib.error.URLError, TimeoutError) as exc:
         logger.warning("Model request failed at %s: %s", path, type(exc).__name__)
         raise HTTPException(status_code=503, detail=f"Model service unavailable: {type(exc).__name__}") from exc
 
 
 def append_jsonl(path: Path, item: dict) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
     try:
+        path.parent.mkdir(parents=True, exist_ok=True)
         with path.open("a", encoding="utf-8") as out:
             out.write(json.dumps(item, sort_keys=True) + "\n")
     except OSError as exc:
@@ -202,7 +225,8 @@ def pipeline() -> dict:
     config = yaml.safe_load((ROOT / "dvc.yaml").read_text())
     steps = []
     for name, stage in config["stages"].items():
-        outputs = [ROOT / entry for entry in stage.get("outs", [])]
+        entries = stage.get("outs", []) + stage.get("metrics", [])
+        outputs = [ROOT / (next(iter(entry)) if isinstance(entry, dict) else entry) for entry in entries]
         steps.append({"name": name, "status": "ready" if outputs and all(p.exists() for p in outputs) else "missing", "outputs": [str(p.relative_to(ROOT)) for p in outputs]})
     try:
         dvc = subprocess.run([DVC, "status", "-c"], cwd=ROOT, text=True, capture_output=True, timeout=20)
@@ -217,7 +241,9 @@ def pipeline() -> dict:
         jobs = [json.loads(line) for line in JOBS.read_text().splitlines()[-8:] if line.strip()]
     evaluation_path = ROOT / "reports/pipeline_evaluation.json"
     evaluation = json.loads(evaluation_path.read_text()) if evaluation_path.exists() else None
-    return {"candidate_evaluation": evaluation, "steps": steps, "dvc_in_sync": dvc_ok, "dvc_message": dvc_message, "model_run_id": active_release()["run_id"], "recent_jobs": jobs}
+    ci_path = ROOT / "reports/local_ci_latest.json"
+    ci = json.loads(ci_path.read_text()) if ci_path.exists() else None
+    return {"local_ci": ci, "candidate_evaluation": evaluation, "steps": steps, "dvc_in_sync": dvc_ok, "dvc_message": dvc_message, "model_run_id": active_release()["run_id"], "recent_jobs": jobs}
 
 
 @app.post("/jobs/validate")

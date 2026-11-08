@@ -2,3 +2,4 @@
 /active
 /candidate_hist_gradient_boosting
 /candidate_random_forest_balanced
+/pipeline_candidate

@@ -7,6 +7,10 @@ stages:
       hash: md5
       md5: f0adaa9c5e25366c6df1cc2684479871
       size: 522048
+    - path: reports/source_validation.json
+      hash: md5
+      md5: d827888b171776f3a7bb5e70dbce6597
+      size: 120
     - path: src/prepare_spark.py
       hash: md5
       md5: 516030a6a80a55aff33ac90d23d08a2d
@@ -23,6 +27,10 @@ stages:
       hash: md5
       md5: f0adaa9c5e25366c6df1cc2684479871
       size: 522048
+    - path: reports/source_validation.json
+      hash: md5
+      md5: d827888b171776f3a7bb5e70dbce6597
+      size: 120
     - path: src/prepare_ray.py
       hash: md5
       md5: 0985c836a8ea4bc3d6e67bb2ec1f0666
@@ -76,3 +84,106 @@ stages:
       hash: md5
       md5: cd534e3fbdb34a61567c437b75e5d691
       size: 582
+  validate_source:
+    cmd: python src/validate_data.py --report reports/source_validation.json
+    deps:
+    - path: data/raw/ai4i2020.csv
+      hash: md5
+      md5: f0adaa9c5e25366c6df1cc2684479871
+      size: 522048
+    - path: src/validate_data.py
+      hash: md5
+      md5: a24ba5bf240f97f2724285447904306f
+      size: 2363
+    outs:
+    - path: reports/source_validation.json
+      hash: md5
+      md5: d827888b171776f3a7bb5e70dbce6597
+      size: 120
+  train_candidate:
+    cmd: python scripts/train_candidate.py
+    deps:
+    - path: data/processed/spark_features.csv
+      hash: md5
+      md5: de9e1e6266057230006ed7abd405a610
+      size: 388556
+    - path: data/splits/split_ids.csv
+      hash: md5
+      md5: 406b61e954e701d59e0e26716c4c4a19
+      size: 116904
+    - path: environment.yml
+      hash: md5
+      md5: 9aee1f7fabddfd364ae097f7adabf14a
+      size: 368
+    - path: scripts/artifacts.py
+      hash: md5
+      md5: 92e073a6c902bf67542aedcb33361589
+      size: 583
+    - path: scripts/train_candidate.py
+      hash: md5
+      md5: ea0ac24b81642ac0b11ad5fbe6bc5c75
+      size: 3781
+    - path: src/train_models.py
+      hash: md5
+      md5: c63c1a50c8623ac866ff8a6d61943b86
+      size: 9417
+    params:
+      params.yaml:
+        candidate:
+          name: random_forest_balanced
+          seed: 42
+          n_estimators: 80
+          max_depth: 8
+          min_samples_leaf: 3
+          threshold: 0.37
+    outs:
+    - path: models/pipeline_candidate
+      hash: md5
+      md5: 4bc1c5b40fe0e1c124358c1148f1c70d.dir
+      size: 2872235
+      nfiles: 7
+    - path: reports/pipeline_training.json
+      hash: md5
+      md5: 3a4796c189548a452a82d485d2b70133
+      size: 696
+  evaluate_candidate:
+    cmd: python scripts/evaluate_candidate.py
+    deps:
+    - path: data/processed/spark_features.csv
+      hash: md5
+      md5: de9e1e6266057230006ed7abd405a610
+      size: 388556
+    - path: data/splits/split_ids.csv
+      hash: md5
+      md5: 406b61e954e701d59e0e26716c4c4a19
+      size: 116904
+    - path: models/pipeline_candidate
+      hash: md5
+      md5: 4bc1c5b40fe0e1c124358c1148f1c70d.dir
+      size: 2872235
+      nfiles: 7
+    - path: reports/model_evaluation.json
+      hash: md5
+      md5: 934269a3f373d7f5969de3f8a20a3f0f
+      size: 4158
+    - path: reports/pipeline_training.json
+      hash: md5
+      md5: 3a4796c189548a452a82d485d2b70133
+      size: 696
+    - path: scripts/artifacts.py
+      hash: md5
+      md5: 92e073a6c902bf67542aedcb33361589
+      size: 583
+    - path: scripts/evaluate_candidate.py
+      hash: md5
+      md5: 7058a68d9844d2dc238606f326415ec6
+      size: 3157
+    - path: src/train_models.py
+      hash: md5
+      md5: c63c1a50c8623ac866ff8a6d61943b86
+      size: 9417
+    outs:
+    - path: reports/pipeline_evaluation.json
+      hash: md5
+      md5: 478d122ee3dd817a801c06e68d4db23e
+      size: 1338

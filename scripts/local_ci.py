@@ -16,7 +16,7 @@ def main():
     parser.add_argument("--offline-only", action="store_true", help="Skip running-service checks")
     args = parser.parse_args()
     logs = ROOT/"reports/local_ci_logs"; logs.mkdir(exist_ok=True)
-    stages = [("compile",[sys.executable,"-m","compileall","-q","api","src","scripts"]),("unit_tests",[sys.executable,"scripts/run_tests.py"]),("dvc_pipeline",["dvc","repro"]),("feature_parity",[sys.executable,"src/compare_features.py"]),("compose_config",["docker","compose","config","--quiet"])]
+    stages = [("environment",[sys.executable,"scripts/verify_environment.py"]),("compile",[sys.executable,"-m","compileall","-q","api","src","scripts"]),("unit_tests",[sys.executable,"scripts/run_tests.py"]),("dvc_pipeline",["dvc","repro"]),("feature_parity",[sys.executable,"src/compare_features.py"]),("compose_config",["docker","compose","config","--quiet"])]
     if not args.offline_only:
         stages += [("integration",[sys.executable,"scripts/phase5_smoke.py"]),("model_contract_and_load",[sys.executable,"scripts/contract_load.py"]),("fresh_drift",[sys.executable,"scripts/drift_check.py","--mode","observations"]),("operations",[sys.executable,"scripts/phase7_verify.py"])]
     report = {"started_at":datetime.now(timezone.utc).isoformat(),"git_sha":subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip(),"execution":"local Ubuntu VM; no hosted runner","stages":[],"status":"running"}

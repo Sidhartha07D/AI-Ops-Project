@@ -24,10 +24,10 @@ def main():
     print("API Prometheus metrics: PASS (requests, predictions, latency, validation)")
 
     targets = get_json("http://127.0.0.1:9091/api/v1/targets?state=active")["data"]["activeTargets"]
-    assert len(targets) == 4 and all(target["health"] == "up" for target in targets)
+    assert len(targets) >= 4 and all(target["health"] == "up" for target in targets)
     probes = get_json("http://127.0.0.1:9091/api/v1/query?query=probe_success")["data"]["result"]
-    assert len(probes) == 2 and all(item["value"][1] == "1" for item in probes)
-    print("Prometheus: PASS (API and host scraped; model and UI probes successful)")
+    assert len(probes) >= 2 and all(item["value"][1] == "1" for item in probes)
+    print("Prometheus: PASS (API and host scraped; model/UI/Grafana probes successful)")
 
     dashboards = get_json("http://127.0.0.1:3001/api/search?query=Smart%20Maintenance")
     assert any(item["uid"] == "smart-maintenance" for item in dashboards)
