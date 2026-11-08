@@ -14,7 +14,7 @@ This model estimates whether an AI4I 2020 equipment record has the dataset's `Ma
 
 ## Selection and results
 
-The candidates were a prior-probability dummy baseline, class-weighted logistic regression, bounded class-weighted random forest, and histogram gradient boosting. The random forest had the best validation average precision (0.7495). A probability threshold of 0.37 maximized validation F2 on a fixed grid. The locked test set was evaluated once after selection.
+The candidates were a prior-probability dummy baseline, class-weighted logistic regression, bounded class-weighted random forest, and histogram gradient boosting. The random forest had the best validation average precision (0.7495). A probability threshold of 0.37 maximized validation F2 on a fixed grid. Test metrics were logged during a failed packaging run and the successful selected-model run; both report the same AP. A strict single-evaluation claim is therefore unsupported.
 
 | Locked test metric | Value |
 | --- | ---: |

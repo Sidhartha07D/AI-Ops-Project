@@ -1,0 +1,15 @@
+{
+  "logged_test_ap_runs": [
+    [
+      "4c30b295721c4cb6bb6d2b4cd67c9f95",
+      "FAILED",
+      0.8066445779056546
+    ],
+    [
+      "e5260d1c99b046f79795c53a4c392575",
+      "FINISHED",
+      0.8066445779056546
+    ]
+  ],
+  "interpretation": "Two original executions logged test metrics; no test scoring performed by this audit."
+}

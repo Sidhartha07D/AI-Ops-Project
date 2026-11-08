@@ -15,7 +15,7 @@
 | Observation-level classifier | AI4I's supplied label is for the same record; there is no time-to-failure horizon. Honest scope is more defensible than claiming a forecast. |
 | UCI synthetic source, pinned hash | Small enough for the VM, legally reusable, and reproducible. Synthetic data cannot validate performance on real industrial assets. |
 | Spark and Ray, run sequentially | Demonstrates both course data tools without exhausting 3.3 GiB RAM. Their 10,000-row outputs are compared row by row. Startup dominates this small workload. |
-| Fixed stratified 60/20/20 split | Validation selects candidate and threshold; the test split was evaluated once. No equipment/time grouping is possible from the dataset fields. |
+| Fixed stratified 60/20/20 split | Validation selects candidate and threshold; the fixed test split has two logged original executions due to a packaging failure/retry. No equipment/time grouping is possible from the dataset fields. |
 | Average precision for selection, validation F2 for alert threshold | Failures are rare (339/10,000), so accuracy alone would be misleading. F2 favors recall for an inspection aid. Both false alarms and missed failures remain visible in the confusion matrix. |
 | MLflow tracking and serving | MLflow run IDs connect metrics and artifacts to the model endpoint. The saved pipeline contains preprocessing and classifier together. |
 | DVC for data and model artifacts, Git for source | Large or generated artifacts stay out of Git while hashes and dependencies remain versioned. The VM-local DVC remote must be backed up separately. |

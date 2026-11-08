@@ -68,6 +68,7 @@ The exact logs and JSON results are archived under `{target.relative_to(ROOT)}`.
 - The user-level five-minute timer refreshes input drift while the user manager runs. Recent inputs include repeated course-demo requests, not new industrial measurements; no fresh-label accuracy/concept-drift claim is made.
 - Release switching has intentional downtime. If automatic recovery itself fails, an explicit operator error is raised; zero-downtime or multi-host atomic deployment is not claimed.
 - Role accounts, fleet replay, feedback approval/retraining from new labels, Kubernetes/KServe, Airflow, production authentication/TLS and full offline image distribution remain outside the approved reduced scope.
+- Original MLflow history contains test AP in failed packaging run `4c30b295721c4cb6bb6d2b4cd67c9f95` and successful selected run `e5260d1c99b046f79795c53a4c392575`, both 0.8066445779. A strict single-evaluation claim is unsupported.
 - The original selected model's uncommitted-source history remains disclosed. New clean candidate lineage does not alter that history. No frozen-test reevaluation was performed.
 - AI disclosure is deferred by the user's instruction. Personal viva readiness and submission access/format need final user review.
 
