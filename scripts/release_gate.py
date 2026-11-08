@@ -106,7 +106,8 @@ def switch_release(release):
     """Block predictions; restore bytes and policy automatically on any failed switch."""
     source = ROOT / release["model_path"]
     load_model(source)  # Reject corrupt bundles before touching the serving release.
-    with (MODELS / ".release.lock").open("a") as lock:
+    lock_path = MODELS / ".release.lock"
+    with lock_path.open("r" if lock_path.exists() else "a") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         old = json.loads(RELEASE.read_text())
         with TemporaryDirectory(prefix="release-backup-", dir=MODELS) as temporary:

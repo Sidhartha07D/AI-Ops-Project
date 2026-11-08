@@ -106,6 +106,10 @@ def git_sha() -> str:
 
 
 def main() -> None:
+    if (ROOT / "reports/model_evaluation.json").exists():
+        raise RuntimeError(
+            "Frozen test has already been evaluated; use the validation-only candidate pipeline"
+        )
     data = pd.read_csv(ROOT / "data/processed/spark_features.csv")
     ids = pd.read_csv(ROOT / "data/splits/split_ids.csv")
     summary = json.loads((ROOT / "reports/split_summary.json").read_text())

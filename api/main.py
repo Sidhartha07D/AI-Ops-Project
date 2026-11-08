@@ -224,7 +224,8 @@ def health() -> dict:
 @contextmanager
 def release_read_lock():
     """Exclude predictions during a release change to keep model/policy consistent."""
-    with (ROOT / "models/.release.lock").open("a") as lock:
+    lock_path = ROOT / "models/.release.lock"
+    with lock_path.open("r" if lock_path.exists() else "a") as lock:
         try:
             fcntl.flock(lock, fcntl.LOCK_SH | fcntl.LOCK_NB)
         except BlockingIOError as exc:

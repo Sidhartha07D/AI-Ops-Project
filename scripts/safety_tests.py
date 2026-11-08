@@ -15,6 +15,17 @@ from scripts import release_gate as gate
 
 
 class SafetyTests(unittest.TestCase):
+    def test_frozen_test_entrypoint_refuses_repeat(self):
+        from src import train_models
+
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / "reports").mkdir()
+            (root / "reports/model_evaluation.json").write_text("{}")
+            with patch.object(train_models, "ROOT", root):
+                with self.assertRaisesRegex(RuntimeError, "already been evaluated"):
+                    train_models.main()
+
     def test_storage_failure_is_controlled(self):
         with patch("pathlib.Path.open", side_effect=OSError("fixture disk error")):
             with self.assertRaises(HTTPException) as error:
