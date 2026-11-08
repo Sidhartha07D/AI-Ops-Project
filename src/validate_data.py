@@ -3,9 +3,11 @@
 from collections import Counter
 import csv
 from hashlib import sha256
+import os
 from pathlib import Path
 
-DATA = Path(__file__).resolve().parents[1] / "data/raw/ai4i2020.csv"
+DEFAULT_DATA = Path(__file__).resolve().parents[1] / "data/raw/ai4i2020.csv"
+DATA = Path(os.environ.get("SMART_MAINTENANCE_VALIDATION_DATA") or DEFAULT_DATA)
 EXPECTED = [
     "UDI", "Product ID", "Type", "Air temperature [K]",
     "Process temperature [K]", "Rotational speed [rpm]", "Torque [Nm]",

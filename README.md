@@ -6,6 +6,8 @@ This project will build an observation-level machine failure classifier and demo
 
 The project is developed incrementally in an Ubuntu ARM64 VM. Model metrics will be reported honestly; the main learning goal is to demonstrate the tools and workflow.
 
+The five course documents are `docs/architecture.md`, `docs/high_level_design.md`, `docs/low_level_design.md`, `docs/test_plan.md`, and `docs/user_manual.md`. `docs/requirements_matrix.md` maps them and the observed results to the professor's rubric. The browser API address is set in `ui/config.js`.
+
 ## Data preparation
 
 Activate the `smart-maintenance` environment and run `dvc repro` to prepare the raw CSV with Spark and Ray. The two jobs are deliberately limited to two local workers and run sequentially on the VM. Run `python src/compare_features.py` to check that their 10,000-row outputs match. See `data/README.md` for source and license details and `docs/feature_schema.md` for the model input columns.
@@ -51,7 +53,7 @@ docker compose ps
 
 Open the same UI, pipeline, and API URLs listed above. Compose binds all published ports to VM localhost. `docker compose logs --tail=50 model api ui` shows service logs. `docker compose down` stops and removes the three containers; the images, DVC data, feedback, and MLflow runs persist. Do not start the Phase 5 host processes and Compose on the same ports at once.
 
-Focused API tests run with `python scripts/phase6_tests.py` from the project environment. `.github/workflows/checks.yaml` defines push/PR source, unit, DVC DAG, and Compose configuration checks; the workflow has not been observed on GitHub until this repository is pushed to a remote. The container test results are recorded in `reports/phase6_test_report.md`.
+Focused API tests run with `python scripts/phase6_tests.py` from the project environment. `.github/workflows/checks.yaml` defines push/PR source, unit, pinned UCI download, full DVC repro, Spark/Ray comparison, and Compose configuration checks. The workflow has not been observed on GitHub until this repository is pushed to a remote. The container test results are recorded in `reports/phase6_test_report.md`.
 
 ## Monitoring and controlled release (Phase 7)
 

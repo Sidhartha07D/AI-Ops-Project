@@ -10,13 +10,28 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
       - name: Install check dependencies
-        run: python -m pip install fastapi==0.162.0 pyyaml==6.0.3 dvc==3.67.1 prometheus-client==0.23.1
+        run: python -m pip install fastapi==0.162.0 pyyaml==6.0.3 dvc==3.67.1 prometheus-client==0.23.1 pyspark==3.5.7 ray==2.59.0 pandas==2.3.3 scikit-learn==1.7.2
       - name: Compile Python source
         run: python -m compileall -q api src scripts
       - name: Unit tests
         run: python scripts/phase6_tests.py
       - name: Validate DVC DAG
         run: dvc dag
+      - name: Restore pinned public data
+        run: python scripts/fetch_uci_for_ci.py
+      - name: Validate source data
+        run: python src/validate_data.py
+      - name: Run DVC data pipeline
+        env:
+          SPARK_LOCAL_IP: 127.0.0.1
+          RAY_USAGE_STATS_ENABLED: '0'
+        run: dvc repro --force
+      - name: Verify independent Spark and Ray outputs
+        run: python src/compare_features.py
       - name: Validate Compose syntax
         run: docker compose config --quiet

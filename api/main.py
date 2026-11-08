@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 import json
+import logging
+import math
 import os
 import subprocess
-import sys
 import threading
 import time
 import urllib.error
@@ -25,13 +26,15 @@ from prometheus_client import Counter, Gauge, Histogram, generate_latest, CONTEN
 ROOT = Path(__file__).resolve().parents[1]
 REPORT = json.loads((ROOT / "reports/model_evaluation.json").read_text())
 RELEASE = ROOT / "models/active_release.json"
-MODEL_URL = os.environ.get("SMART_MAINTENANCE_MODEL_URL", "http://127.0.0.1:5001")
+MODEL_URL = os.environ.get("SMART_MAINTENANCE_MODEL_URL", "http://127.0.0.1:5001").rstrip("/")
+UI_ORIGINS = [origin.strip() for origin in os.environ.get("SMART_MAINTENANCE_UI_ORIGINS", "http://127.0.0.1:8501,http://localhost:8501").split(",") if origin.strip()]
 PYTHON = os.environ.get("SMART_MAINTENANCE_PYTHON", str(Path.home() / "miniconda/envs/smart-maintenance/bin/python"))
 DVC = os.environ.get("SMART_MAINTENANCE_DVC", str(Path.home() / "miniconda/envs/smart-maintenance/bin/dvc"))
 JOBS = ROOT / "reports/phase5_jobs.jsonl"
 FEEDBACK = ROOT / "reports/feedback_pending.jsonl"
 OBSERVATIONS = ROOT / "reports/inference_observations.jsonl"
 job_lock = threading.Lock()
+logger = logging.getLogger(__name__)
 
 REQUESTS = Counter("smm_http_requests_total", "API requests", ["path", "status"])
 LATENCY = Histogram("smm_http_request_duration_seconds", "API request duration", ["path"])
@@ -42,7 +45,7 @@ VALIDATIONS = Counter("smm_validation_jobs_total", "Validation job outcomes", ["
 app = FastAPI(title="Smart Maintenance Monitor API", version="0.7.0", description="Local course demonstration. Scores describe an AI4I 2020 record, not a future failure forecast.")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:8501", "http://localhost:8501"],
+    allow_origins=UI_ORIGINS,
     allow_methods=["GET", "POST"],
     allow_headers=["Content-Type"],
 )
@@ -93,6 +96,7 @@ def fetch_model(path: str, payload: dict | None = None, timeout: float = 8) -> o
             return {"ok": True}
         return json.loads(raw) if raw else {"ok": True}
     except (urllib.error.URLError, TimeoutError, ValueError) as exc:
+        logger.warning("Model request failed at %s: %s", path, type(exc).__name__)
         raise HTTPException(status_code=503, detail=f"Model service unavailable: {type(exc).__name__}") from exc
 
 
@@ -129,11 +133,15 @@ def predict(reading: Reading) -> dict:
         probability = float(result["predictions"][0][1])
     except (TypeError, KeyError, IndexError, ValueError) as exc:
         raise HTTPException(status_code=502, detail="Model returned an invalid prediction") from exc
+    if not math.isfinite(probability) or not 0 <= probability <= 1:
+        logger.error("Model returned out-of-range probability")
+        raise HTTPException(status_code=502, detail="Model returned an invalid prediction")
     release = active_release()
     threshold = float(release["threshold"])
     alert = probability >= threshold
     PREDICTIONS.labels(alert=str(alert).lower()).inc()
     append_jsonl(OBSERVATIONS, {"received_at": datetime.now(timezone.utc).isoformat(), **features, "failure_probability": round(probability, 6), "alert": alert})
+    logger.info("Prediction served: release=%s alert=%s latency_ms=%.1f", release["run_id"][:8], alert, (time.perf_counter() - start) * 1000)
     return {
         "prediction_id": uuid4().hex,
         "failure_probability": round(probability, 6),
@@ -150,6 +158,7 @@ def predict(reading: Reading) -> dict:
 def feedback(item: Feedback) -> dict:
     record = {"id": uuid4().hex, "received_at": datetime.now(timezone.utc).isoformat(), **item.model_dump(), "status": "pending_review"}
     append_jsonl(FEEDBACK, record)
+    logger.info("Feedback queued: id=%s", record["id"])
     return {"id": record["id"], "status": "pending_review", "message": "Saved for review; it will not change the model automatically."}
 
 
@@ -166,6 +175,7 @@ def pipeline() -> dict:
         dvc_ok = dvc.returncode == 0 and "in sync" in dvc_message
     except (OSError, subprocess.TimeoutExpired) as exc:
         dvc_message = f"Check failed: {type(exc).__name__}"
+        logger.warning("DVC status check failed: %s", type(exc).__name__)
         dvc_ok = False
     jobs = []
     if JOBS.exists():
@@ -191,6 +201,7 @@ def run_validation() -> dict:
         item = {"job_id": uuid4().hex[:10], "name": "validate_data", "started_at": started, "finished_at": datetime.now(timezone.utc).isoformat(), "status": status, "exit_code": exit_code, "console": output}
         append_jsonl(JOBS, item)
         VALIDATIONS.labels(status=status).inc()
+        logger.info("Validation job %s: %s (exit %s)", item["job_id"], status, exit_code)
         return item
     finally:
         job_lock.release()

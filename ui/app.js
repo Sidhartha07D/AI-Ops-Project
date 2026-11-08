@@ -1,4 +1,4 @@
-const API='http://127.0.0.1:8000';
+const API=window.SMM_CONFIG.apiBaseUrl.replace(/\/+$/,'');
 const service=document.getElementById('service');
 async function health(){try{const r=await fetch(API+'/health');const d=await r.json();service.textContent=d.model==='ready'?'Services ready':'Model service unavailable';service.className='service '+(d.model==='ready'?'ready':'down')}catch{service.textContent='API unavailable';service.className='service down'}}
 health();

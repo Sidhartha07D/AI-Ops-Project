@@ -24,6 +24,8 @@ services:
       SMART_MAINTENANCE_MODEL_URL: http://model:5001
       SMART_MAINTENANCE_PYTHON: /usr/local/bin/python
       SMART_MAINTENANCE_DVC: /usr/local/bin/dvc
+      SMART_MAINTENANCE_UI_ORIGINS: http://127.0.0.1:8501,http://localhost:8501
+      SMART_MAINTENANCE_VALIDATION_DATA: ${SMART_MAINTENANCE_VALIDATION_DATA:-}
     volumes:
       - .:/workspace
       - /home/sidhartha/dvc-storage/smart-maintenance:/home/sidhartha/dvc-storage/smart-maintenance:ro

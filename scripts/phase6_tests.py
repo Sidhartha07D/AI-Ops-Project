@@ -42,6 +42,18 @@ class PredictionTests(unittest.TestCase):
                 predict(self.reading)
         self.assertEqual(raised.exception.status_code, 502)
 
+    def test_non_finite_probability_is_rejected(self):
+        with patch("api.main.fetch_model", return_value={"predictions": [[0.0, float("nan")]]}):
+            with self.assertRaises(HTTPException) as raised:
+                predict(self.reading)
+        self.assertEqual(raised.exception.status_code, 502)
+
+    def test_unavailable_model_is_reported(self):
+        with patch("api.main.fetch_model", side_effect=HTTPException(status_code=503, detail="unavailable")):
+            with self.assertRaises(HTTPException) as raised:
+                predict(self.reading)
+        self.assertEqual(raised.exception.status_code, 503)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
