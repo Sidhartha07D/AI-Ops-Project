@@ -1,0 +1,8 @@
+API and MLflow health: PASS
+Prediction: PASS (0.011700, alert=False)
+Inspection flag: PASS (0.950276)
+Invalid input response: PASS (422)
+Pipeline status: PASS (8 stages, DVC in sync)
+Validation job and console: PASS
+Review queue: PASS
+Separate UI server: PASS

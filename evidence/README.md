@@ -34,3 +34,7 @@ The failed MLflow runs visible in the first browser screenshot came from initial
 The two UI examples are training-set records used only for demonstration; they are not additional locked-test evaluations. The integration smoke script also checks an invalid-input 422 response, a model prediction, DVC status, validation, feedback queue, and the UI service.
 
 Submission-hardening corrections supersede earlier descriptions. File 26 must not be used as browser outage evidence.
+
+| New capture | Observed result | Context |
+| --- | --- | --- |
+| `29_local_lifecycle_pipeline.jpg` | Updated lifecycle page shows candidate validation score, zero test rows scored, local CI passed, DVC sync, and train/evaluate stages with actual validation console | Ubuntu Firefox, 2026-11-08 16:34 IST; exact inspected frame saved |

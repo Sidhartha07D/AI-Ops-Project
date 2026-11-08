@@ -1,0 +1,11 @@
+{
+  "requests": 40,
+  "concurrency": 2,
+  "errors": 0,
+  "elapsed_seconds": 0.8770588480001607,
+  "requests_per_second": 45.6069739119634,
+  "p50_ms": 43.14295399854018,
+  "p95_ms": 55.21392985028796,
+  "parity_tolerance": 1e-06,
+  "interpretation": "Short closed-loop local probe, not the blueprint two-minute SLA test; repeated training-set demo input, no label scoring."
+}

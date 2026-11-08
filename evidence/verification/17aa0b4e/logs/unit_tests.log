@@ -1,0 +1,36 @@
+test_bad_model_response_is_reported (phase6_tests.PredictionTests.test_bad_model_response_is_reported) ... ok
+test_feature_mapping_and_routine_recommendation (phase6_tests.PredictionTests.test_feature_mapping_and_routine_recommendation) ... 2026-11-08 16:57:47,451 INFO api.main Prediction served: release=e5260d1c alert=False latency_ms=0.2
+ok
+test_feature_rounding_matches_training_etl (phase6_tests.PredictionTests.test_feature_rounding_matches_training_etl) ... 2026-11-08 16:57:47,452 INFO api.main Prediction served: release=e5260d1c alert=False latency_ms=0.1
+ok
+test_invalid_reading_is_rejected (phase6_tests.PredictionTests.test_invalid_reading_is_rejected) ... ok
+test_non_finite_probability_is_rejected (phase6_tests.PredictionTests.test_non_finite_probability_is_rejected) ... 2026-11-08 16:57:47,453 ERROR api.main Model returned out-of-range probability
+ok
+test_non_finite_sensor_reading_is_rejected (phase6_tests.PredictionTests.test_non_finite_sensor_reading_is_rejected) ... ok
+test_threshold_boundary_flags_inspection (phase6_tests.PredictionTests.test_threshold_boundary_flags_inspection) ... 2026-11-08 16:57:47,453 INFO api.main Prediction served: release=e5260d1c alert=True latency_ms=0.1
+ok
+test_unavailable_model_is_reported (phase6_tests.PredictionTests.test_unavailable_model_is_reported) ... ok
+test_failed_switch_restores_bytes_and_policy (safety_tests.SafetyTests.test_failed_switch_restores_bytes_and_policy) ... ok
+test_frozen_test_entrypoint_refuses_repeat (safety_tests.SafetyTests.test_frozen_test_entrypoint_refuses_repeat) ... ok
+test_release_lock_blocks_predictions (safety_tests.SafetyTests.test_release_lock_blocks_predictions) ... ok
+test_storage_failure_is_controlled (safety_tests.SafetyTests.test_storage_failure_is_controlled) ... 2026-11-08 16:57:51,038 ERROR api.main Local storage write failed
+Traceback (most recent call last):
+  File "/home/sidhartha/smart-maintenance-monitor/api/main.py", line 193, in append_jsonl
+    with path.open("a", encoding="utf-8") as out:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sidhartha/miniconda/envs/smart-maintenance/lib/python3.11/unittest/mock.py", line 1124, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sidhartha/miniconda/envs/smart-maintenance/lib/python3.11/unittest/mock.py", line 1128, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sidhartha/miniconda/envs/smart-maintenance/lib/python3.11/unittest/mock.py", line 1183, in _execute_mock_call
+    raise effect
+OSError: fixture disk error
+ok
+test_unknown_prediction_feedback_rejected (safety_tests.SafetyTests.test_unknown_prediction_feedback_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 3.590s
+
+OK

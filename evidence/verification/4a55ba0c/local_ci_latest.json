@@ -1,0 +1,87 @@
+{
+  "started_at": "2026-11-08T11:17:42.466044+00:00",
+  "git_sha": "4a55ba0cd13b90439555212d166a2735bc0e5715",
+  "execution": "local Ubuntu VM; no hosted runner",
+  "stages": [
+    {
+      "name": "python_format",
+      "exit_code": 0,
+      "seconds": 0.079,
+      "log": "reports/local_ci_logs/python_format.log"
+    },
+    {
+      "name": "python_lint",
+      "exit_code": 0,
+      "seconds": 0.081,
+      "log": "reports/local_ci_logs/python_lint.log"
+    },
+    {
+      "name": "environment",
+      "exit_code": 0,
+      "seconds": 0.188,
+      "log": "reports/local_ci_logs/environment.log"
+    },
+    {
+      "name": "compile",
+      "exit_code": 0,
+      "seconds": 0.044,
+      "log": "reports/local_ci_logs/compile.log"
+    },
+    {
+      "name": "unit_tests",
+      "exit_code": 0,
+      "seconds": 4.661,
+      "log": "reports/local_ci_logs/unit_tests.log"
+    },
+    {
+      "name": "dvc_pipeline",
+      "exit_code": 0,
+      "seconds": 0.959,
+      "log": "reports/local_ci_logs/dvc_pipeline.log"
+    },
+    {
+      "name": "artifact_backup",
+      "exit_code": 0,
+      "seconds": 0.484,
+      "log": "reports/local_ci_logs/artifact_backup.log"
+    },
+    {
+      "name": "feature_parity",
+      "exit_code": 0,
+      "seconds": 0.068,
+      "log": "reports/local_ci_logs/feature_parity.log"
+    },
+    {
+      "name": "compose_config",
+      "exit_code": 0,
+      "seconds": 0.182,
+      "log": "reports/local_ci_logs/compose_config.log"
+    },
+    {
+      "name": "integration",
+      "exit_code": 0,
+      "seconds": 1.212,
+      "log": "reports/local_ci_logs/integration.log"
+    },
+    {
+      "name": "model_contract_and_load",
+      "exit_code": 0,
+      "seconds": 5.322,
+      "log": "reports/local_ci_logs/model_contract_and_load.log"
+    },
+    {
+      "name": "fresh_drift",
+      "exit_code": 0,
+      "seconds": 0.11,
+      "log": "reports/local_ci_logs/fresh_drift.log"
+    },
+    {
+      "name": "operations",
+      "exit_code": 0,
+      "seconds": 0.174,
+      "log": "reports/local_ci_logs/operations.log"
+    }
+  ],
+  "status": "passed",
+  "finished_at": "2026-11-08T11:17:56.041662+00:00"
+}

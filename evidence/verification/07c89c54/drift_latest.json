@@ -1,0 +1,19 @@
+{
+  "created_at": "2026-11-08T11:15:30.185744+00:00",
+  "kind": "observed_api_inputs",
+  "result": {
+    "current_rows": 265,
+    "max_psi": 7.4547,
+    "psi_by_feature": {
+      "air_temperature_k": 7.4421,
+      "process_temperature_k": 7.3565,
+      "rotational_speed_rpm": 7.3411,
+      "tool_wear_min": 7.4547,
+      "torque_nm": 7.3425
+    },
+    "reference_rows": 6000,
+    "source": "recent_api_inputs",
+    "status": "drift_flagged",
+    "threshold": 0.2
+  }
+}

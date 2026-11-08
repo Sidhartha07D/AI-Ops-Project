@@ -1,0 +1,40 @@
+'data/raw/ai4i2020.csv.dvc' didn't change, skipping
+Stage 'validate_source' didn't change, skipping
+Stage 'prepare_spark' didn't change, skipping
+Stage 'prepare_ray' didn't change, skipping
+Stage 'compare' didn't change, skipping
+Stage 'make_splits' didn't change, skipping
+Running stage 'train_candidate':
+> python scripts/train_candidate.py
+/home/sidhartha/miniconda/envs/smart-maintenance/lib/python3.11/site-packages/mlflow/types/utils.py:440: UserWarning: Hint: Inferred schema contains integer column(s). Integer columns in Python cannot represent missing values. If your input data contains missing values at inference time, it will be encoded as floats and will cause a schema enforcement error. The best way to avoid this problem is to infer the model schema based on a realistic data sample (training dataset) that includes missing values. Alternatively, you can declare integer columns as doubles (float64) whenever these columns may have missing values. See `Handling Integers With Missing Values <https://www.mlflow.org/docs/latest/models.html#handling-integers-with-missing-values>`_ for more details.
+  warnings.warn(
+Validation-only candidate trained: f3f3943f9e544acc987012bec9ff0cda source 07c89c541e74d6fe4fd6e79fc5b4fdc01d116185
+Updating lock file 'dvc.lock'
+
+Running stage 'evaluate_candidate':
+> python scripts/evaluate_candidate.py
+Validation evaluation: 0.749490506701175 eligible: True locked-test rows scored: 0
+Updating lock file 'dvc.lock'
+
+Running stage 'package_candidate':
+> python scripts/package_candidate.py
+{
+  "run_id": "f3f3943f9e544acc987012bec9ff0cda",
+  "git_sha": "07c89c541e74d6fe4fd6e79fc5b4fdc01d116185",
+  "model_path": "models/pipeline_candidate",
+  "artifact_sha256": "5d76ffce2c080d0a4bab664ef9a7e2050469737d9d85d6dc47d77d3591ed8bb6",
+  "split_manifest_sha256": "7a1fdd0cca26b328c176d621dd96ed62c19fa6a69ca95cb3f8ae492e781bd08a",
+  "threshold": 0.37,
+  "release_eligible": true,
+  "deployment": "not activated; explicit operator gate required"
+}
+Updating lock file 'dvc.lock'
+
+To track the changes with git, run:
+
+	git add dvc.lock
+
+To enable auto staging, run:
+
+	dvc config core.autostage true
+Use `dvc push` to send your updates to remote storage.

@@ -1,0 +1,8 @@
+{
+  "fixture": "deliberate exception after real candidate startup",
+  "automatic_recovery": "passed",
+  "original_artifact_restored": true,
+  "original_manifest_restored": true,
+  "actual_start_checks": 2,
+  "run_id_after": "e5260d1c99b046f79795c53a4c392575"
+}
