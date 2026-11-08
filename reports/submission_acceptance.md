@@ -40,7 +40,7 @@ The exact logs and JSON results are archived under `evidence/verification/17aa0b
 
 ## Corrections and limits
 
-- Saved image 26 is a mislabelled CI terminal capture and is excluded from outage proof. Use the evidence index's correction and replacement capture when available.
+- Mislabelled image 26 was removed: it showed CI terminal output, not the outage UI. A genuine browser outage screenshot remains pending; no replacement is claimed.
 - Local CI is the primary path. Historical GitHub-hosted CI is preserved; its automatic triggers are disabled. No professor exception to the cloud rule is assumed.
 - MLproject declares the version snapshot; 163 installed pip package versions and Python were checked. A fresh environment installation/image digest lock was not demonstrated during this run.
 - The user-level five-minute timer refreshes input drift while the user manager runs. Recent inputs include repeated course-demo requests, not new industrial measurements; no fresh-label accuracy/concept-drift claim is made.

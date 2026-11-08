@@ -1,4 +1,4 @@
-> Superseded for current submission by `reports/submission_acceptance.md`. This is a historical Phase 8 record. Audit correction: file 26 contains CI terminal output and is not browser outage proof.
+> Superseded for current submission by `reports/submission_acceptance.md`. This is a historical Phase 8 record. Audit correction: file 26 contained CI terminal output, was removed during evidence cleanup, and is not browser outage proof.
 
 # Phase 8 acceptance record (in progress)
 
@@ -11,7 +11,7 @@ Observed on 2026-11-08 in the Ubuntu 26.04 ARM64 UTM VM, 4 vCPUs and 3.3 GiB RAM
 | T03 ETL | Both implementations returned 10,000 rows and feature comparison passed. Recorded earlier wall times were Spark 7.62 s/1,312 rows/s and Ray 4.37 s/2,288 rows/s (`reports/etl_benchmark.md`) | Pass |
 | T04 MLflow | Selected run, metrics, tags and confusion artifact observed in prior Ubuntu Firefox screenshots 09–11; current release manifest still identifies that run. Validation-only run from clean commit is visible in screenshot 25 | Pass |
 | T05 unit | Six focused API tests passed on the VM and in a fresh checkout. The final seven-test suite also rejects nonfinite sensor input and passed on the VM | Pass |
-| T06 integration | Seven Compose services started; model, API and UI reported healthy. `scripts/phase5_smoke.py` passed predictions, HTTP 422, DVC status, validation, feedback and separate UI. A temporary validation-fixture bug was found during cleanup, fixed, and the smoke run passed again. Stopping the real model yielded API model-unavailable health, HTTP 503 instead of a score, and a visible UI warning (screenshot 26); restarting the model restored the smoke test | Pass |
+| T06 integration | Seven Compose services started; model, API and UI reported healthy. `scripts/phase5_smoke.py` passed predictions, HTTP 422, DVC status, validation, feedback and separate UI. A temporary validation-fixture bug was found during cleanup, fixed, and the smoke run passed again. Stopping the real model yielded API model-unavailable health, HTTP 503 instead of a score, and a visible UI warning (historical observation; screenshot 26 was miscaptured and removed); restarting the model restored the smoke test | Pass |
 | T07 UI | Prior browser captures show routine and inspection outcomes. A 390 × 844 Firefox responsive view showed header, guidance, service readiness and form without horizontal clipping (screenshot 23). Torque 200 was blocked by the browser's 100 Nm maximum with a visible warning (screenshot 24) | Pass |
 | T08 pipeline | Ubuntu Firefox showed four ready stages and DVC in sync. A separate invalid CSV fixture caused a real validation error and traceback, captured in screenshot 22; after removing the fixture, validation and smoke checks passed | Pass |
 | T09 API | Earlier FastAPI docs screenshot 15 and live smoke HTTP 422 response verified. A current docs review remains | Pass for endpoint behavior |
@@ -19,7 +19,7 @@ Observed on 2026-11-08 in the Ubuntu 26.04 ARM64 UTM VM, 4 vCPUs and 3.3 GiB RAM
 | T11 drift and release | Phase 7 verification confirmed marked deliberate shift, eight real observations below the 50-sample minimum, a rejected candidate, approved promotion, and rollback to the original run | Pass |
 | T12 restore | The VM was started again this session and Compose plus smoke checks passed. A fresh clone restored 19 DVC files and passed data checks. Separately, a disposable restore from the **Mac Phase 8 Git bundle and state archive** fetched the same 19 files, validated the source and Spark/Ray equality, found the active model, verified DVC sync, and opened the restored MLflow database with 15 runs | Pass |
 | T13 CI | The workflow commands passed end-to-end in a fresh VM clone. After creating the private `Sidhartha07D/AI-Ops-Project` repository, hosted GitHub Actions run `42454769012` on commit `e757116` passed all steps: compile, unit tests, DAG, pinned UCI download, validation, forced DVC repro, Spark/Ray equality, and Compose syntax (screenshot 27) | Pass |
-| T14 docs/evidence | Architecture, HLD, LLD, test plan and user manual exist. All 24 real project screenshots through 28 are indexed; viva notes are in `docs/viva_guide.md`. Evidence audit found no missing or unindexed files. Final personal viva preparation remains | Pass for documents/evidence; viva is separate |
+| T14 docs/evidence | Architecture, HLD, LLD, test plan and user manual exist. The historical index contained 24 captures through 28; the corrected current index removes redundant and mislabelled captures; viva notes are in `docs/viva_guide.md`. Evidence audit found no missing or unindexed files. Final personal viva preparation remains | Pass for documents/evidence; viva is separate |
 
 ## Defects and resolution
 

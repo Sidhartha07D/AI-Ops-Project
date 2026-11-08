@@ -12,20 +12,15 @@ Screenshots are original captures of the Ubuntu VM display. The Mac workspace al
 | `10_phase4_mlflow_selected_metrics.jpg` | Selected run metrics, parameters, and provenance tags | Ubuntu Firefox, MLflow run `e5260d1c99b046f79795c53a4c392575`, 17:31 VM time |
 | `11_phase4_mlflow_confusion_artifact.jpg` | Logged confusion-matrix artifact preview | Ubuntu Firefox, same run, 17:32 VM time |
 | `12_phase5_ui_prediction.jpg` | Separate UI shows six fields and a routine result from the served model | Ubuntu Firefox, `http://127.0.0.1:8501/index.html`, 2026-11-07 18:08 VM time |
-| `13_phase5_ui_inspection_alert.jpg` | Inspection example produces a real alert above the selected threshold | Ubuntu Firefox, same UI, 18:10 VM time |
-| `14_phase5_pipeline_console.jpg` | DVC stage state and successful validation job with real console output | Ubuntu Firefox, `http://127.0.0.1:8501/pipeline.html`, 18:11 VM time |
 | `15_phase5_fastapi_docs.jpg` | Independent FastAPI endpoint documentation | Ubuntu Firefox, `http://127.0.0.1:8000/docs`, 18:12 VM time |
 | `16_phase6_compose_ui.jpg` | Containerized UI shows the selected model's 95.0% inspection result, with all services ready | Ubuntu Firefox, `http://127.0.0.1:8501/index.html`, 2026-11-07 18:34 VM time |
 | `17_phase6_compose_tests.jpg` | Three healthy Compose services, four passing API unit tests, and VM storage | Ubuntu terminal, `docker compose ps`, `python scripts/phase6_tests.py`, `df -h /`, 18:36 VM time |
-| `18_phase7_grafana_dashboard.jpg` | Provisioned near-real-time dashboard with API, model, and UI Up plus live prediction and latency panels | Ubuntu Firefox, `http://127.0.0.1:3001/d/smart-maintenance/...`, 2026-11-07 18:55 VM time |
 | `19_phase7_prometheus_targets.jpg` | API metrics scrape and model/UI probes are all Up | Ubuntu Firefox, `http://127.0.0.1:9091/targets`, 18:56 VM time |
 | `20_phase7_drift_release_checks.jpg` | Acceptance check confirms deliberate drift detection, sparse-input guard, release rejection, promotion, rollback, and DVC sync | Ubuntu terminal, `python scripts/phase7_verify.py`, 18:59 VM time |
-| `21_phase7_vm_resources.jpg` | Grafana host exporter panels show actual VM available memory and root free space alongside live service activity | Ubuntu Firefox, same Grafana dashboard, 19:05 VM time |
 | `22_phase8_pipeline_error.jpg` | Pipeline page shows a real failed validation job and console traceback from a separate invalid fixture; pinned source was untouched | Ubuntu Firefox, `http://127.0.0.1:8501/pipeline.html`, 2026-11-08 11:36 VM time |
 | `23_phase8_responsive_mobile.jpg` | Machine-check page at a 390 × 844 responsive viewport, with header, service status, guidance and input form fitting the narrow width | Ubuntu Firefox Responsive Design Mode, `http://127.0.0.1:8501/index.html`, 2026-11-08 11:43 VM time |
 | `24_phase8_ui_input_guard.jpg` | Torque value 200 exceeds the allowed maximum 100; Firefox blocks submission with a visible range message in the narrow viewport | Ubuntu Firefox, same UI, 2026-11-08 11:47 VM time |
 | `25_phase8_clean_commit_mlflow.jpg` | Validation-only MLflow run is Finished and identifies clean source commit `91f9214`; no model metrics are claimed for this data-check run | Ubuntu Firefox, MLflow run `71c564ba12294121ab1e4f78e8eeab9e`, 2026-11-08 11:53 VM time |
-| `26_phase8_model_outage_ui.jpg` | CORRECTION: saved file actually shows CI terminal output; filename is misleading. Excluded from outage proof and distinct evidence count | Historical capture error found during audit |
 | `27_phase8_hosted_ci_pass.jpg` | Private GitHub Actions job passes unit, pinned download, DVC repro, Spark/Ray comparison, and Compose checks | Ubuntu terminal, `gh run view` for run `42454769012`, 2026-11-08 12:02 VM time |
 | `28_phase8_final_vm_status.jpg` | Clean main branch, seven live services, DVC remote in sync, and 5.2 GiB free on the VM root disk after recovery | Ubuntu terminal, `git status`, `docker compose ps`, `dvc status -c`, `df -h /`, 2026-11-08 12:07 VM time |
 
@@ -33,9 +28,13 @@ The failed MLflow runs visible in the first browser screenshot came from initial
 
 The two UI examples are training-set records used only for demonstration; they are not additional locked-test evaluations. The integration smoke script also checks an invalid-input 422 response, a model prediction, DVC status, validation, feedback queue, and the UI service.
 
-Submission-hardening corrections supersede earlier descriptions. File 26 must not be used as browser outage evidence.
+Submission-hardening corrections supersede earlier descriptions. Screenshot 26 was removed because it showed CI terminal output rather than the claimed outage UI. Browser outage evidence remains pending; do not claim that capture exists.
 
 | New capture | Observed result | Context |
 | --- | --- | --- |
 | `29_local_lifecycle_pipeline.jpg` | Updated lifecycle page shows candidate validation score, zero test rows scored, local CI passed, DVC sync, and train/evaluate stages with actual validation console | Ubuntu Firefox, 2026-11-08 16:34 IST; exact inspected frame saved |
 | `30_scheduled_drift_monitoring.jpg` | API, model and UI Up; latest drift report contains 394 inputs, neutral count colour, report age approximately three minutes; VM memory and disk panels visible | Ubuntu Firefox Grafana, VM clock 2026-11-08 17:10; exact inspected frame saved. Inputs include repeated demo/test requests, not new industrial measurements. |
+
+## Evidence cleanup
+
+Removed redundant screenshots 13 (inspection result covered by 16), 14 (pipeline view superseded by 29), and 18/21 (Grafana views superseded by 30). Removed mislabelled screenshot 26, whose terminal content was already covered by CI evidence 27. Screenshot numbers are preserved so historical references remain traceable. Capture tests are excluded. The current set contains 21 useful project screenshots. Earlier versions remain recoverable in Git history.
