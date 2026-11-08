@@ -1,4 +1,5 @@
 """Content identity and trusted local MLflow model loading."""
+
 from hashlib import sha256
 from pathlib import Path
 
@@ -16,4 +17,5 @@ def tree_digest(path):
 
 def load_model(path):
     import mlflow.pyfunc
+
     return mlflow.pyfunc.load_model(str(path))

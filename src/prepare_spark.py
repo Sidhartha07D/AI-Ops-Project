@@ -26,12 +26,18 @@ def main() -> None:
     )
     spark.sparkContext.setLogLevel("ERROR")
     try:
-        raw = spark.read.option("header", True).option("inferSchema", True).csv(str(SOURCE))
+        raw = (
+            spark.read.option("header", True)
+            .option("inferSchema", True)
+            .csv(str(SOURCE))
+        )
         prepared = raw.select(
             F.col("UDI").cast("int").alias("udi"),
             F.col("Type").alias("type"),
             F.col("Air temperature [K]").cast("double").alias("air_temperature_k"),
-            F.col("Process temperature [K]").cast("double").alias("process_temperature_k"),
+            F.col("Process temperature [K]")
+            .cast("double")
+            .alias("process_temperature_k"),
             F.col("Rotational speed [rpm]").cast("int").alias("rotational_speed_rpm"),
             F.col("Torque [Nm]").cast("double").alias("torque_nm"),
             F.col("Tool wear [min]").cast("int").alias("tool_wear_min"),

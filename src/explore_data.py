@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -13,8 +14,12 @@ SOURCE = ROOT / "data/raw/ai4i2020.csv"
 REPORT = ROOT / "reports/data_audit.json"
 FIGURES = ROOT / "reports/figures"
 INPUTS = [
-    "Type", "Air temperature [K]", "Process temperature [K]",
-    "Rotational speed [rpm]", "Torque [Nm]", "Tool wear [min]",
+    "Type",
+    "Air temperature [K]",
+    "Process temperature [K]",
+    "Rotational speed [rpm]",
+    "Torque [Nm]",
+    "Tool wear [min]",
 ]
 FLAGS = ["TWF", "HDF", "PWF", "OSF", "RNF"]
 
@@ -30,11 +35,19 @@ def main() -> None:
         "blank_cells": int(frame.isna().sum().sum()),
         "duplicate_udi": int(frame.duplicated("UDI").sum()),
         "duplicate_input_rows": int(frame.duplicated(INPUTS).sum()),
-        "machine_failure_counts": {str(k): int(v) for k, v in frame["Machine failure"].value_counts().sort_index().items()},
-        "type_counts": {str(k): int(v) for k, v in frame["Type"].value_counts().sort_index().items()},
+        "machine_failure_counts": {
+            str(k): int(v)
+            for k, v in frame["Machine failure"].value_counts().sort_index().items()
+        },
+        "type_counts": {
+            str(k): int(v) for k, v in frame["Type"].value_counts().sort_index().items()
+        },
         "target_vs_failure_mode_disagreements": int(mismatch.sum()),
         "numeric_ranges": {
-            column: {"min": float(frame[column].min()), "max": float(frame[column].max())}
+            column: {
+                "min": float(frame[column].min()),
+                "max": float(frame[column].max()),
+            }
             for column in INPUTS[1:]
         },
         "interpretation": "Synthetic observation-level failure label; no future failure horizon or real machine history.",
@@ -58,7 +71,9 @@ def main() -> None:
     for ax, column in zip(axes.flat, INPUTS[1:]):
         for label, color in [(0, "#377eb8"), (1, "#e6550d")]:
             subset = frame.loc[frame["Machine failure"] == label, column]
-            ax.hist(subset, bins=30, density=True, alpha=0.55, label=str(label), color=color)
+            ax.hist(
+                subset, bins=30, density=True, alpha=0.55, label=str(label), color=color
+            )
         ax.set_title(column)
         ax.set_ylabel("Density")
     axes.flat[5].axis("off")
@@ -68,8 +83,12 @@ def main() -> None:
     fig.savefig(FIGURES / "sensor_distributions.png", dpi=140)
     plt.close(fig)
 
-    print(f"Rows: {report['rows']} | blank cells: {report['blank_cells']} | duplicate inputs: {report['duplicate_input_rows']}")
-    print(f"Failure labels: {report['machine_failure_counts']} | mode disagreements: {report['target_vs_failure_mode_disagreements']}")
+    print(
+        f"Rows: {report['rows']} | blank cells: {report['blank_cells']} | duplicate inputs: {report['duplicate_input_rows']}"
+    )
+    print(
+        f"Failure labels: {report['machine_failure_counts']} | mode disagreements: {report['target_vs_failure_mode_disagreements']}"
+    )
     print(f"Report: {REPORT}")
     print("EDA: PASS")
 

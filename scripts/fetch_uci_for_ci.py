@@ -21,7 +21,9 @@ def main() -> None:
         archive = response.read()
     assert sha256(archive).hexdigest() == ZIP_SHA256, "Source ZIP hash mismatch"
     with ZipFile(BytesIO(archive)) as bundle:
-        names = [name for name in bundle.namelist() if name.lower().endswith("ai4i2020.csv")]
+        names = [
+            name for name in bundle.namelist() if name.lower().endswith("ai4i2020.csv")
+        ]
         assert len(names) == 1, f"Expected one AI4I CSV, found {names}"
         csv = bundle.read(names[0])
     assert sha256(csv).hexdigest() == CSV_SHA256, "Source CSV hash mismatch"

@@ -18,12 +18,16 @@ def main() -> None:
     frame = pd.read_csv(SOURCE)
     assert len(frame) == 10_000
     assert frame["udi"].is_unique, "Duplicate UDI"
-    assert not frame.duplicated(frame.columns.drop(["udi", "machine_failure"]).tolist()).any(), "Exact input duplicates require grouping"
+    assert not frame.duplicated(
+        frame.columns.drop(["udi", "machine_failure"]).tolist()
+    ).any(), "Exact input duplicates require grouping"
     train_val, test = train_test_split(
         frame, test_size=0.20, random_state=SEED, stratify=frame["machine_failure"]
     )
     train, validation = train_test_split(
-        train_val, test_size=0.25, random_state=SEED,
+        train_val,
+        test_size=0.25,
+        random_state=SEED,
         stratify=train_val["machine_failure"],
     )
     parts = {"train": train, "validation": validation, "test": test}
@@ -33,7 +37,9 @@ def main() -> None:
     ).sort_values("udi")
     assert manifest["udi"].is_unique and len(manifest) == len(frame)
     assert {name: len(part) for name, part in parts.items()} == {
-        "train": 6000, "validation": 2000, "test": 2000
+        "train": 6000,
+        "validation": 2000,
+        "test": 2000,
     }
     MANIFEST.parent.mkdir(parents=True, exist_ok=True)
     REPORT.parent.mkdir(parents=True, exist_ok=True)

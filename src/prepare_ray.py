@@ -11,9 +11,15 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "data/raw/ai4i2020.csv"
 OUTPUT = ROOT / "data/processed/ray_features.csv"
 FIELDS = [
-    "udi", "type", "air_temperature_k", "process_temperature_k",
-    "rotational_speed_rpm", "torque_nm", "tool_wear_min",
-    "temperature_gap_k", "machine_failure",
+    "udi",
+    "type",
+    "air_temperature_k",
+    "process_temperature_k",
+    "rotational_speed_rpm",
+    "torque_nm",
+    "tool_wear_min",
+    "temperature_gap_k",
+    "machine_failure",
 ]
 
 

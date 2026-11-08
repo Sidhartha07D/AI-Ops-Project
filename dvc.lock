@@ -111,6 +111,10 @@ stages:
       hash: md5
       md5: 406b61e954e701d59e0e26716c4c4a19
       size: 116904
+    - path: environment.snapshot.yml
+      hash: md5
+      md5: d16b4ef3ee31ac93a63787f9cf7754b3
+      size: 4825
     - path: environment.yml
       hash: md5
       md5: 9aee1f7fabddfd364ae097f7adabf14a
@@ -121,8 +125,8 @@ stages:
       size: 583
     - path: scripts/train_candidate.py
       hash: md5
-      md5: ea0ac24b81642ac0b11ad5fbe6bc5c75
-      size: 3781
+      md5: 6169faf0f13da3cc3e2072eae49a9104
+      size: 3970
     - path: src/train_models.py
       hash: md5
       md5: c63c1a50c8623ac866ff8a6d61943b86
@@ -139,12 +143,12 @@ stages:
     outs:
     - path: models/pipeline_candidate
       hash: md5
-      md5: 4bc1c5b40fe0e1c124358c1148f1c70d.dir
+      md5: e6514e26f23f9831916822c3d3c04cdf.dir
       size: 2872235
       nfiles: 7
     - path: reports/pipeline_training.json
       hash: md5
-      md5: 3a4796c189548a452a82d485d2b70133
+      md5: d529d975cb9cb45127f4e4f5a6668557
       size: 696
   evaluate_candidate:
     cmd: python scripts/evaluate_candidate.py
@@ -159,7 +163,7 @@ stages:
       size: 116904
     - path: models/pipeline_candidate
       hash: md5
-      md5: 4bc1c5b40fe0e1c124358c1148f1c70d.dir
+      md5: e6514e26f23f9831916822c3d3c04cdf.dir
       size: 2872235
       nfiles: 7
     - path: reports/model_evaluation.json
@@ -168,7 +172,7 @@ stages:
       size: 4158
     - path: reports/pipeline_training.json
       hash: md5
-      md5: 3a4796c189548a452a82d485d2b70133
+      md5: d529d975cb9cb45127f4e4f5a6668557
       size: 696
     - path: scripts/artifacts.py
       hash: md5
@@ -185,5 +189,30 @@ stages:
     outs:
     - path: reports/pipeline_evaluation.json
       hash: md5
-      md5: 478d122ee3dd817a801c06e68d4db23e
+      md5: a6c2a0a75eba9e126e847aa1cc477353
       size: 1338
+  package_candidate:
+    cmd: python scripts/package_candidate.py
+    deps:
+    - path: models/pipeline_candidate
+      hash: md5
+      md5: e6514e26f23f9831916822c3d3c04cdf.dir
+      size: 2872235
+      nfiles: 7
+    - path: reports/pipeline_evaluation.json
+      hash: md5
+      md5: a6c2a0a75eba9e126e847aa1cc477353
+      size: 1338
+    - path: scripts/artifacts.py
+      hash: md5
+      md5: 92e073a6c902bf67542aedcb33361589
+      size: 583
+    - path: scripts/package_candidate.py
+      hash: md5
+      md5: a2db3715b6efdc021768fc1a6c03ff19
+      size: 856
+    outs:
+    - path: reports/candidate_release.json
+      hash: md5
+      md5: d6a916a17483fa945db771386ff02001
+      size: 452
