@@ -17,7 +17,7 @@ Observed on 2026-11-08 in the Ubuntu 26.04 ARM64 UTM VM, 4 vCPUs and 3.3 GiB RAM
 | T11 drift and release | Phase 7 verification confirmed marked deliberate shift, eight real observations below the 50-sample minimum, a rejected candidate, approved promotion, and rollback to the original run | Pass |
 | T12 restore | The VM was started again this session and Compose plus smoke checks passed. A fresh clone restored 19 DVC files and passed data checks. Separately, a disposable restore from the **Mac Phase 8 Git bundle and state archive** fetched the same 19 files, validated the source and Spark/Ray equality, found the active model, verified DVC sync, and opened the restored MLflow database with 15 runs | Pass |
 | T13 CI | The workflow commands passed end-to-end in a fresh VM clone. After creating the private `Sidhartha07D/AI-Ops-Project` repository, hosted GitHub Actions run `42454769012` on commit `e757116` passed all steps: compile, unit tests, DAG, pinned UCI download, validation, forced DVC repro, Spark/Ray equality, and Compose syntax (screenshot 27) | Pass |
-| T14 docs/evidence | Architecture, HLD, LLD, test plan and user manual exist. All 23 real project screenshots through 27 are indexed; viva notes are in `docs/viva_guide.md`. Evidence audit found no missing or unindexed files. Final personal viva preparation remains | Pass for documents/evidence; viva is separate |
+| T14 docs/evidence | Architecture, HLD, LLD, test plan and user manual exist. All 24 real project screenshots through 28 are indexed; viva notes are in `docs/viva_guide.md`. Evidence audit found no missing or unindexed files. Final personal viva preparation remains | Pass for documents/evidence; viva is separate |
 
 ## Defects and resolution
 

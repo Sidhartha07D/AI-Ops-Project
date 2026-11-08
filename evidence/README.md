@@ -27,6 +27,7 @@ Screenshots are original captures of the Ubuntu VM display. The Mac workspace al
 | `25_phase8_clean_commit_mlflow.jpg` | Validation-only MLflow run is Finished and identifies clean source commit `91f9214`; no model metrics are claimed for this data-check run | Ubuntu Firefox, MLflow run `71c564ba12294121ab1e4f78e8eeab9e`, 2026-11-08 11:53 VM time |
 | `26_phase8_model_outage_ui.jpg` | Stopping the real MLflow model container makes the UI show “Model service unavailable”; API health also reported unavailable and inference returned HTTP 503, then the model was restored | Ubuntu Firefox, `http://127.0.0.1:8501/index.html`, 2026-11-08 12:02 VM time |
 | `27_phase8_hosted_ci_pass.jpg` | Private GitHub Actions job passes unit, pinned download, DVC repro, Spark/Ray comparison, and Compose checks | Ubuntu terminal, `gh run view` for run `42454769012`, 2026-11-08 12:02 VM time |
+| `28_phase8_final_vm_status.jpg` | Clean main branch, seven live services, DVC remote in sync, and 5.2 GiB free on the VM root disk after recovery | Ubuntu terminal, `git status`, `docker compose ps`, `dvc status -c`, `df -h /`, 2026-11-08 12:07 VM time |
 
 The failed MLflow runs visible in the first browser screenshot came from initial project-entry-point and model-serialization setup errors. They are retained as an honest execution history. The later successful run is the one recorded in the model card and evaluation report.
 

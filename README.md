@@ -51,7 +51,7 @@ docker compose ps
 ~/miniconda/envs/smart-maintenance/bin/python scripts/phase5_smoke.py
 ```
 
-Open the same UI, pipeline, and API URLs listed above. Compose binds all published ports to VM localhost. `docker compose logs --tail=50 model api ui` shows service logs. `docker compose down` stops and removes the three containers; the images, DVC data, feedback, and MLflow runs persist. Do not start the Phase 5 host processes and Compose on the same ports at once.
+Open the same UI, pipeline, and API URLs listed above. Compose binds all published ports to VM localhost. `docker compose logs --tail=50 model api ui` shows service logs. `docker compose down` stops and removes the seven containers; the images, DVC data, feedback, and MLflow runs persist. Do not start the Phase 5 host processes and Compose on the same ports at once.
 
 Focused API tests run with `python scripts/phase6_tests.py` from the project environment. `.github/workflows/checks.yaml` defines push/PR source, unit, pinned UCI download, full DVC repro, Spark/Ray comparison, and Compose configuration checks. The workflow has not been observed on GitHub until this repository is pushed to a remote. The container test results are recorded in `reports/phase6_test_report.md`.
 
