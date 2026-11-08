@@ -1,10 +1,10 @@
 {
-  "run_id": "635349b6d6e3479797ae2683b833b5a9",
+  "run_id": "f3f3943f9e544acc987012bec9ff0cda",
   "experiment_id": "3",
-  "git_sha": "fc21777190e0ff73c4b10a6328bf118eda41580c",
+  "git_sha": "07c89c541e74d6fe4fd6e79fc5b4fdc01d116185",
   "source_clean": true,
   "model_path": "models/pipeline_candidate",
-  "artifact_sha256": "9b6a835db6bd48ff4deceb0bbe5aab7128745ad63b7a55dbce38db5854d94197",
+  "artifact_sha256": "5d76ffce2c080d0a4bab664ef9a7e2050469737d9d85d6dc47d77d3591ed8bb6",
   "split_manifest_sha256": "7a1fdd0cca26b328c176d621dd96ed62c19fa6a69ca95cb3f8ae492e781bd08a",
   "data_sha256": "b762ea195f1bb9d9150d7dd12a58ccc384790c76b12fcb8cb43c71170b124d38",
   "feature_columns": [

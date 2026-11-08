@@ -31,7 +31,9 @@ from prometheus_client import (
     CONTENT_TYPE_LATEST,
 )
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(
+    os.environ.get("SMART_MAINTENANCE_ROOT", str(Path(__file__).resolve().parents[1]))
+)
 REPORT = json.loads((ROOT / "reports/model_evaluation.json").read_text())
 RELEASE = ROOT / "models/active_release.json"
 MODEL_URL = os.environ.get(

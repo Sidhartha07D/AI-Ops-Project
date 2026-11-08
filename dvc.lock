@@ -129,8 +129,8 @@ stages:
       size: 4866
     - path: src/train_models.py
       hash: md5
-      md5: 407d866cec27d0a4a55744d246a4558b
-      size: 10991
+      md5: 37920ad8d35fd1bed6a71590d1514753
+      size: 11184
     params:
       params.yaml:
         candidate:
@@ -143,12 +143,12 @@ stages:
     outs:
     - path: models/pipeline_candidate
       hash: md5
-      md5: c490d09a77e8c4b9e60eab0c3e237d50.dir
+      md5: a8b6733646578beb6f1289c0f3395384.dir
       size: 2872256
       nfiles: 7
     - path: reports/pipeline_training.json
       hash: md5
-      md5: ccbb270c9dcd34eda541c6b2cdb5a364
+      md5: 46aa887019c39fc8c1586618694de190
       size: 720
   evaluate_candidate:
     cmd: python scripts/evaluate_candidate.py
@@ -163,7 +163,7 @@ stages:
       size: 116904
     - path: models/pipeline_candidate
       hash: md5
-      md5: c490d09a77e8c4b9e60eab0c3e237d50.dir
+      md5: a8b6733646578beb6f1289c0f3395384.dir
       size: 2872256
       nfiles: 7
     - path: reports/model_evaluation.json
@@ -172,7 +172,7 @@ stages:
       size: 4158
     - path: reports/pipeline_training.json
       hash: md5
-      md5: ccbb270c9dcd34eda541c6b2cdb5a364
+      md5: 46aa887019c39fc8c1586618694de190
       size: 720
     - path: scripts/artifacts.py
       hash: md5
@@ -184,24 +184,24 @@ stages:
       size: 3599
     - path: src/train_models.py
       hash: md5
-      md5: 407d866cec27d0a4a55744d246a4558b
-      size: 10991
+      md5: 37920ad8d35fd1bed6a71590d1514753
+      size: 11184
     outs:
     - path: reports/pipeline_evaluation.json
       hash: md5
-      md5: 1e3613dc73df6fb5797c03986184be86
+      md5: 9cbb33e99f77649a905bd1bbc23aef48
       size: 1362
   package_candidate:
     cmd: python scripts/package_candidate.py
     deps:
     - path: models/pipeline_candidate
       hash: md5
-      md5: c490d09a77e8c4b9e60eab0c3e237d50.dir
+      md5: a8b6733646578beb6f1289c0f3395384.dir
       size: 2872256
       nfiles: 7
     - path: reports/pipeline_evaluation.json
       hash: md5
-      md5: 1e3613dc73df6fb5797c03986184be86
+      md5: 9cbb33e99f77649a905bd1bbc23aef48
       size: 1362
     - path: scripts/artifacts.py
       hash: md5
@@ -214,5 +214,5 @@ stages:
     outs:
     - path: reports/candidate_release.json
       hash: md5
-      md5: 011777232c88a73e48be156aa26812e8
+      md5: 55f55eb294c3eac421734f93b37e3546
       size: 452
