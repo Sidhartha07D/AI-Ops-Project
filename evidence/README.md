@@ -38,3 +38,4 @@ Submission-hardening corrections supersede earlier descriptions. File 26 must no
 | New capture | Observed result | Context |
 | --- | --- | --- |
 | `29_local_lifecycle_pipeline.jpg` | Updated lifecycle page shows candidate validation score, zero test rows scored, local CI passed, DVC sync, and train/evaluate stages with actual validation console | Ubuntu Firefox, 2026-11-08 16:34 IST; exact inspected frame saved |
+| `30_scheduled_drift_monitoring.jpg` | API, model and UI Up; latest drift report contains 394 inputs, neutral count colour, report age approximately three minutes; VM memory and disk panels visible | Ubuntu Firefox Grafana, VM clock 2026-11-08 17:10; exact inspected frame saved. Inputs include repeated demo/test requests, not new industrial measurements. |
