@@ -22,6 +22,33 @@ def main():
     logs = ROOT / "reports/local_ci_logs"
     logs.mkdir(exist_ok=True)
     stages = [
+        (
+            "python_format",
+            [
+                sys.executable,
+                "-m",
+                "ruff",
+                "format",
+                "--check",
+                "api",
+                "src",
+                "scripts",
+            ],
+        ),
+        (
+            "python_lint",
+            [
+                sys.executable,
+                "-m",
+                "ruff",
+                "check",
+                "--select",
+                "E9,F63,F7,F82",
+                "api",
+                "src",
+                "scripts",
+            ],
+        ),
         ("environment", [sys.executable, "scripts/verify_environment.py"]),
         (
             "compile",

@@ -68,3 +68,18 @@ Two validation-only candidates and their MLflow/DVC artifacts demonstrate the re
 The professor's five required documents are linked near the top of this README. `reports/final_acceptance.md` records observed pass, partial, and pending results against `docs/test_plan.md`; `docs/viva_guide.md` prepares the short live explanation. The evidence inventory is `evidence/README.md`, with original VM-browser captures in `evidence/screenshots/` and Mac copies under `outputs/evidence/screenshots/` in the Codex workspace.
 
 The CI workflow restores the pinned UCI CSV by checked hash and runs the DVC stages from a fresh checkout. Those commands passed locally and in [GitHub Actions run 42454769012](https://github.com/Sidhartha07D/AI-Ops-Project/actions/runs/42454769012) in the private project repository. A Mac Git bundle plus MLflow/DVC state backup was restored in a disposable VM directory and passed source, feature, model-artifact, and tracking-database checks. The final AI-use disclosure is intentionally deferred until submission review.
+
+
+## Current submission workflow (supersedes historical phase commands)
+
+Use `docs/scope_decisions.md` for the agreed scope. The original `src/train_models.py` is retained for historical reproducibility; do not rerun it for a demo because it scores the frozen test set. Current training is validation-only through `dvc repro` or the parameterized MLproject `train` entry point. `MLproject` declares `environment.snapshot.yml` and checks installed versions; use the existing `smart-maintenance` environment for the tested VM workflow.
+
+```bash
+cd ~/smart-maintenance-monitor
+export PATH="$HOME/miniconda/envs/smart-maintenance/bin:$PATH"
+docker compose up -d
+python scripts/local_ci.py
+mlflow run . -e validate --env-manager local
+```
+
+The full local CI result is `reports/local_ci_latest.json`; collected unit counts are `reports/unit_test_results.json`. The last candidate, validation metrics and global importance are in `reports/pipeline_evaluation.json`. DVC may reuse unchanged stages: a cached run does not create a new MLflow run. No deployment happens during DVC reproduction. Historical hosted Actions passes remain evidence of those earlier commits, not claims about the new local-only workflow.

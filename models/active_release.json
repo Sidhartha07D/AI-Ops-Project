@@ -1,4 +1,5 @@
 {
+  "artifact_sha256": "43f90b5ec016bd190c6f304479a616ce0d32f16a25f6194783545960a60e62d4",
   "model_path": "models/serving_model",
   "run_id": "e5260d1c99b046f79795c53a4c392575",
   "threshold": 0.36999999999999994,

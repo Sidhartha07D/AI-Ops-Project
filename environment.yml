@@ -3,6 +3,7 @@ dependencies:
   - python=3.11
   - pip
   - pip:
+      - ruff==0.17.4
       - dvc==3.67.1
       - pyspark==3.5.7
       - ray==2.59.0

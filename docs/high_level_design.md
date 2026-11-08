@@ -32,3 +32,24 @@ The API and UI are local-only. Grafana permits anonymous viewing because its pub
 ## Performance and capacity
 
 One local Spark run prepared 10,000 rows in 7.62 seconds (1,312 rows/s); one Ray run took 4.37 seconds (2,288 rows/s). These include startup and CSV writing and are not scale benchmarks. The model had locked-test average precision 0.8066 and recall 0.8529 at threshold 0.37. The metrics describe a synthetic, randomly split dataset; they do not establish field reliability. Docker images and monitoring storage are bounded to fit the VM. See `reports/etl_benchmark.md`, `docs/model_card.md`, and `docs/operations.md` for the measured details.
+
+
+## Lifecycle and release sequence
+
+```mermaid
+flowchart TD
+    A[Pinned raw CSV] --> B[Hash and schema validation]
+    B --> C[Spark and Ray preparation]
+    C --> D[Compare and fixed split]
+    D --> E[Train candidate on train IDs]
+    E --> F[Validation metrics and importance]
+    F --> G[Verified candidate manifest]
+    G --> H{Operator release review}
+    H -->|reject| I[Keep active release]
+    H -->|approve| J[Block predictions and back up active model]
+    J --> K[Recreate model server and verify served outputs]
+    K -->|success| L[Publish matching manifest]
+    K -->|failure| M[Restore old bytes and policy and verify]
+```
+
+The primary CI command runs on the Ubuntu VM. Hosted Actions is manual-only historical/supplementary evidence. The final local pipeline never reruns the frozen test evaluation. The release switch permits brief downtime and rejects predictions while holding a shared filesystem lock; it is not a zero-downtime deployment. API, model server, and offline development have different dependency subsets. The MLproject declares the version snapshot for offline work and verifies installed versions before executing; this is not a claim that a fresh environment was rebuilt during every run.

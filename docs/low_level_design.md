@@ -61,3 +61,14 @@ Prometheus scrapes FastAPI `/metrics` and node exporter; blackbox exporter probe
 ## Files and recovery
 
 The Git repository holds source, DVC pointer/lock files, reports, dashboard configuration, and evidence. The VM-local DVC remote holds data/model objects; `mlflow_store/` holds the tracking DB and artifacts. Both are backed up separately on the Mac alongside a full Git bundle. `dvc pull` is required after a fresh clone before the model image can be built. See `docs/resume_after_vm_shutdown.md` for the exact restart sequence.
+
+
+## Submission-hardening contract update
+
+`POST /feedback` now requires a prediction ID present in the local observation history; unknown IDs return 404. The browser exposes a flag button only. The API supports an optional note/outcome, but no review/approve/train-from-feedback interface is claimed.
+
+`GET /pipeline` also returns `candidate_evaluation` (validation-only metrics, lineage and importance) and `local_ci` (last completed command results, timestamps and log paths). The stage list includes metric outputs as well as DVC outputs. `ready` means output files are present; it does not mean the stage just executed. CI logs retain DVC's real skip/reuse messages.
+
+Inference holds a shared release lock; promotion holds the exclusive lock. While the latter is held, prediction returns 503 and no score. JSONL write failures return a controlled 503; model JSON errors return 502. Pipeline report schema remains extensible. `docs/openapi.json` is exported from the running API.
+
+The API retains the field name `failure_probability` for compatibility; UI interpretation is an uncalibrated model failure score. Global permutation importance is evaluated on validation rows only and does not imply causal attribution.
