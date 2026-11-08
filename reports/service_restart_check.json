@@ -1,0 +1,219 @@
+{
+  "observed_at": "2026-11-08T15:46:33.479204+00:00",
+  "kind": "docker_compose_down_then_up",
+  "os_reboot_performed": false,
+  "boot_id": "3c5bc3ac-acf5-40f2-9c47-5dc864d29a2f",
+  "command": "docker compose down && docker compose up -d --wait --wait-timeout 180",
+  "compose_restart_exit_code": 0,
+  "post_restart_smoke": "passed; actual phase5_smoke output observed in this session",
+  "dvc_status": "Cache and remote 'vmstore' are in sync.",
+  "drift_timer": "active",
+  "api_http_status": 200,
+  "ui_http_status": 200,
+  "model_http_status": 200,
+  "compose_services": [
+    {
+      "Command": "\"python -m uvicorn a\u2026\"",
+      "CreatedAt": "2026-11-08 21:13:59 +0530 IST",
+      "ExitCode": 0,
+      "Health": "healthy",
+      "ID": "815981e2e303",
+      "Image": "smart-maintenance-api",
+      "Labels": "com.docker.compose.project.config_files=/home/sidhartha/smart-maintenance-monitor/compose.yaml,com.docker.compose.service=api,com.docker.compose.config-hash=cd25748403dadcdc6a89e4c17dc7fe71f9ff0aefc2ad04833b106ea086473969,com.docker.compose.container-number=1,com.docker.compose.depends_on=model:service_healthy:false,com.docker.compose.project=smart-maintenance,com.docker.compose.project.working_dir=/home/sidhartha/smart-maintenance-monitor,com.docker.compose.version=2.40.3,com.docker.compose.image=sha256:408d6fd09876e67b31939d5a2306ed6c9ff233c2e8a79981c8a34b14589c0349,com.docker.compose.oneoff=False",
+      "LocalVolumes": "0",
+      "Mounts": "/home/sidharth\u2026,/home/sidharth\u2026",
+      "Name": "smart-maintenance-api-1",
+      "Names": "smart-maintenance-api-1",
+      "Networks": "smart-maintenance_default",
+      "Ports": "127.0.0.1:8000->8000/tcp",
+      "Project": "smart-maintenance",
+      "Publishers": [
+        {
+          "URL": "127.0.0.1",
+          "TargetPort": 8000,
+          "PublishedPort": 8000,
+          "Protocol": "tcp"
+        }
+      ],
+      "RunningFor": "2 minutes ago",
+      "Service": "api",
+      "Size": "0B",
+      "State": "running",
+      "Status": "Up 2 minutes (healthy)"
+    },
+    {
+      "Command": "\"/bin/blackbox_expor\u2026\"",
+      "CreatedAt": "2026-11-08 21:13:59 +0530 IST",
+      "ExitCode": 0,
+      "Health": "",
+      "ID": "823f274cbd47",
+      "Image": "prom/blackbox-exporter:v0.27.0",
+      "Labels": "maintainer=The Prometheus Authors <prometheus-developers@googlegroups.com>,com.docker.compose.config-hash=4cc0e9d17c16af06892fe077709d07259017dacb42fe23e14088976cb3a5fe0a,com.docker.compose.depends_on=,com.docker.compose.image=sha256:a50c4c0eda297baa1678cd4dc4712a67fdea713b832d43ce7fcc5f9bea05094d,com.docker.compose.oneoff=False,com.docker.compose.version=2.40.3,com.docker.compose.container-number=1,com.docker.compose.project=smart-maintenance,com.docker.compose.project.config_files=/home/sidhartha/smart-maintenance-monitor/compose.yaml,com.docker.compose.project.working_dir=/home/sidhartha/smart-maintenance-monitor,com.docker.compose.service=blackbox",
+      "LocalVolumes": "0",
+      "Mounts": "/home/sidharth\u2026",
+      "Name": "smart-maintenance-blackbox-1",
+      "Names": "smart-maintenance-blackbox-1",
+      "Networks": "smart-maintenance_default",
+      "Ports": "9115/tcp",
+      "Project": "smart-maintenance",
+      "Publishers": [
+        {
+          "URL": "",
+          "TargetPort": 9115,
+          "PublishedPort": 0,
+          "Protocol": "tcp"
+        }
+      ],
+      "RunningFor": "2 minutes ago",
+      "Service": "blackbox",
+      "Size": "0B",
+      "State": "running",
+      "Status": "Up 2 minutes"
+    },
+    {
+      "Command": "\"/run.sh\"",
+      "CreatedAt": "2026-11-08 21:13:59 +0530 IST",
+      "ExitCode": 0,
+      "Health": "",
+      "ID": "e4c37c3ca9b9",
+      "Image": "grafana/grafana:12.0.0",
+      "Labels": "com.docker.compose.container-number=1,com.docker.compose.depends_on=prometheus:service_started:false,com.docker.compose.project.working_dir=/home/sidhartha/smart-maintenance-monitor,com.docker.compose.service=grafana,com.docker.compose.version=2.40.3,maintainer=Grafana Labs <hello@grafana.com>,org.opencontainers.image.source=https://github.com/grafana/grafana,com.docker.compose.config-hash=ff79a52cb1703052b5d7e47da7bbd98f1da03d0dcbd0236f688a9116a0b0e8d8,com.docker.compose.image=sha256:263cbefd5d9b179893c47c415daab4da5c1f3d6770154741eca4f45c81119884,com.docker.compose.oneoff=False,com.docker.compose.project=smart-maintenance,com.docker.compose.project.config_files=/home/sidhartha/smart-maintenance-monitor/compose.yaml",
+      "LocalVolumes": "0",
+      "Mounts": "/home/sidharth\u2026,/home/sidharth\u2026,/home/sidharth\u2026",
+      "Name": "smart-maintenance-grafana-1",
+      "Names": "smart-maintenance-grafana-1",
+      "Networks": "smart-maintenance_default",
+      "Ports": "127.0.0.1:3001->3000/tcp",
+      "Project": "smart-maintenance",
+      "Publishers": [
+        {
+          "URL": "127.0.0.1",
+          "TargetPort": 3000,
+          "PublishedPort": 3001,
+          "Protocol": "tcp"
+        }
+      ],
+      "RunningFor": "2 minutes ago",
+      "Service": "grafana",
+      "Size": "0B",
+      "State": "running",
+      "Status": "Up 2 minutes"
+    },
+    {
+      "Command": "\"mlflow models serve\u2026\"",
+      "CreatedAt": "2026-11-08 21:13:59 +0530 IST",
+      "ExitCode": 0,
+      "Health": "healthy",
+      "ID": "73723c457edd",
+      "Image": "smart-maintenance-model",
+      "Labels": "com.docker.compose.service=model,com.docker.compose.version=2.40.3,com.docker.compose.config-hash=a5302f32f32d14087f1c1fe5f4f7b7137da7e852c75520efe2b06018222f2a91,com.docker.compose.container-number=1,com.docker.compose.project=smart-maintenance,com.docker.compose.project.config_files=/home/sidhartha/smart-maintenance-monitor/compose.yaml,com.docker.compose.project.working_dir=/home/sidhartha/smart-maintenance-monitor,com.docker.compose.depends_on=,com.docker.compose.image=sha256:3410400579256f77edddae0f185c736fda5fd4294ec162d3482857d8f3e3ada5,com.docker.compose.oneoff=False",
+      "LocalVolumes": "0",
+      "Mounts": "/home/sidharth\u2026",
+      "Name": "smart-maintenance-model-1",
+      "Names": "smart-maintenance-model-1",
+      "Networks": "smart-maintenance_default",
+      "Ports": "127.0.0.1:5001->5001/tcp",
+      "Project": "smart-maintenance",
+      "Publishers": [
+        {
+          "URL": "127.0.0.1",
+          "TargetPort": 5001,
+          "PublishedPort": 5001,
+          "Protocol": "tcp"
+        }
+      ],
+      "RunningFor": "2 minutes ago",
+      "Service": "model",
+      "Size": "0B",
+      "State": "running",
+      "Status": "Up 2 minutes (healthy)"
+    },
+    {
+      "Command": "\"/bin/node_exporter \u2026\"",
+      "CreatedAt": "2026-11-08 21:13:59 +0530 IST",
+      "ExitCode": 0,
+      "Health": "",
+      "ID": "e703b9c15788",
+      "Image": "prom/node-exporter:v1.9.1",
+      "Labels": "com.docker.compose.config-hash=56826f0b03fd8c95eedfb25adf0ec089b3c089bff1097bff2d5faffbc4d077cf,com.docker.compose.image=sha256:d00a542e409ee618a4edc67da14dd48c5da66726bbd5537ab2af9c1dfc442c8a,com.docker.compose.oneoff=False,com.docker.compose.project.working_dir=/home/sidhartha/smart-maintenance-monitor,com.docker.compose.service=node-exporter,maintainer=The Prometheus Authors <prometheus-developers@googlegroups.com>,com.docker.compose.container-number=1,com.docker.compose.depends_on=,com.docker.compose.project=smart-maintenance,com.docker.compose.project.config_files=/home/sidhartha/smart-maintenance-monitor/compose.yaml,com.docker.compose.version=2.40.3",
+      "LocalVolumes": "0",
+      "Mounts": "/sys,/proc,/",
+      "Name": "smart-maintenance-node-exporter-1",
+      "Names": "smart-maintenance-node-exporter-1",
+      "Networks": "smart-maintenance_default",
+      "Ports": "9100/tcp",
+      "Project": "smart-maintenance",
+      "Publishers": [
+        {
+          "URL": "",
+          "TargetPort": 9100,
+          "PublishedPort": 0,
+          "Protocol": "tcp"
+        }
+      ],
+      "RunningFor": "2 minutes ago",
+      "Service": "node-exporter",
+      "Size": "0B",
+      "State": "running",
+      "Status": "Up 2 minutes"
+    },
+    {
+      "Command": "\"/bin/prometheus --c\u2026\"",
+      "CreatedAt": "2026-11-08 21:13:59 +0530 IST",
+      "ExitCode": 0,
+      "Health": "",
+      "ID": "60ea90e532e9",
+      "Image": "prom/prometheus:v3.5.0",
+      "Labels": "com.docker.compose.service=prometheus,maintainer=The Prometheus Authors <prometheus-developers@googlegroups.com>,org.opencontainers.image.source=https://github.com/prometheus/prometheus,com.docker.compose.image=sha256:63805ebb8d2b3920190daf1cb14a60871b16fd38bed42b857a3182bc621f4996,com.docker.compose.project=smart-maintenance,com.docker.compose.project.config_files=/home/sidhartha/smart-maintenance-monitor/compose.yaml,com.docker.compose.version=2.40.3,com.docker.compose.config-hash=616a8da2c343f7acb70fcad1fe0df9091091405250043cb564be6c7471debad1,com.docker.compose.container-number=1,com.docker.compose.depends_on=node-exporter:service_started:false,api:service_healthy:false,ui:service_healthy:false,blackbox:service_started:false,com.docker.compose.oneoff=False,com.docker.compose.project.working_dir=/home/sidhartha/smart-maintenance-monitor",
+      "LocalVolumes": "1",
+      "Mounts": "/home/sidharth\u2026,smart-maintena\u2026,/home/sidharth\u2026",
+      "Name": "smart-maintenance-prometheus-1",
+      "Names": "smart-maintenance-prometheus-1",
+      "Networks": "smart-maintenance_default",
+      "Ports": "127.0.0.1:9091->9090/tcp",
+      "Project": "smart-maintenance",
+      "Publishers": [
+        {
+          "URL": "127.0.0.1",
+          "TargetPort": 9090,
+          "PublishedPort": 9091,
+          "Protocol": "tcp"
+        }
+      ],
+      "RunningFor": "2 minutes ago",
+      "Service": "prometheus",
+      "Size": "0B",
+      "State": "running",
+      "Status": "Up 2 minutes"
+    },
+    {
+      "Command": "\"/docker-entrypoint.\u2026\"",
+      "CreatedAt": "2026-11-08 21:13:59 +0530 IST",
+      "ExitCode": 0,
+      "Health": "healthy",
+      "ID": "516dff26deb0",
+      "Image": "nginx:1.29-alpine",
+      "Labels": "com.docker.compose.config-hash=84b52e84a8eae967235c43bd70877e27712a344362e4c386c9560f000faf03d4,com.docker.compose.oneoff=False,com.docker.compose.service=ui,maintainer=NGINX Docker Maintainers <docker-maint@nginx.com>,com.docker.compose.container-number=1,com.docker.compose.depends_on=api:service_healthy:false,com.docker.compose.image=sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de,com.docker.compose.project=smart-maintenance,com.docker.compose.project.config_files=/home/sidhartha/smart-maintenance-monitor/compose.yaml,com.docker.compose.project.working_dir=/home/sidhartha/smart-maintenance-monitor,com.docker.compose.version=2.40.3",
+      "LocalVolumes": "0",
+      "Mounts": "/home/sidharth\u2026",
+      "Name": "smart-maintenance-ui-1",
+      "Names": "smart-maintenance-ui-1",
+      "Networks": "smart-maintenance_default",
+      "Ports": "127.0.0.1:8501->80/tcp",
+      "Project": "smart-maintenance",
+      "Publishers": [
+        {
+          "URL": "127.0.0.1",
+          "TargetPort": 80,
+          "PublishedPort": 8501,
+          "Protocol": "tcp"
+        }
+      ],
+      "RunningFor": "2 minutes ago",
+      "Service": "ui",
+      "Size": "0B",
+      "State": "running",
+      "Status": "Up 2 minutes (healthy)"
+    }
+  ]
+}

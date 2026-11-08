@@ -56,6 +56,8 @@ This record supersedes broad completion statements in `reports/final_acceptance.
 
 The exact logs and JSON results are archived under `{target.relative_to(ROOT)}`. DVC reuse is shown in the pipeline log; skipped cached stages are not new training runs. The MLproject validate entry point was separately executed with its declared environment-version check in run `568a4402193344c3999f618c91191b23`.
 
+Additional later workload and restore evidence is recorded separately in `reports/finishing_checks.md` and its linked JSON reports; each measurement identifies its own source commit.
+
 ## Release verification
 
 `reports/live_recovery_check.json` records a deliberately injected exception after a real candidate server startup. The recovery path restarted the original model and restored both bytes and policy; post-recovery integration passed. Successful live promotion of a validation-only candidate and rollback to the original selected run were also executed. Saved events distinguish this from the operations script's history assertions. Corrupt artifact digest and forged metric fixtures were rejected on actual model evaluation.

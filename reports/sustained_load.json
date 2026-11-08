@@ -1,0 +1,19 @@
+{
+  "started_at": "2026-11-08T15:46:14.733674+00:00",
+  "git_sha": "60168ec0d2a507a206abb61102f4cbe79326293a",
+  "requested_seconds": 120,
+  "elapsed_seconds": 120.0026021540034,
+  "clients": 2,
+  "maximum_offered_requests_per_second": 2,
+  "requests": 240,
+  "successful_requests": 240,
+  "errors": 0,
+  "error_types": [],
+  "error_rate": 0.0,
+  "requests_per_second": 1.9999566317070347,
+  "p50_ms": 81.77454199903877,
+  "p95_ms": 102.45988789793044,
+  "p99_ms": 120.87292503914794,
+  "parity_tolerance": 1e-06,
+  "interpretation": "Two paced clients, at most one request per client per second. Successful-request latency includes client/network/JSON time. Repeated training demo, no label scoring. This measures this local workload, not saturation capacity or a guaranteed production SLA."
+}

@@ -48,3 +48,7 @@ The model, API, and UI containers serve `http://127.0.0.1:5001/ping`, `http://12
 The lighter host-process alternative remains `scripts/start_phase5.sh` and `scripts/stop_phase5.sh`. Feedback, inference observations, and job logs stay on the VM disk and are excluded from Git. The original selected model is active after the tested rollback. The five course documents and current acceptance report are in `docs/` and `reports/submission_acceptance.md`. VM-only CI is the primary path; historical hosted runs are supplementary; the final AI-use disclosure remains for submission review. The local project remains usable after shutdown.
 
 After services become healthy, run `~/miniconda/envs/smart-maintenance/bin/python scripts/local_ci.py` for the full local check. Inspect `systemctl --user status smm-drift.timer` for scheduled drift refresh. The primary submission path uses no hosted compute.
+
+## Latest restart evidence
+
+`reports/service_restart_check.json` records a completed `docker compose down` followed by `docker compose up -d --wait`, healthy endpoints, the active drift timer, and synchronized DVC storage. This recreated the service containers without rebuilding images or retraining. It was not an operating-system reboot; a full shutdown/start demonstration is recorded separately only when actually performed.

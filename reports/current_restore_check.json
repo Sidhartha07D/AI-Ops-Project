@@ -1,0 +1,62 @@
+{
+  "observed_at": "2026-11-08T15:49:24.475601+00:00",
+  "git_sha": "60168ec0d2a507a206abb61102f4cbe79326293a",
+  "result": "passed",
+  "dvc_status": {},
+  "active_model_digest_matches": true,
+  "candidate_model_digest_matches": true,
+  "restored_model_demo_score": 0.011699842208784322,
+  "environment": "Existing smart-maintenance Python environment; fresh source checkout and DVC cache/workspace, not a fresh environment/image installation. Local artifact store used. No label scoring or frozen-test evaluation.",
+  "commands": [
+    {
+      "command": [
+        "git",
+        "clone",
+        "--no-hardlinks",
+        "/home/sidhartha/smart-maintenance-monitor",
+        "/tmp/smm-current-restore-22xtnqax/project"
+      ],
+      "exit_code": 0,
+      "output": "Cloning into '/tmp/smm-current-restore-22xtnqax/project'...\ndone.\n"
+    },
+    {
+      "command": [
+        "dvc",
+        "remote",
+        "add",
+        "--local",
+        "-d",
+        "vmstore",
+        "/home/sidhartha/dvc-storage/smart-maintenance"
+      ],
+      "exit_code": 0,
+      "output": "Setting 'vmstore' as a default remote.\n"
+    },
+    {
+      "command": [
+        "dvc",
+        "pull"
+      ],
+      "exit_code": 0,
+      "output": "A       models/active/\nA       models/candidate_hist_gradient_boosting/\nA       models/candidate_random_forest_balanced/\nA       models/pipeline_candidate/\nA       models/serving_model/\nA       data/processed/ray_features.csv\nA       data/processed/spark_features.csv\nA       data/raw/ai4i2020.csv\nA       data/splits/split_ids.csv\nA       reports/candidate_release.json\nA       reports/feature_comparison.txt\nA       reports/pipeline_training.json\nA       reports/source_validation.json\nA       reports/split_summary.json\n25 files fetched and 44 files added\n"
+    },
+    {
+      "command": [
+        "dvc",
+        "status",
+        "--json"
+      ],
+      "exit_code": 0,
+      "output": "{}\n"
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "output": "60168ec0d2a507a206abb61102f4cbe79326293a\n"
+    }
+  ]
+}
