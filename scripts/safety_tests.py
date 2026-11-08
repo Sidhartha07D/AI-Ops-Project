@@ -54,6 +54,9 @@ class SafetyTests(unittest.TestCase):
                     with api.release_read_lock():
                         self.fail("Lock was bypassed")
                 self.assertEqual(error.exception.status_code, 503)
+                with patch.object(api, "fetch_model") as model:
+                    self.assertEqual(api.health()["model"], "unavailable")
+                    model.assert_not_called()
 
     def test_failed_switch_restores_bytes_and_policy(self):
         with tempfile.TemporaryDirectory() as d:

@@ -211,7 +211,8 @@ def active_release() -> dict:
 @app.get("/health")
 def health() -> dict:
     try:
-        fetch_model("/ping", timeout=2)
+        with release_read_lock():
+            fetch_model("/ping", timeout=2)
         model = "ready"
     except HTTPException:
         model = "unavailable"

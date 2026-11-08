@@ -1,3 +1,5 @@
+> Superseded for current submission by `reports/submission_acceptance.md`. This is a historical Phase 8 record. Audit correction: file 26 contains CI terminal output and is not browser outage proof.
+
 # Phase 8 acceptance record (in progress)
 
 Observed on 2026-11-08 in the Ubuntu 26.04 ARM64 UTM VM, 4 vCPUs and 3.3 GiB RAM. `docs/test_plan.md` defines the expected outcomes. The source checkout began at Phase 7 commit `9897e61`; Phase 8 implementation checkpoint `1ea8880` added the five course documents, configurable UI API address, improved API error handling, and full data CI steps. The selected released model remains MLflow run `e5260d1c99b046f79795c53a4c392575` at threshold 0.37.
