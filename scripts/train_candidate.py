@@ -108,11 +108,16 @@ def main():
             input_example=train[FEATURES].head(3),
             pyfunc_predict_fn="predict_proba",
             skops_trusted_types=["numpy.dtype", "sklearn.tree._tree.Tree"],
-            metadata={"run_id": run.info.run_id, "git_sha": git_sha},
+            metadata={
+                "run_id": run.info.run_id,
+                "experiment_id": run.info.experiment_id,
+                "git_sha": git_sha,
+            },
         )
         mlflow.log_artifacts(str(output), "candidate_bundle")
         record = {
             "run_id": run.info.run_id,
+            "experiment_id": run.info.experiment_id,
             "git_sha": git_sha,
             "source_clean": True,
             "model_path": "models/pipeline_candidate",

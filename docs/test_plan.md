@@ -31,3 +31,8 @@ This plan tests the actual local VM deployment. Record commands, observed result
 ## Pass rule and defect handling
 
 The project is accepted locally when T01–T12 and T14 pass. T13 is separately reported because it depends on a remote repository and a hosted runner. Every failure is recorded with the observed output, fix, and rerun; an unexecuted case remains **not run**, never passed. Check invalid input and service outages without editing the pinned source data. The model is a synthetic-record classifier and the test does not claim a future failure forecast or field accuracy.
+
+
+## Current verification commands
+
+`python scripts/local_ci.py` is the primary VM check. `python scripts/run_tests.py` collects **11** independent unit cases and writes exact counts. Four safety cases test storage failure, unknown feedback identity, exclusive-release locking and automatic restoration of bytes/policy after a mocked restart failure. A separate executed live recovery drill is recorded in `reports/live_recovery_check.json`. The short contract/load script uses 40 repeated demo requests at concurrency 2, compares every score with the active local model at tolerance 1e-6, and reports measured percentiles; it is not the original two-minute load target. The old T01–T14 table contains acceptance groups, not a count of automated unit tests. Operations verification inspects saved release history; a new deployment is claimed only when the release commands were actually exercised.

@@ -29,7 +29,7 @@ Example request:
 {"type":"M","air_temperature_k":298.1,"process_temperature_k":308.6,"rotational_speed_rpm":1551,"torque_nm":42.8,"tool_wear_min":0}
 ```
 
-FastAPI adds `temperature_gap_k = process_temperature_k - air_temperature_k`, rounded to six decimal places. The seven model fields are sent to private MLflow `POST /invocations` as `{"dataframe_records":[{...}]}`. Neither identifier nor failure-mode flags enter inference. MLflow returns `{"predictions":[[P(no failure),P(failure)]]}`. FastAPI checks that the failure probability is finite and in [0,1], then sets `alert = probability >= active threshold`.
+FastAPI adds `temperature_gap_k = process_temperature_k - air_temperature_k`, rounded to one decimal place, matching both ETL implementations. The seven model fields are sent to private MLflow `POST /invocations` as `{"dataframe_records":[{...}]}`. Neither identifier nor failure-mode flags enter inference. MLflow returns `{"predictions":[[P(no failure),P(failure)]]}`. FastAPI checks that the failure probability is finite and in [0,1], then sets `alert = probability >= active threshold`.
 
 Example HTTP 200 response (ID and latency vary):
 

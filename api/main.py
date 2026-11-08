@@ -248,7 +248,7 @@ def predict_locked(reading: Reading) -> dict:
     prediction_id = uuid4().hex
     features = reading.model_dump()
     features["temperature_gap_k"] = round(
-        features["process_temperature_k"] - features["air_temperature_k"], 6
+        features["process_temperature_k"] - features["air_temperature_k"], 1
     )
     result = fetch_model("/invocations", {"dataframe_records": [features]})
     try:

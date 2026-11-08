@@ -1,6 +1,7 @@
 """Focused API tests that run without starting the model server."""
 
 import unittest
+import tempfile
 import sys
 from pathlib import Path
 from unittest.mock import patch
@@ -14,6 +15,13 @@ from api.main import Reading, predict
 
 class PredictionTests(unittest.TestCase):
     def setUp(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        observation_patch = patch(
+            "api.main.OBSERVATIONS", Path(temporary.name) / "observations.jsonl"
+        )
+        observation_patch.start()
+        self.addCleanup(observation_patch.stop)
         self.reading = Reading(
             type="M",
             air_temperature_k=298.1,
@@ -33,6 +41,18 @@ class PredictionTests(unittest.TestCase):
         )
         self.assertFalse(result["alert"])
         self.assertEqual(result["recommendation"], "Continue routine checks")
+
+    def test_feature_rounding_matches_training_etl(self):
+        reading = self.reading.model_copy(
+            update={"air_temperature_k": 298.14, "process_temperature_k": 308.61}
+        )
+        with patch(
+            "api.main.fetch_model", return_value={"predictions": [[0.9, 0.1]]}
+        ) as model:
+            predict(reading)
+        self.assertEqual(
+            model.call_args.args[1]["dataframe_records"][0]["temperature_gap_k"], 10.5
+        )
 
     def test_threshold_boundary_flags_inspection(self):
         with patch(

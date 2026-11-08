@@ -1,0 +1,7 @@
+[Unit]
+Description=Refresh local Smart Maintenance input drift report
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/smart-maintenance-monitor
+ExecStart=%h/miniconda/envs/smart-maintenance/bin/python scripts/drift_check.py --mode observations

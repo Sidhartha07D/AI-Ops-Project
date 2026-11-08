@@ -11,11 +11,11 @@ After the project operator starts the VM services, open Firefox **inside the Ubu
 ## Check a reading
 
 1. Enter the machine's product type (`L`, `M`, or `H`), air and process temperatures in Kelvin, rotation speed in rpm, torque in Nm, and tool wear in minutes. The form labels show the accepted ranges.
-2. Select **Check reading**. The page shows a failure probability, alert decision, recommendation, model run, and response time.
+2. Select **Check reading**. The page shows a model failure score, alert decision, recommendation, model run, and response time.
 3. **Continue routine checks** means this record is below the saved alert threshold. **Schedule an inspection** means the record meets or exceeds it. A score is a model output on synthetic data; use ordinary safety procedures and judgment for real equipment.
 4. For a guided demonstration, choose **Routine sample** or **Inspection sample**, then **Check reading**. These are examples, not live sensor measurements.
 
-If a field is out of range or missing, correct it and submit again. If the page says the model is unavailable, contact the operator; no prediction has been produced. The application never changes the model because a user submits a reading.
+If a field is out of range or missing, correct it and submit again. If the page says the model is unavailable, contact the operator; no prediction has been produced. The application never changes the model because a user submits a reading. During a release change it may ask you to retry shortly.
 
 ## Submit feedback
 

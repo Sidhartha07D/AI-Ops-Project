@@ -1,0 +1,35 @@
+{
+  "run_id": "cb9866768d854ca1809275a337ebc3bd",
+  "git_sha": "1b59d5a192e585ad6b95066e2b1c07b4069bae92",
+  "source_clean": true,
+  "model_path": "models/pipeline_candidate",
+  "artifact_sha256": "c5efc3c5330ffb214dcc1474343f5bfb27788a46f86f1f6b633a0f804e90d4f4",
+  "split_manifest_sha256": "7a1fdd0cca26b328c176d621dd96ed62c19fa6a69ca95cb3f8ae492e781bd08a",
+  "data_sha256": "b762ea195f1bb9d9150d7dd12a58ccc384790c76b12fcb8cb43c71170b124d38",
+  "feature_columns": [
+    "type",
+    "air_temperature_k",
+    "process_temperature_k",
+    "rotational_speed_rpm",
+    "torque_nm",
+    "tool_wear_min",
+    "temperature_gap_k"
+  ],
+  "threshold": 0.37,
+  "test_rows_used": 0,
+  "train_rows": 6000,
+  "validation_rows": 2000,
+  "validation_average_precision": 0.749490506701175,
+  "validation_recall_at_champion_threshold": 0.8088235294117647,
+  "release_eligible": true,
+  "permutation_importance_ap_drop": {
+    "type": 0.040570976561706974,
+    "air_temperature_k": 0.014071412706918954,
+    "process_temperature_k": -0.011091914780973192,
+    "rotational_speed_rpm": 0.4487918258984835,
+    "torque_nm": 0.42287633353913856,
+    "tool_wear_min": 0.23248139326841324,
+    "temperature_gap_k": 0.19918456135833937
+  },
+  "interpretation": "Validation-only model score; not calibrated field failure probability. Importance is not causal."
+}
