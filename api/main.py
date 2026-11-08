@@ -20,7 +20,7 @@ import yaml
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from prometheus_client import Counter, Gauge, Histogram, generate_latest, CONTENT_TYPE_LATEST
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -69,6 +69,8 @@ def metrics() -> Response:
 
 
 class Reading(BaseModel):
+    model_config = ConfigDict(allow_inf_nan=False)
+
     type: Literal["L", "M", "H"]
     air_temperature_k: float = Field(ge=250, le=350)
     process_temperature_k: float = Field(ge=250, le=400)

@@ -36,6 +36,10 @@ class PredictionTests(unittest.TestCase):
         with self.assertRaises(ValidationError):
             Reading.model_validate({**self.reading.model_dump(), "rotational_speed_rpm": -1})
 
+    def test_non_finite_sensor_reading_is_rejected(self):
+        with self.assertRaises(ValidationError):
+            Reading.model_validate({**self.reading.model_dump(), "torque_nm": float("nan")})
+
     def test_bad_model_response_is_reported(self):
         with patch("api.main.fetch_model", return_value={"predictions": []}):
             with self.assertRaises(HTTPException) as raised:

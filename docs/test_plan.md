@@ -17,7 +17,7 @@ This plan tests the actual local VM deployment. Record commands, observed result
 | T02 | Run `dvc repro`, inspect DAG and remote | All four stages finish; DVC remote reports in sync | terminal and DVC lock |
 | T03 | Run Spark/Ray comparison and benchmark | Both produce 10,000 matching feature rows; wall time and throughput are recorded, with hardware context | comparison and benchmark report |
 | T04 | Inspect MLflow selected run | Parameters, metrics, tags, model and confusion artifact visible; run ID agrees with release manifest | MLflow browser and model card |
-| T05 | Run six API unit tests | All six pass, including invalid input, threshold, bad model data and unavailable model | test output |
+| T05 | Run seven API unit tests | All seven pass, including invalid input, nonfinite sensor values, threshold, bad model data and unavailable model | test output |
 | T06 | Start Compose and run integration smoke | Model, API and UI healthy; valid inference, 422 error, feedback, pipeline and validation succeed | Compose and smoke output |
 | T07 | Use the browser UI for routine and inspection examples | Correct recommendation and score visible; invalid entry displays helpful error; no broken controls at normal and narrow viewport | Ubuntu Firefox captures |
 | T08 | Open pipeline page, run validation, exercise a failure | Stage status plus actual success and error console shown; page distinguishes failure from success | Ubuntu Firefox captures and job log |

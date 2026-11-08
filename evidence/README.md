@@ -22,6 +22,7 @@ Screenshots are original captures of the Ubuntu VM display. The Mac workspace al
 | `20_phase7_drift_release_checks.jpg` | Acceptance check confirms deliberate drift detection, sparse-input guard, release rejection, promotion, rollback, and DVC sync | Ubuntu terminal, `python scripts/phase7_verify.py`, 18:59 VM time |
 | `21_phase7_vm_resources.jpg` | Grafana host exporter panels show actual VM available memory and root free space alongside live service activity | Ubuntu Firefox, same Grafana dashboard, 19:05 VM time |
 | `22_phase8_pipeline_error.jpg` | Pipeline page shows a real failed validation job and console traceback from a separate invalid fixture; pinned source was untouched | Ubuntu Firefox, `http://127.0.0.1:8501/pipeline.html`, 2026-11-08 11:36 VM time |
+| `23_phase8_responsive_mobile.jpg` | Machine-check page at a 390 × 844 responsive viewport, with header, service status, guidance and input form fitting the narrow width | Ubuntu Firefox Responsive Design Mode, `http://127.0.0.1:8501/index.html`, 2026-11-08 11:43 VM time |
 
 The failed MLflow runs visible in the first browser screenshot came from initial project-entry-point and model-serialization setup errors. They are retained as an honest execution history. The later successful run is the one recorded in the model card and evaluation report.
 
