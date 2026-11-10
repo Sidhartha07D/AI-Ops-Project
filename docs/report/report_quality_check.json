@@ -1,9 +1,0 @@
-{
-  "pdf_sha256": "8f486e96feb5afecec6d95f304414e6bf3159315d46b9893c8b4d14819d02446",
-  "latex_engine": "Tectonic 0.17.0",
-  "pages": 13,
-  "visual_review": "All pages reviewed in contact sheets; architecture, tool inventory, API, testing, recovery and coverage inspected at full rendering size. Layout fixes were re-rendered and reviewed.",
-  "latex_overfull_warnings": 0,
-  "latex_undefined_reference_warnings": 0,
-  "report_status": "Review copy; actual narrated video and submission access remain pending."
-}
