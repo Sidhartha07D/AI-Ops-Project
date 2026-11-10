@@ -1,3 +1,0 @@
-Compared rows: 10000 | columns: 9
-Identifier and failure-mode flags are not model inputs.
-Spark and Ray output comparison: PASS

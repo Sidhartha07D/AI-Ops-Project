@@ -36,7 +36,7 @@ def main():
 
 Observed archive date: {datetime.now(timezone.utc).isoformat()}.
 Verified source commit: `{ci["git_sha"]}`. Execution: Ubuntu ARM64 VM, local CI.
-This record supersedes broad completion statements in `reports/final_acceptance.md`; older phase reports remain historical.
+Earlier phase acceptance records remain in Git history; this is the retained submission verification record.
 
 ## Actual counts
 
@@ -67,7 +67,7 @@ Subsequent full Ubuntu reboot verification is recorded in `reports/vm_reboot_che
 ## Corrections and limits
 
 - Mislabelled image 26 was removed: it showed CI terminal output, not the outage UI. Genuine replacement browser outage/recovery captures 31/32 are now indexed, together with local-results capture 33.
-- Local CI is the primary path. Historical GitHub-hosted CI is preserved; its automatic triggers are disabled. No professor exception to the cloud rule is assumed.
+- Local CI is the primary path. Historical GitHub-hosted results are preserved; the optional hosted workflow has been removed. No professor exception to the cloud rule is assumed.
 - MLproject declares the version snapshot; 163 installed pip package versions and Python were checked. A fresh environment installation/image digest lock was not demonstrated during this run.
 - The user-level five-minute timer refreshes input drift while the user manager runs. Recent inputs include repeated course-demo requests, not new industrial measurements; no fresh-label accuracy/concept-drift claim is made.
 - Release switching has intentional downtime. If automatic recovery itself fails, an explicit operator error is raised; zero-downtime or multi-host atomic deployment is not claimed.

@@ -60,7 +60,7 @@ Prometheus scrapes FastAPI `/metrics` and node exporter; blackbox exporter probe
 
 ## Files and recovery
 
-The Git repository holds source, DVC pointer/lock files, reports, dashboard configuration, and evidence. The VM-local DVC remote holds data/model objects; `mlflow_store/` holds the tracking DB and artifacts. Both are backed up separately on the Mac alongside a full Git bundle. `dvc pull` is required after a fresh clone before the model image can be built. See `docs/resume_after_vm_shutdown.md` for the exact restart sequence.
+The Git repository holds source, DVC pointer/lock files, reports, dashboard configuration, and evidence. The VM-local DVC remote holds data/model objects; `mlflow_store/` holds the tracking DB and artifacts. Both are backed up separately on the Mac alongside a full Git bundle. `dvc pull` is required after a fresh clone before the model image can be built. See the restart section of `README.md` for the exact restart sequence.
 
 
 ## Submission-hardening contract update

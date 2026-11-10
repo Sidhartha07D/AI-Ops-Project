@@ -51,4 +51,4 @@ The online request path is UI → FastAPI → MLflow model. Spark, Ray, and trai
 
 ## Deployment and recovery
 
-Ubuntu 26.04 ARM64 UTM VM, 4 vCPUs, 3.3 GiB RAM, 39 GiB root disk. Spark and Ray run sequentially. The seven lightweight serving/monitoring containers can run together; Kubernetes/KServe was not started on this VM. `docker compose down` stops containers without deleting tagged images, DVC data, MLflow runs, or the Prometheus volume. Git history, the DVC remote, and the MLflow store have separate Mac backups. See `docs/resume_after_vm_shutdown.md` for restart steps.
+Ubuntu 26.04 ARM64 UTM VM, 4 vCPUs, 3.3 GiB RAM, 39 GiB root disk. Spark and Ray run sequentially. The seven lightweight serving/monitoring containers can run together; Kubernetes/KServe was not started on this VM. `docker compose down` stops containers without deleting tagged images, DVC data, MLflow runs, or the Prometheus volume. Git history, the DVC remote, and the MLflow store have separate Mac backups. See the restart section of `README.md` for restart steps.

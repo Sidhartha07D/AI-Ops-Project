@@ -1,6 +1,6 @@
 # Final-project requirements and evidence matrix
 
-The professor's evaluation guideline defines 25 points. The original blueprint is a larger implementation plan; approved scope reductions are in `docs/scope_decisions.md`. This matrix describes implemented coverage, not promised marks. Current observed results and exact counts are in `reports/submission_acceptance.md`; old phase reports are historical.
+The professor's evaluation guideline defines 25 points. The original blueprint is a larger implementation plan; the retained scope and limits are described below. This matrix describes implemented coverage, not promised marks. Current observed results and exact counts are in `reports/submission_acceptance.md`; old phase reports are historical.
 
 | Graded area | Implementation and evidence | Limits / final review |
 | --- | --- | --- |
@@ -10,7 +10,7 @@ The professor's evaluation guideline defines 25 points. The original blueprint i
 | Implementation (2) | Functional Python, Ruff formatting and selected critical lint checks, INFO logging, controlled API/model/storage errors, exclusive release lock and tests | Educational local app; no blanket claim of exhaustive exception/security testing |
 | Testing (1) | Named plan, exact collected unit counts, local command logs, live integration/model parity, short measured load probe, unit and live recovery fixtures | Acceptance groups are not automated case counts. Short unpaced probe plus a separate two-minute paced measurement; neither proves saturation capacity or a production SLA |
 | Data engineering (2) | Independent bounded Spark/Ray feature jobs, row equality, pinned raw validation dependency, fixed split, measured ETL report | One-run framework timing, not scale/cluster superiority; Ray Core ETL rather than Ray Tune/Train |
-| Source control/CI (2) | Git and DVC data/model hashes; eight-stage lifecycle DAG; `scripts/local_ci.py` runs tests, reproduction, local artifact backup and runtime checks; recorded fresh-checkout/DVC restore drill | Primary CI is VM-only. Historical hosted Actions preserved and manual-only; no assumed cloud exception |
+| Source control/CI (2) | Git and DVC data/model hashes; eight-stage lifecycle DAG; `scripts/local_ci.py` runs tests, reproduction, local artifact backup and runtime checks; recorded fresh-checkout/DVC restore drill | Primary CI is VM-only. Historical hosted results retained; optional workflow removed; no assumed cloud exception |
 | Experiment tracking (2) | Original model comparisons and artifacts; clean-source validation-only candidate runs with source/data/split/artifact identity, full estimator/config parameters, validation metrics and importance | Original selected run's dirty-source limitation remains disclosed. Frozen test evaluation is guarded against accidental repeats |
 | Monitoring (2) | API counters/gauges/histograms, model/UI/Grafana probes, node exporter, Prometheus/blackbox self scrapes, provisioned Grafana, drift/report freshness gauges and five-minute user timer | No real-label model-quality proof; inputs include repeated demos/tests. MLflow and offline jobs are on demand; persistent reports are not internal live process metrics |
 | Packaging (2) | MLflow model server, declared parameterized MLproject/environment snapshot, API code baked into image, separate Nginx UI/API/model Compose services | API workspace mount remains for local DVC/data access. Environment versions checked in the existing env; fresh installation/image distribution was not reproduced here |
@@ -31,3 +31,11 @@ The professor's evaluation guideline defines 25 points. The original blueprint i
 - Rehearse the actual project and assignment concepts. No full-mark guarantee is made.
 - Evidence index corrections matter: mislabelled screenshot 26 was removed. Genuine UI outage/recovery captures 31/32 and the saved-results terminal capture 33 were inspected and saved.
 - Airflow/KServe/Kubernetes, fleet replay, role accounts and feedback-to-training workflow are explicit deferred extensions, not silently completed requirements.
+
+## Scope and limitations
+
+The supported workflow uses the Ubuntu VM, DVC/MLproject, Docker Compose and an explicit operator release gate. Ray Core provides ETL; Ray Tune/Train/Serve, Airflow and Kubernetes/KServe are not claimed. Role accounts, fleet replay, feedback-approved learning and a full train/retry/cancel UI remain deferred. User flags enter a pending queue and never silently replace a model.
+
+The original selected run's uncommitted-source history and repeated test-metric logging remain disclosed in the model card. Clean-source validation-only candidate runs do not rewrite that history. Scores classify synthetic observations and are not calibrated industrial probabilities or future-failure forecasts.
+
+The local deployment has no authentication/TLS or encrypted-storage proof. Scheduled input drift does not establish labeled model-quality degradation or continuously instrument every offline process. The environment snapshot and VM-local artifact dependency remain as documented; portability and artifact distribution are deferred to a later review.
