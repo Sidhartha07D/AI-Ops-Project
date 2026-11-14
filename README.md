@@ -49,10 +49,8 @@ Prometheus scrapes the API, node exporter, itself and blackbox exporter, and pro
 
 The reported selected model has validation AP 0.7495; reported test AP 0.8066 and recall 0.8529 at threshold 0.37. The original tracking database contains test metrics from a failed packaging run and the successful selected-model run, both with the same AP. We therefore do not claim a single globally untouched test evaluation. The original selected run also began with uncommitted source. These history limitations are documented in [the model card](docs/model_card.md); clean-source validation-only candidate runs are separate evidence.
 
-- [Current actual acceptance results](reports/submission_acceptance.md): counts, command logs, parity/load probe and recovery.
-- [Finishing checks](reports/finishing_checks.md): two-minute paced measurement, service restart, fresh DVC restore, and outstanding handoff items.
-- [LaTeX PDF report](docs/report/smart_maintenance_report.pdf) and [editable source](docs/report/smart_maintenance_report.tex): reviewed layout and actual implementation results.
-- [Requirements and limits](docs/requirements_matrix.md): implemented coverage and explicitly deferred extensions.
+
+
 - [Evidence index](evidence/README.md): genuine VM captures; file 26 is a mislabelled CI capture and excluded from outage proof.
 - [Dataset source and attribution](data/README.md), [ETL benchmark](reports/etl_benchmark.md), [model evaluation](reports/model_evaluation.json).
 
